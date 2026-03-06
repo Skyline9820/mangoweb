@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distribuidores | Mango BC</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Syncopate:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-yellow: #FFFF00; 
+            --pure-black: #000000;    
+            --pure-white: #FFFFFF;    
+            --dark-grey: #111111;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        /* Ocultamos el cursor */
+        @media (hover: hover) and (pointer: fine) { 
+            * { cursor: none !important; } 
+            input, select, textarea { cursor: text !important; }
+            .close-modal { cursor: pointer !important; }
+        }
+        
+        body { background-color: var(--pure-black); color: var(--pure-white); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+        #scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--primary-yellow); width: 0%; z-index: 9999999; box-shadow: 0 0 10px var(--primary-yellow); transition: width 0.1s; }
+
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--pure-black); display: flex; justify-content: center; align-items: center; z-index: 999999; transition: opacity 0.8s ease, visibility 0.8s ease; }
+        .loader-text { font-family: 'Syncopate'; font-size: 2vw; color: var(--pure-white); letter-spacing: 5px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; color: var(--primary-yellow); text-shadow: 0 0 20px rgba(255,255,0,0.5); } }
+
+        /* OPTIMIZACIÓN 2: Textura SVG en base64 (0kb) */
+        body::before { 
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); 
+            opacity: 0.04; pointer-events: none; z-index: 9999; 
+        }
+        
+        .dot-grid-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 30px 30px; mask-image: linear-gradient(to bottom, black 40%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%); }
+
+        #cursor { width: 15px; height: 15px; background: rgba(255, 255, 0, 0.1); border: 1px solid rgba(255, 255, 0, 0.3); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999999 !important; will-change: transform; transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1), height 0.4s cubic-bezier(0.23, 1, 0.32, 1), background 0.4s ease, border-color 0.4s ease; }
+        body.hover-active #cursor { width: 90px; height: 90px; background: rgba(255, 255, 0, 0.05); border-color: rgba(255, 255, 0, 0.8); box-shadow: 0 0 20px rgba(255,255,0,0.2); }
+
+        nav { position: fixed; width: 100%; padding: 25px 5%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: rgba(0,0,0,0.5); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .logo { text-decoration: none; display: inline-block; transition: transform 0.4s; }
+        .logo:hover { transform: scale(1.05); }
+        .logo span.main { color: var(--primary-yellow); font-family: 'Syncopate'; font-weight: 900; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 3px; }
+        .logo span.sub { color: var(--pure-white); font-family: 'Inter', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .menu-btn { background: none; border: none; color: white; font-family: 'Syncopate'; font-size: 0.7rem; letter-spacing: 2px; cursor: pointer; }
+
+        .nav-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 5000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.6s cubic-bezier(0.85, 0, 0.15, 1); }
+        .nav-overlay.active { opacity: 1; visibility: visible; }
+        .menu-container { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1400px; padding: 0 5%; }
+        .menu-main { display: flex; flex-direction: column; gap: 15px; }
+        .menu-main a { font-family: 'Syncopate'; font-size: clamp(2rem, 5vw, 6rem); color: white; text-decoration: none; line-height: 1.1; display: flex; align-items: center; transition: all 0.4s ease; transform: translateY(50px); opacity: 0; }
+        .menu-num { font-family: 'Inter'; font-size: 1rem; color: var(--primary-yellow); margin-right: 30px; margin-top: -30px; font-weight: 900; transition: 0.4s ease; }
+        .menu-main:hover a { color: rgba(255,255,255,0.2); -webkit-text-stroke: 0; } 
+        .menu-main a:hover, .menu-main a.active-link { color: transparent !important; -webkit-text-stroke: 2px var(--primary-yellow) !important; transform: translateX(30px) !important; }
+        .menu-main a:hover .menu-num, .menu-main a.active-link .menu-num { color: var(--primary-yellow); -webkit-text-stroke: 0; }
+        .menu-secondary { display: flex; flex-direction: column; gap: 50px; max-width: 300px; }
+        .menu-info-block { transform: translateY(30px); opacity: 0; transition: all 0.4s ease; }
+        .menu-info-block h4 { font-family: 'Syncopate'; font-size: 0.8rem; color: var(--primary-yellow); margin-bottom: 15px; letter-spacing: 2px; }
+        .menu-info-block p, .menu-sublink { font-family: 'Inter'; color: #aaa; font-size: 1rem; line-height: 1.6; text-decoration: none; display: block; margin-bottom: 10px; transition: color 0.3s; cursor: pointer; }
+        .menu-sublink:hover { color: var(--pure-white); padding-left: 10px; }
+        
+        .nav-overlay.active .menu-main a { transform: translateY(0) translateX(0); opacity: 1; }
+        .nav-overlay.active .menu-main a.active-link { transform: translateX(30px); opacity: 1; }
+        .nav-overlay.active .menu-main a:nth-child(1) { transition-delay: 0.1s; }
+        .nav-overlay.active .menu-main a:nth-child(2) { transition-delay: 0.2s; }
+        .nav-overlay.active .menu-main a:nth-child(3) { transition-delay: 0.3s; }
+        .nav-overlay.active .menu-main a:nth-child(4) { transition-delay: 0.4s; }
+        .nav-overlay.active .menu-main a:nth-child(5) { transition-delay: 0.5s; }
+        .nav-overlay.active .menu-info-block { transform: translateY(0); opacity: 1; }
+        .nav-overlay.active .menu-info-block:nth-child(1) { transition-delay: 0.4s; }
+        .nav-overlay.active .menu-info-block:nth-child(2) { transition-delay: 0.5s; }
+
+        .sticky-contact-btn { position: fixed; bottom: 40px; right: 40px; background: var(--primary-yellow); color: var(--pure-black); padding: 15px 30px; border-radius: 50px; font-family: 'Syncopate'; font-size: 0.7rem; font-weight: 900; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 10px 20px rgba(255, 255, 0, 0.15); z-index: 4000; transition: transform 0.3s ease, box-shadow 0.3s ease; display: flex; align-items: center; cursor: pointer; }
+        .sticky-contact-btn:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 15px 30px rgba(255, 255, 0, 0.3); background: var(--pure-white); }
+
+        section { padding: 120px 5%; position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2; overflow: hidden; }
+        .section-title { font-family: 'Syncopate'; font-size: 2.5rem; color: var(--pure-white); margin-bottom: 50px; text-transform: uppercase; text-align: center; }
+        .section-title span { color: var(--primary-yellow); }
+
+        .hero-distribuidores { min-height: 75vh; background: var(--dark-grey); text-align: center; position: relative; padding-bottom: 60px; padding-top: 100px; border-bottom: 1px solid var(--primary-yellow); overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .hero-content { position: relative; z-index: 2; width: 100%; }
+        .hero-title { font-family: 'Syncopate'; font-size: 6vw; color: var(--pure-white); line-height: 1.1; margin-bottom: 20px; text-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .hero-subtitle { font-size: 1.2rem; color: #aaa; font-weight: 300; max-width: 600px; margin: 0 auto; }
+
+        .industrial-stats { padding: 0; background: var(--pure-black); min-height: auto; width: 100%; display: flex; justify-content: center; }
+        .stats-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 40px; width: 100%; max-width: 1400px; padding: 80px 5%; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .stat-item { text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .stat-number { font-family: 'Syncopate'; font-weight: 700; font-size: clamp(2.5rem, 5vw, 4.5rem); color: var(--primary-yellow); line-height: 1; text-shadow: 0 0 20px rgba(255,255,0,0.2); display: flex; align-items: baseline; justify-content: center; }
+        .stat-label { font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-top: 15px; }
+
+        .grid-beneficios { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; max-width: 1200px; width: 100%; margin-bottom: 80px; }
+        .floating-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 40px; border-radius: 12px; transition: all 0.5s ease; position: relative; z-index: 1; }
+        .floating-card:hover { border-color: var(--primary-yellow); background: rgba(255,255,0,0.02); transform: translateY(-10px) scale(1.02); box-shadow: 0 15px 35px rgba(0,0,0,0.5); z-index: 2; }
+        .floating-card h3 { font-family: 'Syncopate'; color: var(--primary-yellow); font-size: 1.2rem; margin-bottom: 15px; }
+        .floating-card p { color: #aaa; line-height: 1.6; }
+        
+        .exclusividad-banner { background: linear-gradient(135deg, var(--primary-yellow), #b3b300); color: var(--pure-black); padding: 50px; border-radius: 15px; width: 100%; max-width: 1200px; text-align: center; box-shadow: 0 20px 40px rgba(255,255,0,0.15); transition: 0.5s; position: relative; overflow: hidden; }
+        .exclusividad-banner:hover { transform: scale(1.02); box-shadow: 0 30px 50px rgba(255,255,0,0.25); }
+        .exclusividad-banner h3 { font-family: 'Syncopate'; font-size: 2.2rem; margin-bottom: 15px; }
+        .exclusividad-banner p { font-weight: 700; font-size: 1.1rem; max-width: 800px; margin: 0 auto; }
+
+        .proceso-section { background: var(--dark-grey); }
+        .timeline { display: flex; flex-wrap: wrap; justify-content: space-between; max-width: 1200px; width: 100%; gap: 20px; position: relative; }
+        .timeline-line { position: absolute; top: 30px; left: 5%; width: 0%; height: 2px; background: var(--primary-yellow); z-index: 0; transition: width 2s cubic-bezier(0.23, 1, 0.32, 1); }
+        .timeline.is-visible .timeline-line { width: 90%; }
+        .timeline::after { content: ''; position: absolute; top: 30px; left: 5%; width: 90%; height: 2px; background: rgba(255,255,255,0.1); z-index: -1; }
+        .step { flex: 1; min-width: 200px; text-align: center; position: relative; z-index: 1; padding: 0 10px; opacity: 0; transform: translateY(30px); transition: opacity 1s ease, transform 1s ease; }
+        .timeline.is-visible .step { opacity: 1; transform: translateY(0); }
+        .timeline.is-visible .step:nth-child(2) { transition-delay: 0.4s; }
+        .timeline.is-visible .step:nth-child(3) { transition-delay: 0.8s; }
+        .timeline.is-visible .step:nth-child(4) { transition-delay: 1.2s; }
+        .step-num { width: 60px; height: 60px; background: var(--dark-grey); border: 2px solid rgba(255,255,255,0.2); color: var(--pure-white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Syncopate'; font-size: 1.2rem; margin: 0 auto 20px; transition: 0.4s; }
+        .step:hover .step-num { border-color: var(--primary-yellow); color: var(--primary-yellow); transform: scale(1.1); box-shadow: 0 0 15px rgba(255,255,0,0.3); }
+        .step h4 { font-family: 'Syncopate'; font-size: 1rem; margin-bottom: 10px; }
+        .step p { color: #888; font-size: 0.85rem; }
+
+        .kits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; max-width: 1000px; width: 100%; margin-bottom: 80px; }
+        .kit-card { border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); padding: 50px 30px; text-align: center; border-radius: 12px; transition: all 0.5s ease; position: relative; z-index: 1; }
+        .kit-card:hover { border-color: var(--primary-yellow); background: rgba(255,255,0,0.02); transform: translateY(-10px) scale(1.02); box-shadow: 0 15px 35px rgba(0,0,0,0.5); z-index: 2; }
+        .kit-card h3 { font-family: 'Syncopate'; font-size: 1.5rem; margin-bottom: 20px; }
+        .kit-price { font-size: 2rem; font-weight: 900; color: var(--primary-yellow); margin-bottom: 20px; }
+        .kit-card ul { list-style: none; color: #ccc; margin-bottom: 30px; font-size: 0.9rem; line-height: 2; }
+
+        .faq-industrial { background: var(--pure-black); border-top: 1px solid rgba(255,255,255,0.05); }
+        .faq-accordion { max-width: 1000px; width: 100%; display: flex; flex-direction: column; gap: 15px; margin-top: 50px; }
+        .accordion-item { border: 1px solid rgba(255,255,255,0.05); background: rgba(255,255,255,0.01); border-radius: 8px; overflow: hidden; transition: 0.4s; }
+        .accordion-item:hover { border-color: rgba(255,255,0,0.2); }
+        .accordion-item.active { border-color: var(--primary-yellow); background: rgba(255,255,0,0.01); box-shadow: inset 0 0 20px rgba(255,255,0,0.02); }
+        
+        .accordion-header { padding: 30px; display: flex; justify-content: space-between; align-items: center; text-decoration: none; position: relative; cursor: pointer; }
+        .accordion-header h3 { font-size: 1rem; color: #ddd; text-transform: uppercase; font-weight: 700; transition: 0.4s; }
+        .accordion-item.active .accordion-header h3 { color: var(--pure-white); }
+        
+        .accordion-icon { width: 20px; height: 20px; position: relative; transform: rotate(0); transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
+        .accordion-icon::after, .accordion-icon::before { content: ''; position: absolute; background: #888; transition: background 0.4s; }
+        .accordion-icon::after { width: 100%; height: 2px; top: 50%; left: 0; transform: translateY(-50%); }
+        .accordion-icon::before { width: 2px; height: 100%; top: 0; left: 50%; transform: translateX(-50%); opacity: 1; transition: opacity 0.4s; }
+        .accordion-item.active .accordion-icon { transform: rotate(180deg); }
+        .accordion-item.active .accordion-icon::after, .accordion-item.active .accordion-icon::before { background: var(--primary-yellow); }
+        .accordion-item.active .accordion-icon::before { opacity: 0; } 
+        
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.8s cubic-bezier(0.23, 1, 0.32, 1); background: rgba(0,0,0,0.2); }
+        .accordion-content p { padding: 0 30px 40px; color: #aaa; font-size: 0.95rem; line-height: 1.8; font-weight: 300; border-top: 1px solid rgba(255,255,255,0.03); padding-top: 25px; }
+
+        .cta-final { text-align: center; margin-top: 40px; position: relative; padding: 100px 5% 40px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .magnetic-wrap { display: inline-block; padding: 20px; cursor: pointer; }
+        .btn-main { display: inline-block; padding: 25px 50px; background: var(--primary-yellow); color: var(--pure-black); font-family: 'Syncopate'; font-weight: 900; text-decoration: none; font-size: 1rem; border-radius: 5px; transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s; will-change: transform; }
+        .btn-main:hover { box-shadow: 0 15px 30px rgba(255,255,0,0.3); }
+
+        footer { background: var(--pure-black); padding: 100px 5% 50px; border-top: 1px solid #111; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 50px; }
+        .footer-col h4 { font-family: 'Syncopate'; font-size: 0.7rem; color: #555; margin-bottom: 25px; }
+        .footer-link { display: block; color: white; text-decoration: none; font-size: 0.8rem; margin-bottom: 15px; text-transform: uppercase; transition: 0.3s; }
+        .footer-link:hover { color: var(--primary-yellow); letter-spacing: 1px; }
+
+        .fade-in { opacity: 0; transform: translateY(40px); transition: opacity 1s cubic-bezier(0.23, 1, 0.32, 1), transform 1s cubic-bezier(0.23, 1, 0.32, 1); will-change: opacity, transform; }
+        .fade-in.is-visible { opacity: 1; transform: translateY(0); }
+
+        /* =========================================
+           DISEÑO RESPONSIVO
+           ========================================= */
+        
+        @media (max-width: 992px) {
+            section { padding: 80px 5%; }
+            .hero-distribuidores { min-height: 60vh; height: auto; padding: 140px 5% 60px 5%; }
+            .hero-title { font-size: 11vw; } 
+            
+            .menu-container { flex-direction: column; align-items: flex-start; justify-content: center; gap: 50px; height: 100vh; overflow-y: auto; padding-top: 100px;}
+            .menu-num { display: none; }
+            .menu-main a { font-size: 10vw; }
+            .menu-main:hover a { color: white; -webkit-text-stroke: 0; }
+            .menu-main a:hover, .menu-main a.active-link { -webkit-text-stroke: 0 !important; color: var(--primary-yellow) !important; transform: none !important; }
+            
+            /* Timeline Responsiva */
+            .timeline { flex-direction: column; align-items: center; gap: 40px; }
+            .timeline::after, .timeline-line { display: none; }
+            .step { width: 100%; }
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 15px 5%; }
+            .logo span.main { font-size: 1.2rem; }
+            .menu-main a { font-size: 12vw; }
+            
+            .exclusividad-banner { padding: 30px 20px; }
+            .exclusividad-banner h3 { font-size: 1.5rem; }
+            .stat-number { font-size: 3rem; }
+
+            .sticky-contact-btn { bottom: 20px; right: 50%; transform: translateX(50%); width: 90%; justify-content: center; padding: 15px; text-align: center; }
+            .sticky-contact-btn:hover { transform: translateX(50%) translateY(-5px) scale(1.02); }
+            
+            .contact-modal { padding: 30px 20px; }
+            .close-modal { top: 15px; right: 15px; }
+            footer { padding: 60px 5% 100px; text-align: center; gap: 30px; }
+        }
+
+        /* Ocultar el cursor */
+        @media (max-width: 992px), (hover: none) and (pointer: coarse) {
+            #cursor { display: none !important; }
+        }
+
+        /* MODAL */
+        .contact-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 999999; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
+        .contact-modal-overlay.active { opacity: 1; visibility: visible; }
+        .contact-modal { background: var(--dark-grey); width: 90%; max-width: 500px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); position: relative; transform: translateY(50px); transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); box-shadow: 0 25px 50px rgba(0,0,0,0.5); overflow: hidden; padding: 50px; }
+        .contact-modal-overlay.active .contact-modal { transform: translateY(0); }
+        .close-modal { position: absolute; top: 20px; right: 25px; background: transparent; border: none; color: #888; font-size: 1.5rem; transition: 0.3s; cursor: pointer; }
+        .close-modal:hover { color: var(--primary-yellow); transform: scale(1.2); }
+        .modal-content h3 { font-family: 'Syncopate'; color: var(--primary-yellow); font-size: 1.5rem; margin-bottom: 10px; line-height: 1.2; }
+        .modal-content p { color: #aaa; font-size: 0.9rem; margin-bottom: 30px; line-height: 1.5; }
+        .input-group { margin-bottom: 20px; }
+        .input-group input, .input-group select { width: 100%; padding: 15px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-family: 'Inter'; font-size: 0.9rem; transition: 0.3s; outline: none; }
+        .input-group input:focus, .input-group select:focus { border-color: var(--primary-yellow); background: rgba(255,255,0,0.02); }
+        .btn-submit { width: 100%; padding: 18px; background: var(--primary-yellow); color: var(--pure-black); font-family: 'Syncopate'; font-weight: 900; font-size: 0.9rem; border: none; border-radius: 8px; transition: 0.3s; position: relative; overflow: hidden; margin-top: 10px; cursor: pointer; }
+        .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,255,0,0.2); }
+        .btn-submit.loading { background: #555; color: transparent; pointer-events: none; box-shadow: none; transform: none; }
+        .btn-submit.loading::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+        .modal-success { display: none; text-align: center; opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
+        .modal-success.active { display: block; opacity: 1; transform: translateY(0); }
+        .success-icon { font-size: 4rem; color: var(--primary-yellow); margin-bottom: 20px; text-shadow: 0 0 30px rgba(255,255,0,0.3); }
+    </style>
+</head>
+<body>
+
+    <div id="scroll-progress"></div>
+    <div id="loader"><div class="loader-text">ESCALANDO</div></div>
+    <div id="cursor"></div>
+
+    <nav>
+        <a href="index.html" class="logo" data-hoverable="true">
+            <img src="Logos Vectorizados.png" alt="Mango BC Logo" style="height: 50px; width: auto; display: block;" decoding="async">
+        </a>
+        <button class="menu-btn" data-hoverable="true" onclick="toggleMenu()">MENÚ</button>
+    </nav>
+
+    <div class="nav-overlay" id="menuOverlay">
+        <div class="menu-container">
+            <div class="menu-main">
+                <a href="index.html" data-hoverable="true"><span class="menu-num">01</span>INICIO</a>
+                <a href="quienes-somos.html" data-hoverable="true"><span class="menu-num">02</span>QUIÉNES SOMOS</a>
+                <a href="unidades.html" data-hoverable="true"><span class="menu-num">03</span>UNIDADES DE NEGOCIO</a>
+                <a href="emprendedores.html" data-hoverable="true"><span class="menu-num">04</span>EMPRENDEDORES</a>
+                <a href="distribuidores.html" class="active-link" data-hoverable="true"><span class="menu-num">05</span>DISTRIBUIDORES</a>
+            </div>
+            
+            <div class="menu-secondary">
+                <div class="menu-info-block">
+                    <h4>SEDE CENTRAL</h4>
+                    <p>Morelia, Michoacán<br>México</p>
+                </div>
+                <div class="menu-info-block">
+                    <h4>CONTACTO DIRECTO</h4>
+                    <a href="javascript:void(0)" onclick="openContactModal(); toggleMenu();" class="menu-sublink" data-hoverable="true">Soporte Distribuidores</a>
+                    <a href="javascript:void(0)" onclick="openContactModal(); toggleMenu();" class="menu-sublink" data-hoverable="true">Expansión & Franquicias</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="javascript:void(0)" onclick="openContactModal()" class="sticky-contact-btn" data-hoverable="true">
+        CONTACTAR ↗
+    </a>
+
+    <section class="hero-distribuidores">
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;">
+            <video autoplay muted loop playsinline style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.35) grayscale(1);">
+                <source src="Cinematic.mp4" type="video/mp4">
+            </video>
+            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 60%, var(--pure-black) 100%);"></div>
+        </div>
+        
+        <div class="hero-content">
+            <h1 class="hero-title fade-in">ESCALA TU<br><span>NEGOCIO</span></h1>
+            <p class="hero-subtitle fade-in" style="transition-delay: 0.2s;">Conviértete en un distribuidor autorizado de nuestras marcas líderes y domina tu mercado local con el respaldo de Mango Logistics.</p>
+        </div>
+    </section>
+    
+    <section class="industrial-stats">
+        <div class="dot-grid-bg"></div>
+        <div class="stats-wrapper fade-in">
+            <div class="stat-item" data-hoverable="true">
+                <div class="stat-number"><span class="counter" data-target="1500">0</span>+</div>
+                <div class="stat-label">Tons distribuidas mes</div>
+            </div>
+            <div class="stat-item" data-hoverable="true">
+                <div class="stat-number"><span class="counter" data-target="25000">0</span>+</div>
+                <div class="stat-label">puntos de venta activos</div>
+            </div>
+            <div class="stat-item" data-hoverable="true">
+                <div class="stat-number"><span class="counter" data-target="100">0</span>%</div>
+                <div class="stat-label">cobertura nacional</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="beneficios">
+        <h2 class="section-title fade-in">BENEFICIOS DEL <span>PROGRAMA</span></h2>
+        
+        <div class="grid-beneficios fade-in">
+            <div class="floating-card" data-hoverable="true">
+                <h3>Márgenes Atractivos</h3>
+                <p>Precios preferenciales de fábrica diseñados para maximizar tu rentabilidad en ventas al por mayor y minoristas.</p>
+            </div>
+            <div class="floating-card" data-hoverable="true" style="transition-delay: 0.1s;">
+                <h3>Demanda Comprobada</h3>
+                <p>Acceso a productos de alta rotación como Deli Barras y Fibra Max, marcas ya posicionadas en la mente del consumidor.</p>
+            </div>
+            <div class="floating-card" data-hoverable="true" style="transition-delay: 0.2s;">
+                <h3>Soporte Logístico</h3>
+                <p>Abastecimiento garantizado y continuo respaldado por la infraestructura nacional de Mango Logistics.</p>
+            </div>
+        </div>
+
+        <div class="exclusividad-banner fade-in" data-hoverable="true">
+            <h3>EXCLUSIVIDAD DE ZONA</h3>
+            <p>Protegemos tu inversión. Al calificar como distribuidor oficial, te garantizamos un territorio asignado donde no autorizaremos a otros mayoristas de la red Mango BC.</p>
+        </div>
+    </section>
+
+    <section class="proceso-section" id="proceso">
+        <h2 class="section-title fade-in">PROCESO DE <span>REGISTRO ÁGIL</span></h2>
+        
+        <div class="timeline fade-in">
+            <div class="timeline-line"></div>
+            <div class="step" data-hoverable="true">
+                <div class="step-num">01</div>
+                <h4>Contacto</h4>
+                <p>Envía tu solicitud llenando el formulario de registro.</p>
+            </div>
+            <div class="step" data-hoverable="true">
+                <div class="step-num">02</div>
+                <h4>Evaluación</h4>
+                <p>Nuestro equipo analizará tu perfil y zona de interés.</p>
+            </div>
+            <div class="step" data-hoverable="true">
+                <div class="step-num">03</div>
+                <h4>Selección</h4>
+                <p>Elige el volumen inicial que se adapte a tu proyección.</p>
+            </div>
+            <div class="step" data-hoverable="true">
+                <div class="step-num">04</div>
+                <h4>Arranque</h4>
+                <p>Firma de acuerdo, envío de mercancía y capacitación.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="kits">
+        <h2 class="section-title fade-in">KITS DE <span>DISTRIBUCIÓN</span></h2>
+        
+        <div class="kits-grid fade-in">
+            <div class="floating-card kit-card" data-hoverable="true">
+                <h3>NIVEL REGIONAL</h3>
+                <div class="kit-price">VOL. MEDIO</div>
+                <ul>
+                    <li>Inventario mixto de introducción</li>
+                    <li>Material POP básico</li>
+                    <li>Acceso a portal de pedidos</li>
+                    <li>Asignación de zona estándar</li>
+                </ul>
+            </div>
+            <div class="floating-card kit-card" style="border-color: var(--primary-yellow); box-shadow: 0 0 30px rgba(255,255,0,0.05);" data-hoverable="true">
+                <h3>NIVEL ESTATAL</h3>
+                <div class="kit-price">ALTO VOL.</div>
+                <ul>
+                    <li>Inventario completo de todas las marcas</li>
+                    <li>Material POP Premium & Exhibidores</li>
+                    <li>Ejecutivo de cuenta asignado</li>
+                    <li>Exclusividad de zona amplia</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq-industrial" id="faq">
+        <h2 class="section-title fade-in">PREGUNTAS <span>FRECUENTES</span></h2>
+        
+        <div class="faq-accordion fade-in">
+            
+            <div class="accordion-item" data-hoverable="true">
+                <a href="javascript:void(0);" class="accordion-header">
+                    <h3>¿Cuál es el margen de utilidad garantizado?</h3>
+                    <div class="accordion-icon"></div>
+                </a>
+                <div class="accordion-content">
+                    <p>Aunque el margen depende del volumen de compra y la estrategia de precios en tu zona, nuestro modelo B2B está diseñado para garantizar márgenes preferenciales superiores a la media de snacks tradicionales, permitiendo una rentabilidad competitiva tanto en venta mayorista como minorista.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-hoverable="true">
+                <a href="javascript:void(0);" class="accordion-header">
+                    <h3>¿Cómo funciona la exclusividad de territorio?</h3>
+                    <div class="accordion-icon"></div>
+                </a>
+                <div class="accordion-content">
+                    <p>Al firmar el acuerdo de distribución "Nivel Estatal" (Alto Volumen), Mango BC asocia tu perfil a una zona geográfica exclusiva. Esto significa que no autorizaremos nuevos distribuidores directos de nuestra red dentro de tus límites territoriales protegidos mientras cumplas con los objetivos mínimos de venta acordados.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-hoverable="true">
+                <a href="javascript:void(0);" class="accordion-header">
+                    <h3>¿Cuál es el tiempo de entrega de Mango Logistics?</h3>
+                    <div class="accordion-icon"></div>
+                </a>
+                <div class="accordion-content">
+                    <p>Contamos con una infraestructura nacional optimizada. Los tiempos de entrega para pedidos estándar varían de 3 a 7 días hábiles, dependiendo de tu ubicación y el volumen del pedido. Para pedidos masivos "Nivel Estatal", tu ejecutivo de cuenta gestionará envíos programados prioritarios.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item" data-hoverable="true">
+                <a href="javascript:void(0);" class="accordion-header">
+                    <h3>¿Ofrecen líneas de crédito para mayoristas?</h3>
+                    <div class="accordion-icon"></div>
+                </a>
+                <div class="accordion-content">
+                    <p>Inicialmente, las operaciones se realizan de contado o pre-pago para establecer el historial comercial. Una vez que tu cuenta muestre un volumen constante y confiable por un periodo mínimo de 6 meses, nuestro departamento financiero evaluará la opción de abrir líneas de crédito comerciales para optimizar tu flujo de efectivo.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="cta-section-wrapper" id="contacto">
+        <div class="cta-final fade-in">
+            <p style="margin-bottom: 10px; color: #fff; font-size: 1.5rem; font-family: 'Syncopate'; text-shadow: 0 0 10px rgba(255,255,0,0.2);">¿LISTO PARA DOMINAR TU MERCADO?</p>
+            <p style="margin-bottom: 30px; color: #888; font-size: 1rem; font-weight: 300; max-width: 500px; margin-left: auto; margin-right: auto;">Únete a la red industrial de Mango BC y escala tu facturación al siguiente nivel.</p>
+            <div class="magnetic-wrap" data-hoverable="true">
+                <a href="javascript:void(0)" onclick="openContactModal()" class="btn-main cta-magnet">SOLICITAR CONTACTO</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-col">
+            <a href="index.html" class="logo">
+                <span class="main">MANGO</span><br>
+                <span class="sub">BUSINESS CENTER</span>
+            </a>
+            <p style="color:#444; font-size:0.7rem; margin-top:20px;">LIDERANDO EL SECTOR ALIMENTARIO INDUSTRIAL.</p>
+        </div>
+        <div class="footer-col">
+            <h4>NEGOCIO</h4>
+            <a href="quienes-somos.html#talento" class="footer-link">Bolsa de Trabajo</a>
+            <a href="unidades.html#logistics" class="footer-link">Mango Logistics</a>
+            <a href="unidades.html#hot-rolls" class="footer-link">Hot Rolls</a>
+        </div>
+        <div class="footer-col">
+            <h4>CONTACTO</h4>
+            <a href="javascript:void(0)" onclick="openContactModal()" class="footer-link">Soporte Distribuidores</a>
+            <a href="javascript:void(0)" onclick="openContactModal()" class="footer-link">Contrataciones / Emprendedores</a>
+        </div>
+        <div style="grid-column: 1/-1; text-align:center; color:#222; font-size:0.6rem; margin-top:50px;">© 2026 MANGO BUSINESS CENTER — TODOS LOS DERECHOS RESERVADOS</div>
+    </footer>
+
+    <div class="contact-modal-overlay" id="contactModal">
+        <div class="contact-modal" data-hoverable="true">
+            <button class="close-modal" onclick="closeContactModal()">✕</button>
+            
+            <div class="modal-content" id="modalContent">
+                <h3>SOLICITUD DE<br>CONTACTO</h3>
+                <p>Déjanos tus datos. Nuestro equipo de escalamiento se comunicará contigo en menos de 24 horas.</p>
+                
+                <form id="fakeContactForm">
+                    <div class="input-group">
+                        <input type="text" placeholder="Nombre Completo" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" placeholder="Correo Electrónico" required>
+                    </div>
+                    <div class="input-group">
+                        <select required style="color: #aaa;">
+                            <option value="" disabled selected>Área de Interés</option>
+                            <option value="distribuidor">Ser Distribuidor (B2B)</option>
+                            <option value="emprendedor">Emprendimiento (Kits)</option>
+                            <option value="franquicia">Franquicias Hot Rolls</option>
+                            <option value="logistica">Mango Logistics</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-submit" id="submitBtn">ENVIAR INFORMACIÓN</button>
+                </form>
+            </div>
+
+            <div class="modal-success" id="modalSuccess">
+                <div class="success-icon">✓</div>
+                <h3 style="font-family: 'Syncopate'; color: var(--pure-white); font-size: 1.5rem; margin-bottom: 10px;">¡SOLICITUD RECIBIDA!</h3>
+                <p style="color: #aaa; font-size: 0.9rem; line-height: 1.6;">Hemos registrado tus datos en nuestro sistema. Un asesor corporativo de Mango BC te contactará a la brevedad.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Carga Ajustada 
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loader').style.visibility = 'hidden';
+                }, 800); 
+            }, 800); 
+        });
+
+        // OPTIMIZACIÓN 4: Scroll Progress Bar con Throttle (requestAnimationFrame)
+        let tickingScroll = false;
+        window.addEventListener('scroll', () => {
+            if (!tickingScroll) {
+                window.requestAnimationFrame(() => {
+                    const scrollTotal = document.documentElement.scrollTop;
+                    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                    const scrolled = (scrollTotal / height) * 100;
+                    document.getElementById('scroll-progress').style.width = scrolled + '%';
+                    tickingScroll = false;
+                });
+                tickingScroll = true;
+            }
+        }, { passive: true }); // passive: true mejora el rendimiento en scroll
+
+        // Custom Cursor
+        const cursor = document.getElementById('cursor');
+        if (window.matchMedia("(pointer: fine)").matches) {
+            let mouseX = 0, mouseY = 0;
+            document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+            function animateCursor() {
+                cursor.style.transform = `translate3d(${mouseX - (cursor.offsetWidth/2)}px, ${mouseY - (cursor.offsetHeight/2)}px, 0)`;
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+        } else {
+            cursor.style.display = 'none';
+        }
+
+        // Control del Menú Full Screen
+        function toggleMenu() { document.getElementById('menuOverlay').classList.toggle('active'); }
+
+        // Intersection Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { 
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible'); 
+                    if(entry.target.classList.contains('stats-wrapper')) { animateCounters(); }
+                }
+            });
+        }, { threshold: 0.2 });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Hover States
+        document.querySelectorAll('[data-hoverable="true"], button, input, select').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
+        });
+
+        // Contadores Animados
+        let countersAnimated = false; 
+        function animateCounters() {
+            if (countersAnimated) return;
+            countersAnimated = true;
+            
+            const counters = document.querySelectorAll('.counter');
+            const speed = 200; 
+
+            counters.forEach(counter => {
+                const animateCounter = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText;
+                    const increment = target / speed; 
+
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + increment);
+                        setTimeout(animateCounter, 10);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                animateCounter();
+            });
+        }
+
+        // Acordeón FAQ
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const item = this.parentElement;
+                const content = this.nextElementSibling;
+                const accordion = item.parentElement;
+                
+                if (item.classList.contains('active')) {
+                    item.classList.remove('active');
+                    content.style.maxHeight = '0';
+                } else {
+                    accordion.querySelectorAll('.accordion-item.active').forEach(openItem => {
+                        openItem.classList.remove('active');
+                        openItem.querySelector('.accordion-content').style.maxHeight = '0';
+                    });
+                    item.classList.add('active');
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                }
+            });
+        });
+
+        // OPTIMIZACIÓN 4: Botón Magnético con Throttle (requestAnimationFrame)
+        const magnet = document.querySelector('.magnetic-wrap');
+        const magnetBtn = document.querySelector('.cta-magnet');
+        let tickingMagnet = false;
+        
+        magnet.addEventListener('mousemove', (e) => {
+            if (!tickingMagnet) {
+                window.requestAnimationFrame(() => {
+                    const position = magnet.getBoundingClientRect();
+                    const x = e.clientX - position.left - position.width / 2;
+                    const y = e.clientY - position.top - position.height / 2;
+                    magnetBtn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+                    tickingMagnet = false;
+                });
+                tickingMagnet = true;
+            }
+        });
+        
+        magnet.addEventListener('mouseout', () => {
+            magnetBtn.style.transform = `translate(0px, 0px)`;
+        });
+
+        // LÓGICA DEL MODAL
+        const modalOverlay = document.getElementById('contactModal');
+        const fakeForm = document.getElementById('fakeContactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const modalContent = document.getElementById('modalContent');
+        const modalSuccess = document.getElementById('modalSuccess');
+
+        function openContactModal() {
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeContactModal() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto'; 
+            
+            setTimeout(() => {
+                fakeForm.reset();
+                modalContent.style.display = 'block';
+                modalSuccess.classList.remove('active');
+                submitBtn.classList.remove('loading');
+            }, 500);
+        }
+
+        fakeForm.addEventListener('submit', function(e) {
+            e.preventDefault(); 
+            submitBtn.classList.add('loading');
+            
+            setTimeout(() => {
+                modalContent.style.display = 'none'; 
+                modalSuccess.classList.add('active'); 
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

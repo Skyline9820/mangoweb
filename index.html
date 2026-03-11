@@ -88,13 +88,14 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            transition: opacity 0.4s ease, transform 0.4s ease;
+            transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
             transform-origin: bottom right;
         }
 
         /* Estado oculto */
         .floating-menu.collapsed .floating-items {
             opacity: 0;
+            visibility: hidden;
             transform: translateY(20px) scale(0.8);
             pointer-events: none;
         }
@@ -718,27 +719,30 @@
         }, { threshold: 0.15 });
         document.querySelectorAll('.fade-in, .bento-box, .cta-box, .pricing-card, .benefit-card, .test-card, .how-it-works, .form-container').forEach(el => observer.observe(el));
 
-        // --- LÓGICA DEL MENÚ FLOTANTE ---
+        // --- LÓGICA DEL MENÚ FLOTANTE (INFALIBLE) ---
         const floatingMenu = document.getElementById('floatingMenu');
         const mainToggle = document.getElementById('mainToggle');
-        const heroSection = document.querySelector('.hero-product');
+        
+        // Variable para saber dónde estaba el scroll antes
+        let lastScrollY = window.scrollY;
 
-        // Observer que revisa si estás en la sección 1 (Hero)
-        const menuObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Si la sección 1 es visible, abrir menú automáticamente
-                    floatingMenu.classList.remove('collapsed');
-                } else {
-                    // Si saliste de la sección 1, colapsar y dejar solo INICIO
-                    floatingMenu.classList.add('collapsed');
-                }
-            });
-        }, { threshold: 0.1 }); // 10% visible es suficiente para activarse
+        window.addEventListener('scroll', () => {
+            let currentScroll = window.scrollY;
+            let limit = window.innerHeight * 0.5; // El límite es la mitad de la pantalla
+            
+            // Si regresamos a la parte superior -> Se abre solito
+            if (currentScroll < limit) {
+                floatingMenu.classList.remove('collapsed');
+            } 
+            // Si bajamos de la mitad de la pantalla -> Se cierra solito
+            else if (currentScroll > limit && lastScrollY <= limit) {
+                floatingMenu.classList.add('collapsed');
+            }
+            
+            lastScrollY = currentScroll;
+        });
 
-        menuObserver.observe(heroSection);
-
-        // Poder abrirlo o cerrarlo al darle clic manualmente
+        // Cuando le das clic, lo puedes abrir o cerrar sin importar dónde estés
         mainToggle.addEventListener('click', () => {
             floatingMenu.classList.toggle('collapsed');
         });

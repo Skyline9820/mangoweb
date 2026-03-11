@@ -40,9 +40,9 @@
         
         .loader-logo { 
             width: auto; 
-            height: 70vh; /* Ocupa el 70% del alto de la pantalla */
-            max-height: 730px; /* Recupera el tamaño máximo gigante que tenías */
-            max-width: 90vw; /* Evita que se desborde a los lados en celulares */
+            height: 70vh; 
+            max-height: 730px; 
+            max-width: 90vw; 
             animation: pulse 1.5s infinite; 
             object-fit: contain;
         }
@@ -259,7 +259,7 @@
         .btn-box { display: inline-block; margin-top: 20px; padding: 12px 25px; border: 1px solid var(--primary-yellow); color: var(--primary-yellow); text-decoration: none; font-family: 'Syncopate'; font-size: 0.7rem; transition: 0.3s; text-transform: uppercase; }
         .unidad-box:hover .btn-box, .btn-box:hover { background: var(--primary-yellow); color: var(--pure-black); }
 
-        /* PRODUCTOS OPTIMIZADO */
+        /* PRODUCTOS CORREGIDO */
         .marcas-expansion { background: var(--pure-white); color: var(--pure-black); z-index: 3; flex-direction: column; padding-top: 150px; }
         .bg-marquee { position: absolute; top: 50%; transform: translateY(-50%); white-space: nowrap; overflow: hidden; width: 100%; opacity: 0.04; z-index: 0;}
         .marquee-content { display: inline-block; font-family: 'Syncopate'; font-size: 15vw; animation: marquee 25s linear infinite; }
@@ -277,23 +277,64 @@
         }
         
         .brand-card { 
-            flex: 1; min-height: 350px; background: var(--pure-white); border-radius: 20px; padding: 40px; display: flex; flex-direction: column; justify-content: center;
-            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1); position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
-            opacity: 0; transform: translateY(50px);
+            flex: 1; 
+            background: var(--pure-white); 
+            border-radius: 20px; 
+            padding: 35px 25px; 
+            display: flex; 
+            flex-direction: column; 
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1); 
+            position: relative; 
+            overflow: hidden; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+            opacity: 0; 
+            transform: translateY(50px);
             text-decoration: none; 
             color: inherit;
         }
         .brand-card.is-visible { opacity: 1; transform: translateY(0); }
         .brand-card::before { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); opacity: 0; transition: opacity 0.6s ease; z-index: 1; }
-        .card-num { font-family: 'Syncopate'; font-size: 1rem; color: #b0b0b0; z-index: 2; position: absolute; top: 40px; left: 40px; }
-        .brand-card h2 { font-family: 'Syncopate'; font-size: clamp(1rem, 2vw, 1.5rem); margin-top: auto; color: var(--pure-black); z-index: 2; transition: 0.6s; }
-        .desc { opacity: 0; transform: translateY(20px); transition: 0.6s; font-size: 0.9rem; color: #e0e0e0; z-index: 2; line-height: 1.4; margin-top: 10px; }
-        .product-img { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8); max-height: 55%; max-width: 80%; object-fit: contain; filter: opacity(0.6); transition: 0.8s; z-index: 0; }
+        
+        .card-num { font-family: 'Syncopate'; font-size: 1rem; color: #b0b0b0; z-index: 2; }
+        
+        .brand-card h2 { 
+            font-family: 'Syncopate'; 
+            font-size: clamp(1rem, 1.5vw, 1.5rem); 
+            margin-top: 15px; 
+            color: var(--pure-black); 
+            z-index: 2; 
+            transition: 0.6s; 
+            word-wrap: break-word; 
+        }
+        
+        .desc { 
+            margin-top: auto; 
+            opacity: 0; 
+            transform: translateY(20px); 
+            transition: 0.6s; 
+            font-size: 0.85rem; 
+            color: #e0e0e0; 
+            z-index: 2; 
+            line-height: 1.4; 
+        }
+        
+        .product-img { 
+            position: absolute; 
+            top: 55%; 
+            left: 50%; 
+            transform: translate(-50%, -50%) scale(0.8); 
+            max-height: 40%; 
+            max-width: 80%; 
+            object-fit: contain; 
+            filter: opacity(0.6); 
+            transition: 0.8s; 
+            z-index: 0; 
+        }
 
         @media (hover: hover) {
             .brand-card:hover { flex: 2.5; background: var(--pure-black); }
             .brand-card:hover::before { opacity: 1; }
-            .brand-card:hover h2 { font-size: clamp(1.5rem, 3vw, 2.5rem); color: var(--primary-yellow); }
+            .brand-card:hover h2 { font-size: clamp(1.2rem, 2.5vw, 2.5rem); color: var(--primary-yellow); }
             .brand-card:hover .desc { opacity: 1; transform: translateY(0); }
             .brand-card:hover .product-img { left: 75%; transform: translate(-50%, -50%) scale(1.1); filter: opacity(1); }
         }
@@ -346,12 +387,13 @@
 
             .marcas-expansion { padding-top: 80px; }
             .expansion-container { flex-direction: column; height: auto; gap: 20px; }
-            .brand-card { width: 100%; min-height: 280px; padding: 30px; justify-content: flex-start; }
-            .card-num { top: 20px; left: 20px; }
+            
+            /* Correcciones para la versión móvil de las tarjetas */
+            .brand-card { width: 100%; min-height: 250px; padding: 30px; }
             .brand-card::before { opacity: 0.8; height: 100%; } 
-            .brand-card .desc { opacity: 1; transform: translateY(0); position: relative; z-index: 5; margin-top: 5px; }
-            .brand-card h2 { font-size: 2rem; color: var(--primary-yellow); margin-top: 40px; }
-            .brand-card .product-img { filter: opacity(1); left: 80%; transform: translate(-50%, -50%) scale(0.9); }
+            .brand-card .desc { opacity: 1; transform: translateY(0); position: relative; z-index: 5; margin-top: 15px; }
+            .brand-card h2 { font-size: 1.8rem; color: var(--primary-yellow); margin-top: 10px; }
+            .brand-card .product-img { filter: opacity(1); left: 80%; top: 50%; transform: translate(-50%, -50%) scale(0.9); }
 
             .vision-text { font-size: 10vw; }
         }

@@ -47,8 +47,6 @@
         nav { position: fixed; width: 100%; padding: 25px 5%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: rgba(0,0,0,0.5); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05); }
         .logo { text-decoration: none; display: inline-block; transition: transform 0.4s; }
         .logo:hover { transform: scale(1.05); }
-        .logo span.main { color: var(--primary-yellow); font-family: 'Syncopate'; font-weight: 900; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 3px; }
-        .logo span.sub { color: var(--pure-white); font-family: 'Inter', sans-serif; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
         .menu-btn { background: none; border: none; color: white; font-family: 'Syncopate'; font-size: 0.7rem; letter-spacing: 2px; cursor: pointer; }
 
         .nav-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 5000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.6s cubic-bezier(0.85, 0, 0.15, 1); }
@@ -117,11 +115,14 @@
             background: var(--pure-white); color: var(--pure-black); box-shadow: 0 10px 25px rgba(255,255,255,0.2);
         }
 
-        section { padding: 120px 5%; position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2; overflow: hidden; }
+        /* SECCIONES Y FONDOS NEGROS */
+        section { padding: 120px 5%; position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2; overflow: hidden; background-color: var(--pure-black) !important; }
+        .hero-unidades, .hotrolls-section { background-color: var(--dark-grey) !important; }
+
         .section-title { font-family: 'Syncopate'; font-size: 2.5rem; color: var(--pure-white); margin-bottom: 50px; text-transform: uppercase; text-align: center; }
         .section-title span { color: var(--primary-yellow); }
 
-        .hero-nosotros { min-height: 75vh; background: var(--dark-grey); text-align: center; position: relative; padding-bottom: 60px; padding-top: 100px; border-bottom: 1px solid var(--primary-yellow); overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .hero-nosotros { min-height: 75vh; background: var(--dark-grey) !important; text-align: center; position: relative; padding-bottom: 60px; padding-top: 100px; border-bottom: 1px solid var(--primary-yellow); overflow: hidden; display: flex; align-items: center; justify-content: center; }
         .bg-marquee-hero { position: absolute; top: 50%; left: 0; transform: translateY(-50%); white-space: nowrap; width: 100%; opacity: 0.03; z-index: 0; pointer-events: none; }
         .marquee-content-hero { display: inline-block; font-family: 'Syncopate'; font-size: 18vw; font-weight: 900; animation: marquee-hero 40s linear infinite; }
         @keyframes marquee-hero { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
@@ -147,7 +148,7 @@
         .image-collage:hover .img-back { filter: grayscale(0%) brightness(1); transform: translate(10px, -10px); }
         .image-collage:hover .img-front { filter: grayscale(0%) brightness(1); transform: translate(-10px, 10px); }
 
-        .mv-section { display: flex; flex-direction: column; gap: 120px; padding: 150px 5%; background: var(--dark-grey); }
+        .mv-section { display: flex; flex-direction: column; gap: 120px; padding: 150px 5%; background: var(--dark-grey) !important; }
         .mv-row { display: flex; width: 100%; max-width: 1400px; margin: 0 auto; align-items: center; gap: 60px; }
         .mv-title-wrapper { flex: 1; display: flex; }
         .mv-row.mision .mv-title-wrapper { justify-content: flex-start; }
@@ -168,15 +169,16 @@
         .valor-card h3 { font-family: 'Syncopate'; color: var(--pure-white); font-size: 1.2rem; margin-bottom: 15px; position: relative; z-index: 2; margin-top: 20px; }
         .valor-card p { color: #aaa; line-height: 1.6; font-size: 0.95rem; position: relative; z-index: 2; }
 
-        .talento-section { background: var(--dark-grey); padding: 150px 5%; text-align: center; }
+        .talento-section { background: var(--dark-grey) !important; padding: 150px 5%; text-align: center; }
         .talento-content { max-width: 800px; margin: 0 auto; }
         .talento-content h2 { font-family: 'Syncopate'; font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: 20px; }
         .talento-content p { color: #888; font-size: 1.1rem; line-height: 1.8; margin-bottom: 50px; }
+        
         .magnetic-wrap { display: inline-block; padding: 20px; cursor: pointer; }
         .btn-main { display: inline-block; padding: 25px 50px; background: var(--primary-yellow); color: var(--pure-black); font-family: 'Syncopate'; font-weight: 900; text-decoration: none; font-size: 1rem; border-radius: 5px; transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s; will-change: transform; cursor: pointer;}
         .btn-main:hover { box-shadow: 0 15px 30px rgba(255,255,0,0.3); }
 
-        footer { background: var(--pure-black); padding: 100px 5% 50px; border-top: 1px solid #111; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 50px; }
+        footer { background: var(--pure-black) !important; padding: 100px 5% 50px; border-top: 1px solid #111; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 50px; }
         .footer-col h4 { font-family: 'Syncopate'; font-size: 0.7rem; color: #555; margin-bottom: 25px; }
         .footer-link { display: block; color: white; text-decoration: none; font-size: 0.8rem; margin-bottom: 15px; text-transform: uppercase; transition: 0.3s; cursor: pointer;}
         .footer-link:hover { color: var(--primary-yellow); letter-spacing: 1px; }
@@ -225,11 +227,11 @@
             footer { padding: 60px 5% 100px; text-align: center; gap: 30px; }
         }
 
-        /* Ocultar el cursor personalizado en móviles y dispositivos táctiles */
         @media (max-width: 992px), (hover: none) and (pointer: coarse) {
             #cursor { display: none !important; }
         }
 
+        /* MODAL */
         .contact-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 999999; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
         .contact-modal-overlay.active { opacity: 1; visibility: visible; }
         .contact-modal { background: var(--dark-grey); width: 90%; max-width: 500px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); position: relative; transform: translateY(50px); transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); box-shadow: 0 25px 50px rgba(0,0,0,0.5); overflow: hidden; padding: 50px; }
@@ -238,14 +240,17 @@
         .close-modal:hover { color: var(--primary-yellow); transform: scale(1.2); }
         .modal-content h3 { font-family: 'Syncopate'; color: var(--primary-yellow); font-size: 1.5rem; margin-bottom: 10px; line-height: 1.2; }
         .modal-content p { color: #aaa; font-size: 0.9rem; margin-bottom: 30px; line-height: 1.5; }
-        .input-group { margin-bottom: 20px; }
+        .input-group { margin-bottom: 20px; text-align: left; }
+        .input-group label { font-size: 0.8rem; color: #aaaaaa; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; display: block; }
         .input-group input, .input-group select { width: 100%; padding: 15px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-family: 'Inter'; font-size: 0.9rem; transition: 0.3s; outline: none; }
         .input-group input:focus, .input-group select:focus { border-color: var(--primary-yellow); background: rgba(255,255,0,0.02); }
+        
         .btn-submit { width: 100%; padding: 18px; background: var(--primary-yellow); color: var(--pure-black); font-family: 'Syncopate'; font-weight: 900; font-size: 0.9rem; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; margin-top: 10px; }
         .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,255,0,0.2); }
         .btn-submit.loading { background: #555; color: transparent; pointer-events: none; box-shadow: none; transform: none; }
         .btn-submit.loading::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+        
         .modal-success { display: none; text-align: center; opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
         .modal-success.active { display: block; opacity: 1; transform: translateY(0); }
         .success-icon { font-size: 4rem; color: var(--primary-yellow); margin-bottom: 20px; text-shadow: 0 0 30px rgba(255,255,0,0.3); }
@@ -405,9 +410,8 @@
 
     <footer>
         <div class="footer-col">
-            <a href="index.html#inicio" class="logo">
-                <span class="main">MANGO</span><br>
-                <span class="sub">BUSINESS CENTER</span>
+            <a href="index.html#inicio" class="logo" data-hoverable="true">
+                <img src="Logos Vectorizados.png" alt="Mango BC Logo" style="height: 50px; width: auto; display: block;" decoding="async">
             </a>
             <p style="color:#444; font-size:0.7rem; margin-top:20px;">LIDERANDO EL SECTOR ALIMENTARIO INDUSTRIAL.</p>
         </div>
@@ -435,13 +439,16 @@
                 
                 <form id="fakeContactForm">
                     <div class="input-group">
-                        <input type="text" placeholder="Nombre Completo" required>
+                        <input type="text" id="nombreAtom" placeholder="Nombre Completo" required>
                     </div>
                     <div class="input-group">
-                        <input type="email" placeholder="Correo Electrónico" required>
+                        <input type="email" id="emailAtom" placeholder="Correo Electrónico" required>
                     </div>
                     <div class="input-group">
-                        <select required style="color: #aaa;">
+                        <input type="tel" id="telefonoAtom" placeholder="10 dígitos" required>
+                    </div>
+                    <div class="input-group">
+                        <select id="interesAtom" required style="color: #aaa;">
                             <option value="" disabled selected>Motivo de Contacto</option>
                             <option value="vacante_operativa">Aplicar a Vacante Operativa</option>
                             <option value="vacante_admin">Aplicar a Vacante Administrativa</option>
@@ -462,30 +469,33 @@
     </div>
 
     <script>
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loader').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('loader').style.visibility = 'hidden';
-                }, 800);
-            }, 800);
-        });
+        // PRELOADER BLINDADO
+        const loader = document.getElementById('loader');
+        if (loader) {
+            const hideLoader = () => {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 800);
+            };
+            window.addEventListener('load', hideLoader);
+            setTimeout(hideLoader, 2500);
+        }
 
-        // OPTIMIZACIÓN 4: Scroll Progress Bar con Throttle
+        // Scroll Progress Bar con Throttle
         let tickingScroll = false;
         window.addEventListener('scroll', () => {
             if (!tickingScroll) {
                 window.requestAnimationFrame(() => {
-                    const currentScroll = document.documentElement.scrollTop;
+                    const scrollTotal = document.documentElement.scrollTop;
                     const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                    document.getElementById('scroll-progress').style.width = (currentScroll / height) * 100 + '%';
+                    const scrolled = (scrollTotal / height) * 100;
+                    document.getElementById('scroll-progress').style.width = scrolled + '%';
                     tickingScroll = false;
                 });
                 tickingScroll = true;
             }
         }, { passive: true });
 
-        // OPTIMIZACIÓN 4: Custom Cursor con requestAnimationFrame
+        // Custom Cursor con requestAnimationFrame
         const cursor = document.getElementById('cursor');
         if (window.matchMedia("(pointer: fine)").matches) {
             let mouseX = 0, mouseY = 0;
@@ -523,28 +533,31 @@
             el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
         });
 
-        // OPTIMIZACIÓN 4: Botón Magnético con Throttle
+        // Botón Magnético con Throttle
         const magnet = document.querySelector('.magnetic-wrap');
         const magnetBtn = document.querySelector('.cta-magnet');
         let tickingMagnet = false;
         
-        magnet.addEventListener('mousemove', (e) => {
-            if (!tickingMagnet) {
-                window.requestAnimationFrame(() => {
-                    const position = magnet.getBoundingClientRect();
-                    const x = e.clientX - position.left - position.width / 2;
-                    const y = e.clientY - position.top - position.height / 2;
-                    magnetBtn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
-                    tickingMagnet = false;
-                });
-                tickingMagnet = true;
-            }
-        });
-        
-        magnet.addEventListener('mouseout', () => {
-            magnetBtn.style.transform = `translate(0px, 0px)`;
-        });
+        if(magnet) {
+            magnet.addEventListener('mousemove', (e) => {
+                if (!tickingMagnet) {
+                    window.requestAnimationFrame(() => {
+                        const position = magnet.getBoundingClientRect();
+                        const x = e.clientX - position.left - position.width / 2;
+                        const y = e.clientY - position.top - position.height / 2;
+                        magnetBtn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+                        tickingMagnet = false;
+                    });
+                    tickingMagnet = true;
+                }
+            });
+            
+            magnet.addEventListener('mouseout', () => {
+                magnetBtn.style.transform = `translate(0px, 0px)`;
+            });
+        }
 
+        // Modal Form Logic + ATOM WEBHOOK
         const modalOverlay = document.getElementById('contactModal');
         const fakeForm = document.getElementById('fakeContactForm');
         const submitBtn = document.getElementById('submitBtn');
@@ -561,22 +574,55 @@
             document.body.style.overflow = 'auto'; 
             
             setTimeout(() => {
-                fakeForm.reset();
-                modalContent.style.display = 'block';
-                modalSuccess.classList.remove('active');
-                submitBtn.classList.remove('loading');
+                if(fakeForm) fakeForm.reset();
+                if(modalContent) modalContent.style.display = 'block';
+                if(modalSuccess) modalSuccess.classList.remove('active');
+                if(submitBtn) submitBtn.classList.remove('loading');
             }, 500);
         }
 
-        fakeForm.addEventListener('submit', function(e) {
-            e.preventDefault(); 
-            submitBtn.classList.add('loading');
-            
-            setTimeout(() => {
-                modalContent.style.display = 'none'; 
-                modalSuccess.classList.add('active'); 
-            }, 2000);
-        });
+        if(fakeForm) {
+            fakeForm.addEventListener('submit', function(e) {
+                e.preventDefault(); 
+                if(submitBtn) submitBtn.classList.add('loading');
+                
+                // Recolectar datos
+                const nombre = document.getElementById('nombreAtom') ? document.getElementById('nombreAtom').value : '';
+                const email = document.getElementById('emailAtom') ? document.getElementById('emailAtom').value : '';
+                const interes = document.getElementById('interesAtom') ? document.getElementById('interesAtom').value : '';
+                
+                // Limpiar y preparar teléfono
+                const rawPhone = document.getElementById('telefonoAtom') ? document.getElementById('telefonoAtom').value : '';
+                const cleanPhone = rawPhone.replace(/\D/g, ''); 
+                const atomPhone = "52" + cleanPhone;
+                
+                // Armar paquete JSON
+                const payloadAtom = {
+                    "phone": atomPhone,
+                    "nombre": nombre,   
+                    "correo": email,
+                    "interes": interes
+                };
+                
+                // Disparo a Atom Webhook
+                fetch('https://us-central1-atomchat-io.cloudfunctions.net/webhook/c97-011-4f6-b1e-58a', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payloadAtom)
+                })
+                .then(response => {
+                    if(modalContent) modalContent.style.display = 'none'; 
+                    if(modalSuccess) modalSuccess.classList.add('active'); 
+                })
+                .catch(error => {
+                    console.error('Error con Atom:', error);
+                    alert("Hubo un error de conexión. Por favor intenta de nuevo.");
+                    if(submitBtn) submitBtn.classList.remove('loading');
+                });
+            });
+        }
 
         // --- LÓGICA DEL MENÚ FLOTANTE INTELIGENTE (HOVER + SCROLL) ---
         const floatingMenu = document.getElementById('floatingMenu');

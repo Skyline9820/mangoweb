@@ -252,7 +252,8 @@
         }
         .card-btn:hover { background: var(--mango); color: var(--dark); }
 
-        @media (hover: hover) {
+        /* Efectos Hover en PC (Arriba de 1200px) */
+        @media (min-width: 1201px) and (hover: hover) {
             .brand-card:hover { flex: 2.5; background: #0a0a0a; border-color: var(--mango); }
             .brand-card:hover::before { opacity: 1; }
             .brand-card:hover .card-num { color: var(--mango); }
@@ -360,8 +361,9 @@
         .capacidad-right {
             display: flex;
             flex-direction: column;
-            gap: 40px;
-            align-items: center;
+            gap: 35px;
+            align-items: center; 
+            text-align: center;
         }
 
         .production-img {
@@ -373,19 +375,11 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
         }
-
-        .sales-cta-block { 
-            display: flex; 
-            align-items: center; 
-            gap: 30px; 
-            width: 100%; 
-            justify-content: center; 
-            flex-wrap: wrap;
-        }
         
         .growth-badge { 
             display: flex; 
             align-items: center; 
+            justify-content: center; 
             gap: 15px; 
             color: var(--mango); 
             font-family: 'Montserrat'; 
@@ -402,31 +396,74 @@
             line-height: 1.2; 
             text-align: left; 
         }
-        
-        .btn-ventas-gigante { 
-            flex: 1; 
-            min-width: 250px; 
-            background: var(--mango); 
-            color: var(--dark); 
-            padding: 22px 20px; 
-            border-radius: 50px; 
-            text-align: center; 
-            font-family: 'Montserrat'; 
-            font-weight: 900; 
-            font-size: 1.1rem; 
-            text-transform: uppercase; 
-            text-decoration: none; 
-            transition: 0.4s; 
+
+        .negotiation-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+        }
+
+        /* TEXTO LLAMATIVO Y ANIMADO PARA LOS BOTONES */
+        .negotiation-title {
+            color: var(--white);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0 0 10px 0;
+            font-weight: 900;
+            text-shadow: 0 0 15px rgba(253, 234, 20, 0.3);
+        }
+        .negotiation-title span {
+            color: var(--mango);
+        }
+        .arrow-down {
+            display: inline-block;
+            font-size: 1.5rem;
+            animation: bounceDown 1.5s infinite ease-in-out;
         }
         
-        .btn-ventas-gigante:hover { 
-            background: var(--white); 
-            transform: translateY(-5px); 
-            box-shadow: 0 10px 40px rgba(253, 234, 20, 0.4); 
+        @keyframes bounceDown {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(8px); }
+        }
+
+        .negotiation-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .btn-negotiate {
+            flex: 1;
+            min-width: 180px;
+            max-width: 250px;
+            background-color: var(--mango);
+            color: var(--dark);
+            border: none;
+            border-radius: 50px;
+            padding: 16px 20px;
+            font-size: 0.95rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-negotiate:hover {
+            background-color: var(--white);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(253, 234, 20, 0.3);
         }
 
         /* =========================================================
-           6. TALENTO (Ajustado para 1 sola vista)
+           6. TALENTO
            ========================================================= */
         .talento { 
             background: var(--white); 
@@ -504,118 +541,186 @@
             .bento-card h3 { font-size: clamp(2.2rem, 4vw, 3.5rem); }
         }
 
+        /* =========================================================
+           AJUSTE PARA TABLETS (Hasta 1200px) - EVITA QUE SE APLASTEN LAS MARCAS
+           ========================================================= */
+        @media (max-width: 1200px) {
+            .expansion-container { 
+                flex-wrap: wrap; 
+                height: auto; 
+                justify-content: center; 
+                gap: 20px;
+                padding: 0 10px;
+            }
+            .brand-card { 
+                /* Forzamos a que sean exactamente 2 tarjetas por fila */
+                flex: 0 0 calc(50% - 10px); 
+                width: calc(50% - 10px); 
+                height: auto; 
+                min-height: 420px;
+                align-items: center; 
+                text-align: center;
+                padding: 30px 20px;
+                padding-top: 180px; 
+            }
+            .brand-card::before { 
+                opacity: 0.85; 
+                height: 100%; 
+                background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.1)); 
+            } 
+            .brand-card .brand-desc, .brand-card .card-btn { 
+                opacity: 1; 
+                transform: translateY(0); 
+                position: relative; 
+                z-index: 5; 
+            }
+            .brand-card h2 { 
+                font-size: 1.8rem; 
+                color: var(--mango); 
+                position: relative; 
+                z-index: 5; 
+                margin-top: 0;
+            }
+            .brand-card .card-num { 
+                color: rgba(255,255,255,0.5); 
+                position: absolute; 
+                top: 25px; 
+                left: 25px; 
+            }
+            
+            .brand-card .product-img { 
+                filter: none; 
+                left: 50%; 
+                top: 100px; 
+                transform: translate(-50%, -50%) scale(1); 
+                z-index: 2; 
+                max-height: 130px; 
+            }
+            
+            @media (hover: hover) {
+                .brand-card:hover { 
+                    /* Evita que se estire horizontalmente al hacer hover en este tamaño */
+                    flex: 0 0 calc(50% - 10px); 
+                    transform: translateY(-10px); 
+                    border-color: var(--mango); 
+                }
+                .brand-card:hover .product-img { 
+                    left: 50%; 
+                    transform: translate(-50%, -50%) scale(1.1); 
+                }
+            }
+        }
+
         /* Ajuste de seguridad para pantallas con poca altura */
         @media (max-height: 800px) {
             .hero-content img { width: 70% !important; max-width: 320px !important; margin-bottom: 15px !important; }
             .hero-content p { font-size: 0.95rem; margin-bottom: 25px; }
         }
 
-        /* =========================================
-           MAGIA RESPONSIVE (MÓVIL Y TABLET) 
+       /* =========================================
+           MAGIA RESPONSIVE (CELULAR Y TABLET)
            ========================================= */
         @media (max-width: 992px) {
-            
-            nav { width: 100%; top: 0; left: 0; border-radius: 0; padding: 15px 5%; border-bottom: 1px solid transparent;}
-            
-            nav.menu-open { background: var(--white) !important; border-bottom-color: #EEE !important;}
-            nav.menu-open .nav-logo { filter: none !important; }
-            nav.menu-open .hamburger span { background-color: var(--dark) !important; }
-
+            nav { width: 100%; top: 0; left: 0; border-radius: 0; padding: 15px 5%; }
             .hamburger { display: flex; }
             .nav-links { 
                 position: fixed; top: 0; left: 100%; width: 100%; height: 100vh; 
                 background: var(--white); flex-direction: column; justify-content: center; 
-                align-items: center; gap: 40px; transition: 0.4s cubic-bezier(0.77,0.2,0.05,1.0); z-index: 1001;
+                align-items: center; gap: 40px; transition: 0.4s; z-index: 1001;
             }
             .nav-links.active { left: 0; }
-            .nav-links a { font-size: 1.5rem; color: var(--dark) !important; } 
+            .hero { height: 100svh !important; padding: 80px 5% 20px; }
+            .hero-buttons { flex-direction: column; }
+            .que-es-grid { grid-template-columns: 1fr; }
+            .sticky-wrapper { flex-direction: column; }
+            .sticky-left { position: relative; top: 0; width: 100%; text-align: center; }
+            .scroll-right { width: 100%; margin-top: 0; }
             
-            .hamburger span { background-color: var(--dark); } 
-
-            .hero { height: 100svh !important; min-height: 600px; padding: 80px 5% 20px; }
-            .hero-content { margin-top: 0; }
-            .hero-content h2 { font-size: 1.2rem; margin-bottom: 15px; line-height: 1.4; }
-            .hero-content p { font-size: 0.9rem; line-height: 1.5; margin-bottom: 25px; }
-            .hero-buttons { flex-direction: column; width: 100%; gap: 12px; }
-            .btn-mango, .btn-white, .btn-outline { padding: 15px 20px; font-size: 0.8rem; width: 100%; display: block; margin-top: 0 !important;}
-
-            section { padding: 60px 5%; }
-            .que-es { padding: 60px 5%; }
-            .metodologia { padding: 60px 5% 0; }
-
-            .section-title { text-align: center !important; }
-            .section-desc { text-align: center !important; margin: 0 auto 30px !important; }
-
-            .que-es-grid { grid-template-columns: 1fr; gap: 40px; }
-            .narrativa-box .section-title { font-size: 2.2rem; text-align: center; }
-            .narrativa-box p { font-size: 1.1rem; text-align: center; }
-            .stats-bento { grid-template-columns: 1fr 1fr; gap: 15px; }
-            .bento-card { padding: 20px 10px; text-align: center; }
-            .bento-card h3 { font-size: 2rem; letter-spacing: 0; margin-bottom: 5px; }
-            .bento-card p { font-size: 0.7rem; }
-            
-            .sticky-wrapper { flex-direction: column; gap: 30px; }
-            .sticky-left { position: relative; top: 0; height: auto; padding-bottom: 0; width: 100%; text-align: center; }
-            .sticky-left h2 { text-align: center; }
-            .sticky-left p { text-align: center; margin: 0 auto; }
-            .scroll-right { width: 100%; padding-top: 0; padding-bottom: 40px; margin-top: 0; gap: 20px; }
-            .metodo-card { flex-direction: column; gap: 10px; padding: 25px; text-align: center; align-items: center; }
-            .m-num { font-size: 3rem; }
-            
-            .carousel-container { position: relative; width: 100%; overflow: hidden; padding-bottom: 20px;}
+            /* CARRUSEL UNIDADES (Se mantiene igual) */
             .unidades-grid { 
-                display: flex !important; flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x mandatory;
-                scroll-behavior: smooth; gap: 20px; padding: 10px 5%; margin: 0 -5%; 
-                -webkit-overflow-scrolling: touch; scrollbar-width: none; 
+                display: flex !important; overflow-x: auto; scroll-snap-type: x mandatory; gap: 20px;
+                padding: 10px 5%; margin: 0 -5%; scrollbar-width: none;
             }
-            .unidades-grid::-webkit-scrollbar { display: none; } 
-            
-            .unidad-card { flex: 0 0 85vw; scroll-snap-align: center; height: 420px; }
-            .card-front, .card-back { padding: 30px 20px; }
-            .u-icon { width: 50px; height: 50px; font-size: 1.2rem; border-radius: 12px; margin-bottom: 20px; }
-            .card-front h3 { font-size: 1.5rem; margin-bottom: 5px;}
-            
-            .card-front .u-sub { background: #fdfbb7; color: #333; font-size: 0.7rem; padding: 6px 10px; border-radius: 6px; align-self: center; margin-bottom: 15px; font-weight: 700; }
-            .card-front p { font-size: 0.95rem; margin-bottom: 0; color: #555; }
-            
-            .card-back h3 { font-size: 1.3rem; margin-bottom: 15px;}
-            .card-back ul li { font-size: 0.85rem; margin-bottom: 15px; line-height: 1.4; }
-            
+            .unidad-card { flex: 0 0 85vw; scroll-snap-align: center; }
             .carousel-nav { display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
-            .carousel-dot { width: 10px; height: 10px; background: #D0D0D0; border-radius: 50%; transition: 0.3s; }
-            .carousel-dot.active { background: var(--mango); } 
-            
-            /* Ajuste Marcas Expansivas para Móvil */
-            .marcas-expansion { padding-top: 80px; }
-            .expansion-container { flex-direction: column; height: auto; gap: 20px; }
-            .brand-card { width: 100%; min-height: 300px; padding: 30px; background: #252525; }
-            .brand-card::before { opacity: 0.8; height: 100%; background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.2)); } 
-            .brand-card .brand-desc, .brand-card .card-btn { opacity: 1; transform: translateY(0); position: relative; z-index: 5; }
-            .brand-card h2 { font-size: 2rem; color: var(--mango); }
-            .brand-card .product-img { filter: none; left: 80%; transform: translate(-50%, -50%) scale(0.9); }
-            .brand-card .card-num { color: #666; }
+            .carousel-dot { width: 10px; height: 10px; background: #D0D0D0; border-radius: 50%; }
+            .carousel-dot.active { background: var(--mango); }
 
-            /* Ajuste Rediseño Ventas Full Width para Móvil */
-            .capacidad-accion-container { padding: 80px 5%; }
-            .capacidad-grid { grid-template-columns: 1fr; gap: 50px; }
-            .capacidad-header h2 { font-size: 2.5rem; text-align: center; }
-            .capacidad-header p { text-align: center; margin: 0 auto; }
-            .datos-title { text-align: center; font-size: 1.8rem; }
-            .sales-cta-block { flex-direction: column; text-align: center; gap: 20px; }
-            .growth-badge { font-size: 3rem; }
-            .btn-ventas-gigante { width: 100%; }
-            .production-img { max-height: 300px; border-radius: 20px; }
-
-            /* Ajuste Talento para Móvil */
-            .talento { padding-top: 80px; padding-bottom: 60px; min-height: auto; display: block; }
-            .talento .section-desc { margin-bottom: 30px; }
-            .jobs-container { padding: 0; background: transparent; box-shadow: none; width: 100%; }
-            .job-row { flex-direction: column; text-align: center; gap: 15px; padding: 20px 15px; background: rgba(28,28,28,0.95); border-radius: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 5px 15px rgba(0,0,0,0.2); transform: none !important; }
-            .job-row:hover { transform: none !important; border-color: var(--mango); } 
-            .job-btn { width: 100%; display: block; }
-            .talento-footer { margin-top: 30px; }
+            /* --- FIX SECCIÓN MARCAS CELULAR (AQUÍ ESTÁ EL TRUCO) --- */
+            .marcas-expansion { padding-top: 80px; padding-bottom: 60px; }
             
-            .footer-grid { text-align: center; gap: 40px; }
+            .expansion-container { 
+                flex-direction: column; /* Cambia a una sola columna */
+                height: auto; 
+                gap: 50px; /* Espacio entre marcas */
+                padding: 0 5%; 
+                width: 100%;
+                align-items: center;
+            }
+
+            .brand-card { 
+                flex: none; 
+                width: 100%; 
+                max-width: 400px; /* Para que no se vea deforme en tablets */
+                min-height: 480px; 
+                padding: 30px;
+                padding-top: 220px; /* Empuja el texto hacia abajo para dejar espacio a la imagen */
+                align-items: center; 
+                text-align: center;
+                border-radius: 25px;
+            }
+
+            /* Hacemos que todo sea visible sin necesidad de pasar el mouse */
+            .brand-card::before { 
+                opacity: 0.95; 
+                height: 100%; 
+                background: linear-gradient(to top, rgba(0,0,0,0.95) 50%, rgba(0,0,0,0.3)); 
+            }
+
+            .brand-card h2 { 
+                font-size: 2rem; 
+                color: var(--mango); 
+                position: relative; 
+                z-index: 5; 
+                margin-top: 0;
+            }
+
+            .brand-desc, .card-btn { 
+                opacity: 1 !important; 
+                transform: translateY(0) !important; 
+                position: relative; 
+                z-index: 5; 
+                display: block; /* Asegura que se vean */
+            }
+
+            .brand-card .card-btn { 
+                width: 100%; 
+                padding: 15px;
+            }
+
+            /* Imagen Centrada "Al Cien" arriba */
+            .brand-card .product-img { 
+                left: 50%; 
+                top: 110px; /* La posiciona en la parte superior del card */
+                transform: translate(-50%, -50%) scale(1.1); 
+                max-height: 180px; 
+                z-index: 2; 
+                filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+            }
+
+            .brand-card .card-num { 
+                position: absolute; 
+                top: 20px; 
+                left: 20px; 
+                opacity: 0.5; 
+                color: var(--white);
+            }
+
+            /* VENTAS Y TALENTO MÓVIL */
+            .capacidad-grid { grid-template-columns: 1fr; }
+            .cat-features { grid-template-columns: 1fr; }
+            .job-row { flex-direction: column; text-align: center; gap: 15px; }
+            .job-btn { width: 100%; }
         }
     </style>
 </head>
@@ -635,7 +740,6 @@
             <span></span>
             <span></span>
         </div>
-
         <div class="nav-links" id="nav-links">
             <a href="#que-es" class="nav-item">¿QUÉ ES MANGO?</a>
             <a href="#metodologia" class="nav-item">METODOLOGÍA</a>
@@ -647,7 +751,7 @@
     </nav>
 
     <section class="hero" id="inicio">
-        <video class="hero-video" autoplay muted loop playsinline><source src="loop deli.mp4" type="video/mp4"></video>
+        <video class="hero-video" autoplay muted loop playsinline><source src="VideoDeli.mp4" type="video/mp4"></video>
         <div class="hero-overlay"></div>
         <div class="hero-content reveal">
             <img src="mbc.png" alt="Mango Business Center" style="width: 90%; max-width: 450px; height: auto; margin-bottom: 25px; filter: brightness(0) invert(1) drop-shadow(0 10px 20px rgba(0,0,0,0.5));">
@@ -874,16 +978,21 @@
                 </div>
             </div>
 
-            <!-- Derecha: Imagen y CTA -->
+            <!-- Derecha: Imagen y CTA con Botones Divididos -->
             <div class="capacidad-right">
                 <img src="IMG_8954.jpg" alt="Deli Barras en Producción" class="production-img">
                 
-                <div class="sales-cta-block">
-                    <div class="growth-badge">
-                        +30% 
-                        <span class="small-text">CRECIMIENTO<br>ANUAL</span>
+                <div class="growth-badge">
+                    +30% 
+                    <span class="small-text">CRECIMIENTO<br>ANUAL</span>
+                </div>
+
+                <div class="negotiation-block">
+                    <h3 class="negotiation-title">Hablemos de <span>negocios</span> <span class="arrow-down">↓</span></h3>
+                    <div class="negotiation-buttons">
+                        <a href="emprendedores.html" class="btn-negotiate">Emprendedores</a>
+                        <a href="distribuidores.html" class="btn-negotiate">Distribuidores</a>
                     </div>
-                    <a href="mailto:socios@mangobusiness.com" class="btn-ventas-gigante">HABLEMOS DE NEGOCIOS</a>
                 </div>
             </div>
         </div>
@@ -1104,4 +1213,4 @@
         });
     </script>
 </body>
-</html> 
+</html>

@@ -665,7 +665,7 @@
             </div>
             
             <div class="cat-img">
-                <img src="IMG8954.jpg" alt="Deli Barras en Producción">
+                <img src="IMG_8954.jpg" alt="Deli Barras en Producción">
             </div>
         </div>
     </section>
@@ -864,6 +864,29 @@
                 carouselObserver.observe(unidadesSection);
             }
         }
+        // 5. Smart Navbar (Ocultar al hacer scroll hacia abajo, mostrar hacia arriba)
+        let lastScrollTop = 0;
+        const navbarElement = document.getElementById('navbar');
+
+        window.addEventListener('scroll', () => {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Evitamos que la barra se oculte si el menú móvil está abierto
+            if (navbarElement.classList.contains('menu-open')) {
+                return;
+            }
+
+            if (scrollTop > lastScrollTop && scrollTop > 80) {
+                // Scroll hacia abajo: empujamos la barra hacia arriba fuera de la vista
+                navbarElement.style.transform = 'translateY(-150%)';
+            } else {
+                // Scroll hacia arriba (o al llegar al tope): regresamos la barra a su lugar
+                navbarElement.style.transform = 'translateY(0)';
+            }
+            
+            // Actualizamos la posición anterior
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
+        });
     </script>
 </body>
 </html>

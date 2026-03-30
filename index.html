@@ -275,7 +275,33 @@
         .footer-col a { color: #AAA; text-decoration: none; display: block; margin-bottom: 15px; font-size: 0.9rem; transition: 0.3s; }
         .footer-col a:hover { color: var(--white); transform: translateX(5px); }
         .footer-bottom { text-align: center; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 60px; padding-top: 30px; color: #666; font-size: 0.8rem; }
+/* =========================================================
+           AJUSTE PARA LAPTOPS Y PANTALLAS MEDIANAS (Hasta 1440px)
+           ========================================================= */
+        @media (max-width: 1440px) {
+            /* Reducimos los paddings gigantes para que no asfixien la pantalla */
+            section { padding: 80px 5%; }
+            .que-es { padding: 80px 5%; }
+            .metodologia { padding: 100px 5% 0; }
+            
+            /* Ajustamos el sticky de metodología para que no baje tanto */
+            .sticky-left { top: 120px; padding-bottom: 100px; }
+            .scroll-right { margin-top: 150px; padding-bottom: 100px; }
 
+            /* Reducimos la altura de las tarjetas giratorias */
+            .unidad-card { height: 400px; }
+            .card-front, .card-back { padding: 30px 20px; }
+            .u-icon { width: 50px; height: 50px; margin: 0 auto 20px; }
+            
+            /* Achicamos un poco el catálogo de ventas */
+            .catalogo { padding: 60px 5%; }
+            .cat-text { padding: 40px; }
+            .cat-text h2 { font-size: 1.8rem; }
+            
+            /* Ajustamos los textos gigantes de los Bento Cards */
+            .bento-card { padding: 40px 20px; }
+            .bento-card h3 { font-size: clamp(2.2rem, 4vw, 3.5rem); }
+        }
         /* =========================================
            MAGIA RESPONSIVE (MÓVIL Y TABLET) 
            ========================================= */
@@ -866,7 +892,7 @@
         }
         // 5. Smart Navbar (Ocultar al hacer scroll hacia abajo, mostrar hacia arriba)
         let lastScrollTop = 0;
-        const navbarElement = document.getElementById('navbar');
+        const navbarElement = document.getElementById('rnavba');
 
         window.addEventListener('scroll', () => {
             let scrollTop = window.pageYOffset || document.documentElement.scrollTop;

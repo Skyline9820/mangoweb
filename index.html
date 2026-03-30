@@ -3,941 +3,272 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mango BC | Industrial Excellence</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
-    
+    <title>Capacidad en Acción - Ecosistema Mango</title>
     <style>
-        :root {
-            /* EL AMARILLO ELÉCTRICO Y PALETA LIMPIA */
-            --mango: #fdea14; 
-            --dark: #1C1C1C;  
-            --white: #FFFFFF;
-            --light-bg: #F5F5F7; 
-            /* Opacidad reducida para mejor efecto cristal */
-            --glass-bg: rgba(255, 255, 255, 0.65);
-            --glass-border: rgba(255, 255, 255, 0.3);
-            --shadow-soft: 0 20px 40px rgba(0, 0, 0, 0.05);
-            --shadow-hover: 0 30px 60px rgba(0, 0, 0, 0.2);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        
         body {
-            background-color: var(--light-bg);
-            color: var(--dark);
-            font-family: 'Open Sans', sans-serif;
-            overflow-x: hidden;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f7f8f9;
+        }
+
+        .highlight {
+            color: #fdea14;
+        }
+
+        /* Cabecera superior (Fondo blanco) */
+        .page-header {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+
+        .page-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: #666;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        /* Sección de Tarjeta Oscura */
+        .action-container {
+            max-width: 1200px;
+            margin: 0 auto 100px auto;
+            background-color: #1a1a1a;
+            border-radius: 40px;
+            padding: 60px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        /* Columna Izquierda */
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .left-column h2 {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            margin: 0;
+            color: #fff;
+        }
+
+        .left-column p.sub-header-left {
+            margin: 0;
+            color: #999;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .left-column h3 {
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            margin: 0;
+            color: #fff;
+        }
+
+        .left-column p.highlight {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        /* Grid de datos clave */
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .data-card {
+            background-color: #111;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid #333;
+        }
+
+        .data-icon {
+            font-size: 3rem;
+            margin-bottom: 5px;
+        }
+
+        .data-text {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        /* Columna Derecha (Modificada) */
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 30px;
+            height: 100%;
+        }
+
+        .right-column img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .stat-block {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+            font-size: 1.3rem;
+        }
+
+        .stat-percentage {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #fdea14;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            text-align: left;
+            color: #ccc;
+        }
+
+        /* Nuevo bloque de "Hablemos de negocios" */
+        .negotiation-block {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
             width: 100%;
         }
 
-        h1, h2, h3, h4, .font-title { font-family: 'Montserrat', sans-serif; }
-
-        /* PRELOADER */
-        #loader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--dark);
-            display: flex; justify-content: center; align-items: center; z-index: 9999999;
-            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), visibility 1s;
-        }
-        .loader-logo { width: 180px; animation: pulse 2s ease-in-out infinite; filter: brightness(0) invert(1); }
-        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; filter: drop-shadow(0 0 30px rgba(253, 234, 20, 0.6)); } }
-
-        /* =========================================================
-           NAVEGACIÓN EFECTO CRISTAL 
-           ========================================================= */
-        nav {
-            position: fixed; width: 90%; top: 20px; left: 5%; padding: 15px 30px; 
-            background: var(--glass-bg); 
-            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border); 
-            border-radius: 100px;
-            display: flex; justify-content: space-between; align-items: center; z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
-            transition: all 0.4s ease;
-        }
-        .logo { text-decoration: none; display: flex; align-items: center; z-index: 1002; }
-        
-        .nav-logo { height: 35px; width: auto; object-fit: contain; }
-        
-        .nav-links { display: flex; gap: 30px; align-items: center; }
-        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 600; font-size: 0.85rem; transition: color 0.3s; }
-        .nav-links a:hover { color: #888; }
-        
-        .nav-cta { background: var(--dark); color: var(--white) !important; padding: 10px 24px; border-radius: 50px; transition: 0.4s;}
-        .nav-cta:hover { background: var(--mango); color: var(--dark) !important; }
-
-        /* HAMBURGUESA PARA MÓVIL */
-        .hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; z-index: 1002; }
-        .hamburger span { width: 30px; height: 3px; background-color: var(--dark); border-radius: 3px; transition: 0.4s; }
-
-        /* REVEAL ANIMATIONS */
-        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-        .delay-1 { transition-delay: 0.1s; } .delay-2 { transition-delay: 0.2s; } .delay-3 { transition-delay: 0.3s; }
-
-        /* SECCIONES BASE */
-        section { padding: 120px 5%; position: relative; }
-        .section-title { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 900; color: var(--dark); margin-bottom: 20px; text-transform: uppercase; line-height: 1; text-align: center; }
-        .section-title span { color: var(--mango); }
-        .section-desc { font-size: 1.2rem; color: #555; max-width: 700px; margin-bottom: 60px; line-height: 1.8; text-align: center; margin-left: auto; margin-right: auto; }
-
-        /* BOTONES GLOBALES */
-        .btn-mango { background: var(--mango); color: var(--dark); padding: 18px 40px; border-radius: 50px; font-family: 'Montserrat'; font-weight: 700; text-decoration: none; text-transform: uppercase; font-size: 0.85rem; transition: 0.4s; box-shadow: 0 10px 20px rgba(253, 234, 20, 0.3); display: inline-block; text-align: center; }
-        .btn-mango:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(253, 234, 20, 0.5); background: var(--white); }
-        
-        .btn-white { background: var(--white); color: var(--dark); padding: 18px 40px; border-radius: 50px; font-family: 'Montserrat'; font-weight: 700; text-decoration: none; text-transform: uppercase; font-size: 0.85rem; transition: 0.4s; display: inline-block; text-align: center; }
-        .btn-white:hover { transform: translateY(-5px); background: #eee; }
-
-        .btn-outline { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.5); padding: 16px 40px; border-radius: 50px; font-family: 'Montserrat'; font-weight: 700; text-decoration: none; text-transform: uppercase; font-size: 0.85rem; transition: 0.4s; display: inline-block; text-align: center; backdrop-filter: blur(5px); margin-top: 20px; }
-        .btn-outline:hover { background: rgba(255,255,255,0.1); border-color: var(--white); transform: translateY(-5px); }
-
-        /* 1. HERO (Actualizado con min-height y padding-top) */
-        .hero { 
-            height: 100vh; 
-            min-height: 700px; 
-            padding-top: 120px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            position: relative; 
-            overflow: hidden; 
-        }
-        .hero-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
-        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(28,28,28,0.9) 0%, rgba(28,28,28,0.6) 100%); z-index: -1; }
-        
-        .hero-content { text-align: center; z-index: 1; max-width: 1000px; padding: 0 5%; display: flex; flex-direction: column; align-items: center;}
-        .hero-content h2 { font-size: clamp(1.2rem, 2vw, 1.8rem); color: var(--mango); font-weight: 600; margin-bottom: 30px; }
-        .hero-content p { color: #DDD; font-size: 1.1rem; line-height: 1.8; max-width: 800px; margin: 0 auto 40px; }
-        .hero-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; width: 100%; }
-
-        /* 2. ¿QUÉ ES MANGO? */
-        .que-es { background: var(--white); padding: 150px 5%; }
-        .que-es-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; max-width: 1400px; margin: 0 auto; align-items: center; }
-        
-        .narrativa-box .section-title { font-size: clamp(2.5rem, 5vw, 4.5rem); margin-bottom: 30px; text-align: left; }
-        .narrativa-box p { font-size: clamp(1.2rem, 2vw, 1.6rem); color: var(--dark); line-height: 1.8; font-weight: 300; }
-        .narrativa-box strong { color: var(--dark); font-weight: 700; background: rgba(253,234,20,0.4); padding: 4px 8px; border-radius: 6px; }
-        
-        .stats-bento { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .bento-card { background: var(--light-bg); padding: 50px 30px; border-radius: 30px; transition: 0.4s; border: 1px solid rgba(0,0,0,0.03); text-align: left; }
-        .bento-card:hover { transform: translateY(-10px); background: var(--white); box-shadow: var(--shadow-hover); border-color: var(--mango);}
-        .bento-card h3 { font-size: clamp(3rem, 5vw, 4.5rem); color: var(--mango); line-height: 1; margin-bottom: 15px; letter-spacing: -2px; }
-        .bento-card p { font-size: 1rem; font-weight: 700; text-transform: uppercase; color: var(--dark); letter-spacing: 1px; }
-
-        /* 3. METODOLOGÍA */
-        .metodologia { background: var(--dark); color: var(--white); padding: 150px 5% 0; }
-        .sticky-wrapper { display: flex; max-width: 1400px; margin: 0 auto; gap: 5%; justify-content: space-between; align-items: flex-start; }
-        .sticky-left { position: sticky; top: 200px; width: 45%; padding-bottom: 150px; }
-        .sticky-left h2 { font-size: clamp(2.5rem, 4vw, 4rem); line-height: 1.05; margin-bottom: 20px; color: var(--white); text-align: left; }
-        .sticky-left h2 span { color: var(--mango); display: block; }
-        .sticky-left p { color: #AAA; font-size: 1.1rem; line-height: 1.6; max-width: 90%; text-align: left; }
-        
-        .scroll-right { width: 50%; display: flex; flex-direction: column; gap: 80px; margin-top: 260px; padding-bottom: 200px; }
-        .metodo-card { display: flex; gap: 30px; align-items: flex-start; background: rgba(255,255,255,0.03); padding: 50px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.05); transition: 0.5s; backdrop-filter: blur(10px); }
-        .metodo-card:hover { transform: translateX(-20px); border-color: var(--mango); background: rgba(253, 234, 20, 0.05); }
-        .m-num { font-size: 4rem; font-family: 'Montserrat'; font-weight: 900; color: transparent; -webkit-text-stroke: 2px rgba(255,255,255,0.2); line-height: 0.8; transition: 0.4s;}
-        .metodo-card:hover .m-num { -webkit-text-stroke: 2px var(--mango); }
-        .m-text h4 { font-size: 1.5rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
-        .m-text p { color: #CCC; font-size: 1.1rem; line-height: 1.7; font-weight: 300; }
-
-        /* =========================================================
-           4. UNIDADES DE NEGOCIO (TARJETAS 3D GIRATORIAS)
-           ========================================================= */
-        .unidades { background: var(--light-bg); overflow: hidden; } 
-        .carousel-nav { display: none; } 
-        .unidades-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; max-width: 1400px; margin: 0 auto; transition: transform 0.5s ease-in-out; }
-        
-        .unidad-card { perspective: 1500px; background: transparent; height: 480px; cursor: pointer; }
-        .card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; }
-        .unidad-card:hover .card-inner, .unidad-card.is-flipped .card-inner { transform: rotateY(180deg); }
-
-        .card-front, .card-back {
-            position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden;
-            border-radius: 30px; padding: 40px 30px; display: flex; flex-direction: column;
-            box-shadow: var(--shadow-soft); border: 1px solid rgba(0,0,0,0.03); transition: 0.5s;
+        .negotiation-title {
+            color: #fff;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            margin: 0;
         }
 
-        .card-front { background: var(--white); color: var(--dark); }
-        .unidad-card:hover .card-front { border-color: var(--mango); }
-        
-        .u-icon { width: 60px; height: 60px; background: var(--dark); border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; font-family: 'Montserrat'; font-weight: 900; color: var(--mango); margin: 0 auto 30px; }
-        .card-front h3 { font-size: 1.8rem; margin-bottom: 10px; color: var(--dark); font-weight: 900; }
-        .card-front .u-sub { color: var(--dark); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 25px; letter-spacing: 1px; background: rgba(253, 234, 20, 0.3); display: inline-block; padding: 4px 10px; border-radius: 6px; align-self: center;}
-        .card-front p { color: #666; line-height: 1.7; flex-grow: 1; margin-bottom: 10px;}
-        .flip-hint { font-size: 0.8rem; color: var(--mango); font-weight: 700; text-transform: uppercase; margin-top: auto; display: flex; align-items: center; justify-content: center; gap: 5px;}
-
-        .card-back {
-            background: var(--dark); color: var(--white); transform: rotateY(180deg); justify-content: center;
-            align-items: flex-start; text-align: left; border-color: var(--mango);
-        }
-        .card-back h3 { color: var(--mango); font-size: 1.5rem; margin-bottom: 20px; font-weight: 900; }
-        .card-back ul { list-style: none; padding: 0; margin: 0; }
-        .card-back ul li { margin-bottom: 20px; font-size: 0.95rem; line-height: 1.5; color: #EEE; display: flex; align-items: flex-start; gap: 10px; }
-        .card-back ul li::before { content: '✓'; color: var(--mango); font-weight: bold; font-size: 1.1rem; }
-
-        .carousel-container { position: relative; max-width: 1400px; margin: 0 auto; }
-        .carousel-track { display: flex; gap: 40px; transition: transform 0.5s ease; }
-        .carousel-dot { width: 10px; height: 10px; border-radius: 50%; background: #CCC; cursor: pointer; transition: 0.3s; }
-        .carousel-dot.active { background: var(--mango); transform: scale(1.2); }
-
-        /* --- SEPARADOR VISUAL PARA VENTAS --- */
-        .ventas-divisor { width: 100%; height: 4px; background: linear-gradient(90deg, transparent, var(--mango), transparent); margin: 0; opacity: 0.5; border: none; }
-
-        /* =========================================================
-           5. ÁREA DE VENTAS / CATÁLOGO (PC)
-           ========================================================= */
-        .catalogo { 
-            background: var(--light-bg); 
-            overflow: hidden; 
-            padding: 80px 5%; 
-            min-height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-        }
-        
-        .ventas-header { text-align: center; margin-bottom: 40px; } 
-        .ventas-header .section-title { font-size: clamp(3rem, 5vw, 4.5rem); margin-bottom: 10px; color: var(--dark); }
-        .ventas-header .section-desc { font-size: 1.2rem; color: #555; }
-        
-        .catalogo-wrapper { 
-            display: flex; 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            background: var(--dark); 
-            border-radius: 40px; 
-            padding: 0; 
-            align-items: center; 
-            box-shadow: var(--shadow-hover); 
-            overflow: hidden;
+        .negotiation-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
             width: 100%;
         }
-        
-        .cat-text { flex: 1; padding: 60px; min-width: 300px; } 
-        
-        .cat-text h2 { color: var(--white); font-size: 2.2rem; margin-bottom: 10px; line-height: 1.1; text-align: left; font-weight: 900;}
-        .cat-text h2 span { color: var(--mango); }
-        .cat-text p { color: #CCC; font-size: 1rem; line-height: 1.6; margin-bottom: 30px; text-align: left;}
-        
-        .cat-features { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; } 
-        .feature-tag { 
-            background: #111; 
-            color: var(--white); 
-            padding: 15px; 
-            border-radius: 12px; font-weight: 600; font-size: 0.95rem; 
-            border: 1px solid #333; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 8px; text-align: center;
-            transition: 0.3s;
-        }
-        .feature-tag:hover { border-color: rgba(253, 234, 20, 0.5); background: rgba(253, 234, 20, 0.05); color: var(--mango); }
 
-        .sales-cta-block { display: flex; flex-direction: column; gap: 15px; max-width: 100%; }
-        
-        .growth-badge { 
-            background: transparent;
-            border: 2px solid var(--mango); color: var(--mango); 
-            padding: 15px 20px; 
-            border-radius: 12px; font-family: 'Montserrat'; font-weight: 900; 
-            font-size: 1.4rem; display: flex; align-items: center; justify-content: center; gap: 15px; text-align: center;
-        }
-        .growth-badge span.small-text { font-size: 0.8rem; color: var(--white); text-transform: uppercase; letter-spacing: 1px; line-height: 1.2; text-align: left;}
-        
-        .btn-ventas-gigante {
-            background: var(--mango); color: var(--dark); 
-            padding: 18px; 
-            border-radius: 12px; text-align: center; font-family: 'Montserrat'; font-weight: 900; font-size: 1.1rem;
-            text-transform: uppercase; text-decoration: none; transition: 0.4s; display: block; width: 100%;
-        }
-        .btn-ventas-gigante:hover { background: var(--white); transform: translateY(-5px); box-shadow: 0 10px 40px rgba(253, 234, 20, 0.4); }
-
-        .cat-img { flex: 1; display: flex; justify-content: center; align-items: center; padding: 40px;}
-        .cat-img img { max-width: 100%; height: auto; border-radius: 20px; object-fit: cover; box-shadow: 0 20px 40px rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.05);} 
-
-        /* 6. TALENTO */
-        .talento { background: var(--white); }
-        .jobs-container { max-width: 1200px; margin: 0 auto; background: var(--light-bg); border-radius: 30px; padding: 40px; box-shadow: var(--shadow-soft); }
-        
-        .job-row { 
-            display: flex; justify-content: space-between; align-items: center; padding: 30px; 
-            background: rgba(28,28,28,0.95); 
-            border-radius: 16px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; 
-        }
-        .job-row:last-child { margin-bottom: 0; }
-        .job-row:hover { transform: scale(1.02); background: var(--dark); border-color: var(--mango); box-shadow: 0 10px 20px rgba(0,0,0,0.2);}
-        
-        .job-info h4 { font-size: 1.2rem; color: var(--white); margin-bottom: 8px; font-weight: 700; }
-        .job-info p { color: #BBB; font-size: 0.9rem; }
-        
-        .job-btn { padding: 12px 30px; background: var(--mango); color: var(--dark); border-radius: 50px; font-weight: 700; text-decoration: none; transition: 0.3s; text-align: center; border: 2px solid var(--mango);}
-        .job-row:hover .job-btn { background: var(--white); border-color: var(--white); }
-        
-        .talento-footer { text-align: center; margin-top: 50px; }
-        .talento-footer h3 { color: var(--dark); font-size: 1.5rem; margin-bottom: 10px; }
-
-        /* 7. FOOTER CORPORATIVO */
-        footer { background: var(--dark); padding: 80px 5% 40px; color: var(--white); }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 50px; max-width: 1400px; margin: 0 auto; }
-        .footer-col h4 { color: var(--mango); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 25px; }
-        .footer-col a { color: #AAA; text-decoration: none; display: block; margin-bottom: 15px; font-size: 0.9rem; transition: 0.3s; }
-        .footer-col a:hover { color: var(--white); transform: translateX(5px); }
-        .footer-bottom { text-align: center; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 60px; padding-top: 30px; color: #666; font-size: 0.8rem; }
-
-        /* =========================================================
-           AJUSTE PARA LAPTOPS Y PANTALLAS MEDIANAS (Hasta 1440px)
-           ========================================================= */
-        @media (max-width: 1440px) {
-            /* Reducimos los paddings gigantes para que no asfixien la pantalla */
-            section { padding: 80px 5%; }
-            .que-es { padding: 80px 5%; }
-            .metodologia { padding: 100px 5% 0; }
-            
-            /* Ajustamos el sticky de metodología para que no baje tanto */
-            .sticky-left { top: 120px; padding-bottom: 100px; }
-            .scroll-right { margin-top: 150px; padding-bottom: 100px; }
-
-            /* Reducimos la altura de las tarjetas giratorias */
-            .unidad-card { height: 400px; }
-            .card-front, .card-back { padding: 30px 20px; }
-            .u-icon { width: 50px; height: 50px; margin: 0 auto 20px; }
-            
-            /* Achicamos un poco el catálogo de ventas */
-            .catalogo { padding: 60px 5%; }
-            .cat-text { padding: 40px; }
-            .cat-text h2 { font-size: 1.8rem; }
-            
-            /* Ajustamos los textos gigantes de los Bento Cards */
-            .bento-card { padding: 40px 20px; }
-            .bento-card h3 { font-size: clamp(2.2rem, 4vw, 3.5rem); }
+        .btn-negotiate {
+            flex: 1;
+            background-color: #fdea14;
+            color: #1a1a1a;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
         }
 
-        /* Ajuste de seguridad para pantallas con poca altura */
-        @media (max-height: 800px) {
-            .hero-content img {
-                width: 70% !important; 
-                max-width: 320px !important; 
-                margin-bottom: 15px !important;
-            }
-            .hero-content p {
-                font-size: 0.95rem; 
-                margin-bottom: 25px;
-            }
+        .btn-negotiate:hover {
+            background-color: #e5d312;
+            transform: scale(1.03);
         }
 
-        /* =========================================
-           MAGIA RESPONSIVE (MÓVIL Y TABLET) 
-           ========================================= */
+        /* Responsive */
         @media (max-width: 992px) {
-            
-            nav { width: 100%; top: 0; left: 0; border-radius: 0; padding: 15px 5%; border-bottom: 1px solid transparent;}
-            
-            /* Estado de Menú Abierto (Blanco total) */
-            nav.menu-open { background: var(--white) !important; border-bottom-color: #EEE !important;}
-            nav.menu-open .nav-logo { filter: none !important; }
-            nav.menu-open .hamburger span { background-color: var(--dark) !important; }
+            .action-container {
+                grid-template-columns: 1fr;
+                gap: 50px;
+                padding: 40px;
+            }
 
-            .hamburger { display: flex; }
-            .nav-links { 
-                position: fixed; top: 0; left: 100%; width: 100%; height: 100vh; 
-                background: var(--white); flex-direction: column; justify-content: center; 
-                align-items: center; gap: 40px; transition: 0.4s cubic-bezier(0.77,0.2,0.05,1.0); z-index: 1001;
-            }
-            .nav-links.active { left: 0; }
-            .nav-links a { font-size: 1.5rem; color: var(--dark) !important; } 
-            
-            .hamburger span { background-color: var(--dark); } 
-
-            /* 1. HERO FIX */
-            .hero { height: 100svh !important; min-height: 600px; padding: 80px 5% 20px; }
-            .hero-content { margin-top: 0; }
-            .hero-content h2 { font-size: 1.2rem; margin-bottom: 15px; line-height: 1.4; }
-            .hero-content p { font-size: 0.9rem; line-height: 1.5; margin-bottom: 25px; }
-            .hero-buttons { flex-direction: column; width: 100%; gap: 12px; }
-            .btn-mango, .btn-white, .btn-outline { padding: 15px 20px; font-size: 0.8rem; width: 100%; display: block; margin-top: 0 !important;}
-
-            /* Reducción general de espacios */
-            section { padding: 60px 5%; }
-            .que-es { padding: 60px 5%; }
-            .metodologia { padding: 60px 5% 0; }
-
-            .section-title { text-align: center !important; }
-            .section-desc { text-align: center !important; margin: 0 auto 30px !important; }
-
-            .que-es-grid { grid-template-columns: 1fr; gap: 40px; }
-            .narrativa-box .section-title { font-size: 2.2rem; text-align: center; }
-            .narrativa-box p { font-size: 1.1rem; text-align: center; }
-            .stats-bento { grid-template-columns: 1fr 1fr; gap: 15px; }
-            .bento-card { padding: 20px 10px; text-align: center; }
-            .bento-card h3 { font-size: 2rem; letter-spacing: 0; margin-bottom: 5px; }
-            .bento-card p { font-size: 0.7rem; }
-            
-            .sticky-wrapper { flex-direction: column; gap: 30px; }
-            .sticky-left { position: relative; top: 0; height: auto; padding-bottom: 0; width: 100%; text-align: center; }
-            .sticky-left h2 { text-align: center; }
-            .sticky-left p { text-align: center; margin: 0 auto; }
-            .scroll-right { width: 100%; padding-top: 0; padding-bottom: 40px; margin-top: 0; gap: 20px; }
-            .metodo-card { flex-direction: column; gap: 10px; padding: 25px; text-align: center; align-items: center; }
-            .m-num { font-size: 3rem; }
-            
-            /* UNIDADES FIX */
-            .carousel-container { position: relative; width: 100%; overflow: hidden; padding-bottom: 20px;}
-            .unidades-grid { 
-                display: flex !important;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                scroll-snap-type: x mandatory;
-                scroll-behavior: smooth;
-                gap: 20px;
-                padding: 10px 5%; 
-                margin: 0 -5%; 
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none; 
-            }
-            .unidades-grid::-webkit-scrollbar { display: none; } 
-            
-            .unidad-card { 
-                flex: 0 0 85vw; 
-                scroll-snap-align: center;
-                height: 420px; 
-            }
-            
-            .card-front, .card-back { padding: 30px 20px; }
-            .u-icon { width: 50px; height: 50px; font-size: 1.2rem; border-radius: 12px; margin-bottom: 20px; }
-            .card-front h3 { font-size: 1.5rem; margin-bottom: 5px;}
-            
-            .card-front .u-sub { 
-                background: #fdfbb7; 
-                color: #333; 
-                font-size: 0.7rem; 
-                padding: 6px 10px; 
-                border-radius: 6px; 
-                align-self: center;
-                margin-bottom: 15px;
-                font-weight: 700;
-            }
-            .card-front p { font-size: 0.95rem; margin-bottom: 0; color: #555; }
-            
-            .card-back h3 { font-size: 1.3rem; margin-bottom: 15px;}
-            .card-back ul li { font-size: 0.85rem; margin-bottom: 15px; line-height: 1.4; }
-            
-            .carousel-nav { display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
-            .carousel-dot { width: 10px; height: 10px; background: #D0D0D0; border-radius: 50%; transition: 0.3s; }
-            .carousel-dot.active { background: var(--mango); } 
-            
-            /* CAPACIDAD FIX: Ajuste Perfecto en Móvil */
-            .catalogo { 
-                padding: 0 5%; 
-                height: 100svh !important; 
-                display: flex; 
-                flex-direction: column; 
-                justify-content: center; 
-            }
-            .ventas-header { margin-bottom: 20px; } 
-            .ventas-header .section-title { font-size: 2.2rem; margin-bottom: 5px;}
-            .ventas-header .section-desc { font-size: 0.95rem; line-height: 1.4;}
-            
-            .catalogo-wrapper { flex-direction: column; background: transparent; box-shadow: none; border: none; width: 100%;}
-            .cat-img { display: none !important; } 
-            
-            .cat-text { 
-                padding: 20px 15px; 
-                width: 100%; 
-                background: var(--dark); 
-                border-radius: 20px; 
-            }
-            
-            .cat-text h2 { display: none; } 
-            .cat-text p { display: none; } 
-            
-            .cat-features { 
-                display: grid; 
-                grid-template-columns: 1fr 1fr; 
-                gap: 10px; 
-                margin-bottom: 15px; 
-            } 
-            
-            .feature-tag { 
-                background: #0a0a0a; 
-                border: 1px solid #333; 
-                border-radius: 12px;
-                padding: 15px 8px; 
-                flex-direction: column; 
-                justify-content: center; 
-                align-items: center;
-                gap: 8px;
+            .left-column h2, .left-column h3 {
                 text-align: center;
-                font-size: 0.8rem; 
-            }
-            
-            .sales-cta-block { max-width: 100%; width: 100%; gap: 10px; }
-            
-            .growth-badge { 
-                background: transparent;
-                border: 2px solid var(--mango); 
-                color: var(--mango); 
-                padding: 12px 15px; 
-                border-radius: 12px;
-                flex-direction: row; 
-                justify-content: center;
-                align-items: center;
-                gap: 12px; 
-                font-size: 1.2rem; 
-            }
-            .growth-badge span.small-text { text-align: left; font-size: 0.7rem; color: var(--white); }
-            
-            .btn-ventas-gigante { 
-                font-size: 0.95rem; 
-                padding: 16px; 
-                width: 100%; 
-                display: block;
-                border-radius: 12px;
             }
 
-            .jobs-container { padding: 0; background: transparent; box-shadow: none; }
-            .job-row { 
-                flex-direction: column; text-align: center; gap: 15px; 
-                padding: 25px 15px; 
-                background: rgba(28,28,28,0.95);
-                border-radius: 16px; 
-                margin-bottom: 15px;
-                border: 1px solid rgba(255,255,255,0.1);
-                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-                transform: none !important;
+            .left-column p.sub-header-left, .left-column h3 + p {
+                text-align: center;
+                margin: 0 auto;
             }
-            .job-row:hover { transform: none !important; border-color: var(--mango); } 
-            .job-btn { width: 100%; display: block; }
-            
-            .footer-grid { text-align: center; gap: 40px; }
+
+            .negotiation-buttons {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div id="loader">
-        <img src="Logos Vectorizados.png" class="loader-logo" alt="Cargando Mango BC">
-    </div>
+    <header class="page-header">
+        <h1>CAPACIDAD EN <span class="highlight">ACCIÓN</span></h1>
+        <p>Nuestra línea Deli Barras es el ejemplo perfecto de lo que podemos hacer por ti. Un producto líder en el canal retail.</p>
+    </header>
 
-    <nav id="navbar">
-        <a href="#inicio" class="logo">
-            <!-- LOGO SIN FILTRO (Se ve bien sobre el glass-bg) -->
-            <img src="mbc.png" alt="Mango BC" class="nav-logo">
-        </a>
-        
-        <div class="hamburger" id="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-
-        <div class="nav-links" id="nav-links">
-            <a href="#que-es" class="nav-item">¿QUÉ ES MANGO?</a>
-            <a href="#metodologia" class="nav-item">METODOLOGÍA</a>
-            <a href="#unidades" class="nav-item">UNIDADES</a>
-            <a href="#ventas" class="nav-item">VENTAS</a>
-            <a href="#talento" class="nav-cta nav-item">BOLSA DE TRABAJO</a>
-        </div>
-    </nav>
-
-    <section class="hero" id="inicio">
-        <video class="hero-video" autoplay muted loop playsinline><source src="VideoDeli.mp4" type="video/mp4"></video>
-        <div class="hero-overlay"></div>
-        <div class="hero-content reveal">
-            <!-- LOGO RECUPERADO EN EL HERO (Con filtro blanco) -->
-            <img src="mbc.png" alt="Mango Business Center" style="width: 90%; max-width: 450px; height: auto; margin-bottom: 25px; filter: brightness(0) invert(1) drop-shadow(0 10px 20px rgba(0,0,0,0.5));">
+    <main class="action-container">
+        <section class="left-column">
+            <h2>CAPACIDAD EN <span class="highlight">ACCIÓN</span></h2>
+            <p class="sub-header-left">Nuestra línea Deli Barras es el ejemplo perfecto de lo que podemos hacer por ti.</p>
             
-            <h1 style="display: none;">MANGO BUSINESS CENTER</h1>
-            <h2>El ecosistema que conecta la producción, la distribución y el talento.</h2>
-            <p>Somos el centro de operaciones donde las marcas crecen, los emprendedores escalan y el talento encuentra su lugar. Construimos una plataforma integral desde la maquila hasta la entrega directa.</p>
+            <div class="data-and-icons">
+                <p class="highlight">DATOS CLAVE DEL ÉXITO</p>
+                <div class="data-grid">
+                    <div class="data-card">
+                        <span class="data-icon">⭐</span>
+                        <p class="data-text">10g Proteína Pura</p>
+                    </div>
+                    <div class="data-card">
+                        <span class="data-icon">🍃</span>
+                        <p class="data-text">100% Ingredientes Naturales</p>
+                    </div>
+                    <div class="data-card">
+                        <span class="data-icon">📦</span>
+                        <p class="data-text">0% Azúcar Añadida</p>
+                    </div>
+                    <div class="data-card">
+                        <span class="data-icon">🏅</span>
+                        <p class="data-text">#1 en Ventas Retail</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="right-column">
+            <img src="factory_image_placeholder.jpg" alt="automated production line packaging goods into clear plastic bags">
             
-            <div class="hero-buttons">
-                <a href="#ventas" class="btn-mango">Soy socio comercial &rarr;</a>
-                <a href="#talento" class="btn-white">Quiero trabajar aquí &rarr;</a>
-                <a href="#unidades" class="btn-outline">Conoce nuestras unidades de negocio &darr;</a>
+            <div class="stat-block">
+                <span class="stat-percentage">+30%</span>
+                <span class="stat-label">CRECIMIENTO<br>ANUAL</span>
             </div>
-        </div>
-    </section>
 
-    <section class="que-es" id="que-es">
-        <div class="que-es-grid">
-            <div class="narrativa-box reveal">
-                <h2 class="section-title">¿QUÉ ES <span>MANGO?</span></h2>
-                <p>Creemos que el crecimiento no tiene que ser complicado. Por eso hemos creado un modelo donde <strong>la producción, la logística y la comercialización</strong> conviven bajo un mismo entorno. Somos el aliado estratégico para que te enfoques en vender más.</p>
-            </div>
-            <div class="stats-bento reveal delay-1">
-                <div class="bento-card"><h3>+10</h3><p>Años de experiencia</p></div>
-                <div class="bento-card"><h3>500k</h3><p>Productos al mes</p></div>
-                <div class="bento-card"><h3>+15k</h3><p>Puntos de venta</p></div>
-                <div class="bento-card"><h3>+50</h3><p>Marcas confían</p></div>
-            </div>
-        </div>
-    </section>
-
-    <section class="metodologia" id="metodologia">
-        <div class="sticky-wrapper">
-            <div class="sticky-left reveal">
-                <h2>NUESTRA <span>METODOLOGÍA</span></h2>
-                <p>El proceso estratégico que nos permite escalar negocios de manera sostenida y eficiente en la industria alimentaria.</p>
-            </div>
-            <div class="scroll-right">
-                <div class="metodo-card reveal">
-                    <div class="m-num">01</div>
-                    <div class="m-text">
-                        <h4>Entendemos el mercado</h4>
-                        <p>Analizamos datos, no corazonadas. Identificamos lo que el consumidor ya está buscando para lanzar productos con demanda real, no con suerte.</p>
-                    </div>
-                </div>
-                <div class="metodo-card reveal">
-                    <div class="m-num">02</div>
-                    <div class="m-text">
-                        <h4>Operamos con eficiencia</h4>
-                        <p>Cada proceso está medido: desde la compra de insumos hasta la entrega final. Eso se traduce en tiempos ágiles y costos competitivos.</p>
-                    </div>
-                </div>
-                <div class="metodo-card reveal">
-                    <div class="m-num">03</div>
-                    <div class="m-text">
-                        <h4>Construimos relaciones</h4>
-                        <p>Construimos con confianza. Nuestros socios comerciales no son clientes; son parte de nuestra red de crecimiento sólido a largo plazo.</p>
-                    </div>
+            <div class="negotiation-block">
+                <h3 class="negotiation-title">Hablemos de negocios</h3>
+                <div class="negotiation-buttons">
+                    <button class="btn-negotiate">Emprendedores</button>
+                    <button class="btn-negotiate">Distribuidores</button>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <section class="unidades" id="unidades">
-        <div class="reveal">
-            <h2 class="section-title">UNIDADES DE <br><span>NEGOCIO</span></h2>
-            <p class="section-desc">Soluciones integrales diseñadas para cada etapa del ecosistema alimentario.</p>
-        </div>
-        
-        <div class="carousel-container reveal delay-1">
-            <div class="unidades-grid" id="carousel-track">
-                
-                <div class="unidad-card">
-                    <div class="card-inner">
-                        <div class="card-front">
-                            <div class="u-icon">F</div>
-                            <h3>Franquicias</h3>
-                            <div class="u-sub">Desarrollo e Inversión</div>
-                            <p>El modelo probado que te da autonomía sin empezar de cero. Producto validado, modelo operativo y acompañamiento continuo.</p>
-                            <div class="flip-hint">Ver beneficios ↺</div>
-                        </div>
-                        <div class="card-back">
-                            <h3>Beneficios Clave</h3>
-                            <ul>
-                                <li>Retorno de inversión (ROI) acelerado.</li>
-                                <li>Capacitación operativa y gerencial.</li>
-                                <li>Proveeduría de insumos garantizada.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="unidad-card">
-                    <div class="card-inner">
-                        <div class="card-front">
-                            <div class="u-icon">M</div>
-                            <h3>Marca Propia</h3>
-                            <div class="u-sub">Maquila para terceros</div>
-                            <p>Tu idea, nuestra fábrica. Nos encargamos desde la formulación hasta el empaque final con total confidencialidad.</p>
-                            <div class="flip-hint">Ver beneficios ↺</div>
-                        </div>
-                        <div class="card-back">
-                            <h3>Beneficios Clave</h3>
-                            <ul>
-                                <li>Ahorro total en compra de maquinaria.</li>
-                                <li>Capacidad de producción escalable.</li>
-                                <li>Procesos con certificaciones de calidad.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="unidad-card">
-                    <div class="card-inner">
-                        <div class="card-front">
-                            <div class="u-icon">L</div>
-                            <h3>Logistics</h3>
-                            <div class="u-sub">Entregas a retail</div>
-                            <p>Tu producto en puntos de venta sin complicaciones. Entregas directas a retail y servicio de última milla para empresas.</p>
-                            <div class="flip-hint">Ver beneficios ↺</div>
-                        </div>
-                        <div class="card-back">
-                            <h3>Beneficios Clave</h3>
-                            <ul>
-                                <li>Reducción de costos de flota propia.</li>
-                                <li>Monitoreo de envíos 24/7.</li>
-                                <li>Cobertura garantizada en retail.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            
-            <div class="carousel-nav" id="carousel-nav">
-                <div class="carousel-dot active" data-index="0"></div>
-                <div class="carousel-dot" data-index="1"></div>
-                <div class="carousel-dot" data-index="2"></div>
-            </div>
-        </div>
-    </section>
-
-    <hr class="ventas-divisor">
-
-    <section class="catalogo" id="ventas">
-        <div class="ventas-header reveal">
-            <h2 class="section-title">CAPACIDAD EN <br><span>ACCIÓN</span></h2>
-            <p class="section-desc">Nuestra línea Deli Barras es el ejemplo perfecto de lo que podemos hacer por ti. Un producto líder en el canal retail.</p>
-        </div>
-
-        <div class="catalogo-wrapper reveal">
-            <div class="cat-text">
-                <h2>CAPACIDAD <span>EN ACCIÓN</span></h2>
-                <p>Nuestra línea Deli Barras es el ejemplo perfecto de lo que podemos hacer por ti.</p>
-                
-                <div class="cat-features">
-                    <div class="feature-tag"><span>10g Proteína Pura</span><span>⭐</span></div>
-                    <div class="feature-tag"><span>100% Ingredientes Naturales</span><span>🍃</span></div>
-                    <div class="feature-tag"><span>0% Azúcar Añadida</span><span>📦</span></div>
-                    <div class="feature-tag"><span>#1 en Ventas Retail</span><span>🏅</span></div>
-                </div>
-                
-                <div class="sales-cta-block">
-                    <div class="growth-badge">
-                        +30% 
-                        <span class="small-text">CRECIMIENTO<br>ANUAL</span>
-                    </div>
-                    <a href="mailto:socios@mangobusiness.com" class="btn-ventas-gigante">Hablemos de negocios</a>
-                </div>
-            </div>
-            
-            <div class="cat-img">
-                <img src="IMG_8954.jpg" alt="Deli Barras en Producción">
-            </div>
-        </div>
-    </section>
-
-    <section class="talento" id="talento">
-        <div class="reveal">
-            <h2 class="section-title">EL TALENTO <br><span>MUEVE A MANGO</span></h2>
-            <p class="section-desc">Buscamos personas que no solo quieran un empleo, sino que quieran construir. Autonomía, desarrollo y excelencia.</p>
-        </div>
-        
-        <div class="jobs-container reveal delay-1">
-            <div class="job-row">
-                <div class="job-info">
-                    <h4>Ejecutivo de Cuentas Retail</h4>
-                    <p>Ubicación: Morelia | Tiempo Completo</p>
-                </div>
-                <a href="mailto:talento@mangobusiness.com" class="job-btn">Postularme</a>
-            </div>
-            <div class="job-row">
-                <div class="job-info">
-                    <h4>Coordinador Logístico</h4>
-                    <p>Ubicación: Morelia | Tiempo Completo</p>
-                </div>
-                <a href="mailto:talento@mangobusiness.com" class="job-btn">Postularme</a>
-            </div>
-            <div class="job-row">
-                <div class="job-info">
-                    <h4>Desarrollador Franquicias</h4>
-                    <p>Ubicación: Morelia | Tiempo Completo</p>
-                </div>
-                <a href="mailto:talento@mangobusiness.com" class="job-btn">Postularme</a>
-            </div>
-            <div class="job-row">
-                <div class="job-info">
-                    <h4>Analista de Producción</h4>
-                    <p>Ubicación: Morelia | Tiempo Completo</p>
-                </div>
-                <a href="mailto:talento@mangobusiness.com" class="job-btn">Postularme</a>
-            </div>
-        </div>
-        
-        <div class="talento-footer reveal delay-2">
-            <h3 style="font-size: 1.2rem;">"No buscamos empleados, buscamos socios de alma."</h3>
-            <p style="color: #666; margin-bottom: 10px; font-size: 0.9rem;">Conéctate para futuras vacantes.</p>
-            <a href="mailto:talento@mangobusiness.com" style="color: var(--dark); font-weight: 700; text-decoration: underline;">talento@mangobusiness.com</a>
-        </div>
-    </section>
-
-    <footer>
-        <div class="footer-grid reveal">
-            <div class="footer-col">
-                <div class="footer-logo" style="margin-bottom: 20px;">
-                    <img src="Logos Vectorizados.png" alt="Mango BC" style="height: 50px; width: auto; filter: brightness(0) invert(1);">
-                </div>
-                <p style="color: #888; font-size: 0.9rem; line-height: 1.6;">Morelia, Michoacán<br>México, CP 58000<br>+52 XX XXXX XXXX</p>
-            </div>
-            <div class="footer-col">
-                <h4>Contacto Directo</h4>
-                <a href="mailto:socios@mangobusiness.com">Ventas y Socios</a>
-                <a href="mailto:talento@mangobusiness.com">Atracción de Talento</a>
-                <a href="mailto:compras@mangobusiness.com">Proveedores y Compras</a>
-            </div>
-            <div class="footer-col">
-                <h4>Redes Sociales</h4>
-                <a href="#">LinkedIn</a>
-                <a href="#">Instagram</a>
-                <a href="#">Facebook</a>
-            </div>
-        </div>
-        <div class="footer-bottom reveal delay-1">
-            © 2026 MANGO BUSINESS CENTER
-        </div>
-    </footer>
-
-    <script>
-        // 1. Preloader
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loader').style.opacity = '0';
-                document.getElementById('loader').style.visibility = 'hidden';
-            }, 1000);
-        });
-
-        // 2. Menú Móvil
-        const hamburger = document.getElementById('hamburger');
-        const navLinks = document.getElementById('nav-links');
-        const navItems = document.querySelectorAll('.nav-item');
-
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('active');
-            document.getElementById('navbar').classList.toggle('menu-open');
-            document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : 'auto';
-        });
-
-        navItems.forEach(item => {
-            item.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('active');
-                document.getElementById('navbar').classList.remove('menu-open');
-                document.body.style.overflow = 'auto';
-            });
-        });
-
-        // 3. Reveal Animation
-        const revealElements = document.querySelectorAll('.reveal');
-        const revealOptions = { threshold: 0.05, rootMargin: "0px 0px 50px 0px" };
-        
-        const revealObserver = new IntersectionObserver(function(entries, observer) {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) return;
-                entry.target.classList.add('active');
-                observer.unobserve(entry.target);
-            });
-        }, revealOptions);
-
-        revealElements.forEach(el => revealObserver.observe(el));
-
-        // 4. Lógica del Carrusel Móvil
-        if (window.innerWidth <= 992) {
-            const track = document.getElementById('carousel-track');
-            const dots = document.querySelectorAll('.carousel-dot');
-            const cards = track.querySelectorAll('.unidad-card');
-            const totalSlides = dots.length;
-            let currentIndex = 0;
-            let flipTimer, slideTimer, transitionTimer;
-            let carouselStarted = false;
-
-            const updateDots = (index) => {
-                dots.forEach(d => d.classList.remove('active'));
-                if(dots[index]) dots[index].classList.add('active');
-            };
-
-            const scrollToCard = (index) => {
-                if(!cards[index]) return;
-                const scrollPos = cards[index].offsetLeft - track.offsetLeft - (track.clientWidth - cards[index].clientWidth) / 2;
-                track.scrollTo({ left: scrollPos, behavior: 'smooth' });
-                updateDots(index);
-                currentIndex = index;
-            };
-
-            const clearTimers = () => {
-                clearTimeout(flipTimer);
-                clearTimeout(slideTimer);
-                clearTimeout(transitionTimer);
-                cards.forEach(c => c.classList.remove('is-flipped'));
-            };
-
-            const startAutoPlay = () => {
-                clearTimers();
-                
-                flipTimer = setTimeout(() => {
-                    if(cards[currentIndex]) cards[currentIndex].classList.add('is-flipped');
-
-                    slideTimer = setTimeout(() => {
-                        if(cards[currentIndex]) cards[currentIndex].classList.remove('is-flipped');
-
-                        transitionTimer = setTimeout(() => {
-                            currentIndex = (currentIndex + 1) % totalSlides;
-                            scrollToCard(currentIndex);
-                            startAutoPlay(); 
-                        }, 300);
-
-                    }, 2000);
-
-                }, 3000);
-            };
-
-            dots.forEach((dot, idx) => {
-                dot.addEventListener('click', () => {
-                    scrollToCard(idx);
-                    if (carouselStarted) startAutoPlay(); 
-                });
-            });
-
-            track.addEventListener('scroll', () => {
-                const scrollLeft = track.scrollLeft;
-                const cardWidth = track.clientWidth; 
-                const index = Math.round(scrollLeft / cardWidth);
-                if (index !== currentIndex) {
-                    updateDots(index);
-                    currentIndex = index;
-                    if (carouselStarted) startAutoPlay(); 
-                }
-            });
-
-            const unidadesSection = document.getElementById('unidades');
-            const carouselObserver = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting && !carouselStarted) {
-                    carouselStarted = true;
-                    startAutoPlay();
-                }
-            }, { threshold: 0.2 });
-
-            if (unidadesSection) {
-                carouselObserver.observe(unidadesSection);
-            }
-        }
-
-        // 5. Smart Navbar (Ocultar al hacer scroll hacia abajo, mostrar hacia arriba)
-        let lastScrollTop = 0;
-        const navbarElement = document.getElementById('navbar');
-
-        window.addEventListener('scroll', () => {
-            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
-            // Evitamos que la barra se oculte si el menú móvil está abierto
-            if (navbarElement.classList.contains('menu-open')) {
-                return;
-            }
-
-            if (scrollTop > lastScrollTop && scrollTop > 80) {
-                // Scroll hacia abajo: empujamos la barra hacia arriba fuera de la vista
-                navbarElement.style.transform = 'translateY(-150%)';
-            } else {
-                // Scroll hacia arriba (o al llegar al tope): regresamos la barra a su lugar
-                navbarElement.style.transform = 'translateY(0)';
-            }
-            
-            // Actualizamos la posición anterior
-            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
-        });
-    </script>
 </body>
 </html>

@@ -139,8 +139,32 @@
         .scroll-right { width: 50%; display: flex; flex-direction: column; gap: 80px; margin-top: 260px; padding-bottom: 200px; }
         .metodo-card { display: flex; gap: 30px; align-items: flex-start; background: rgba(255,255,255,0.03); padding: 50px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.05); transition: 0.5s; backdrop-filter: blur(10px); }
         .metodo-card:hover { transform: translateX(-20px); border-color: var(--mango); background: rgba(253, 234, 20, 0.05); }
-        .m-num { font-size: 4rem; font-family: 'Montserrat'; font-weight: 900; color: transparent; -webkit-text-stroke: 2px rgba(255,255,255,0.2); line-height: 0.8; transition: 0.4s;}
-        .metodo-card:hover .m-num { -webkit-text-stroke: 2px var(--mango); }
+        
+        /* --- NUEVO ESTILO PARA LOS NÚMEROS DE METODOLOGÍA --- */
+        .m-num { 
+            font-size: 2.2rem; 
+            font-family: 'Montserrat'; 
+            font-weight: 900; 
+            color: var(--dark); 
+            background: var(--mango); 
+            min-width: 75px; 
+            height: 75px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 20px rgba(253, 234, 20, 0.15); 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            flex-shrink: 0; /* Evita que el número se aplaste si hay mucho texto */
+        }
+        
+        /* Efecto al pasar el mouse por encima de la tarjeta */
+        .metodo-card:hover .m-num { 
+            background: var(--white); 
+            transform: scale(1.1) rotate(-5deg); 
+            box-shadow: 0 15px 30px rgba(255, 255, 255, 0.2);
+        }
+
         .m-text h4 { font-size: 1.5rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
         .m-text p { color: #CCC; font-size: 1.1rem; line-height: 1.7; font-weight: 300; }
 
@@ -164,7 +188,26 @@
         .card-front { background: var(--white); color: var(--dark); }
         .unidad-card:hover .card-front { border-color: var(--mango); }
         
-        .u-icon { width: 60px; height: 60px; background: var(--dark); border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; font-family: 'Montserrat'; font-weight: 900; color: var(--mango); margin: 0 auto 30px; }
+        /* Iconos de las tarjetas de negocio */
+        .u-icon { 
+            width: 120px; 
+            height: 120px; 
+            background: transparent; 
+            border-radius: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            margin: 0 auto 30px; 
+            overflow: visible; 
+            padding: 0; 
+        }
+        
+        .u-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; 
+        }
+
         .card-front h3 { font-size: 1.8rem; margin-bottom: 10px; color: var(--dark); font-weight: 900; }
         .card-front .u-sub { color: var(--dark); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 25px; letter-spacing: 1px; background: rgba(253, 234, 20, 0.3); display: inline-block; padding: 4px 10px; border-radius: 6px; align-self: center;}
         .card-front p { color: #666; line-height: 1.7; flex-grow: 1; margin-bottom: 10px;}
@@ -226,27 +269,46 @@
             transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1); position: relative; 
             overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
             border: 1px solid rgba(255,255,255,0.05); 
+            justify-content: flex-end; 
         }
         
         .brand-card::before { 
-            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; 
-            background: linear-gradient(to top, rgba(0,0,0,0.95), transparent); 
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; 
+            background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.2)); 
             opacity: 0; transition: opacity 0.6s ease; z-index: 1; 
         }
         
-        .card-num { font-family: 'Montserrat'; font-weight: 900; font-size: 1.2rem; color: #666; z-index: 2; transition: 0.6s; }
-        .brand-card h2 { font-family: 'Montserrat'; font-weight: 900; font-size: 1.5rem; margin-top: 15px; color: var(--white); z-index: 2; transition: 0.6s; text-transform: uppercase; }
-        .brand-desc { margin-top: auto; opacity: 0; transform: translateY(20px); transition: 0.6s; font-size: 0.95rem; color: #DDD; z-index: 2; font-family: 'Open Sans'; line-height: 1.5;}
-        
-        .product-img { 
-            position: absolute; top: 50%; left: 50%; 
-            transform: translate(-50%, -50%) scale(0.8); max-height: 55%; 
-            filter: none; 
-            transition: 0.8s; z-index: 0; object-fit: contain; 
+        .card-num { 
+            font-family: 'Montserrat'; font-weight: 900; font-size: 1.2rem; color: #666; 
+            z-index: 2; transition: 0.6s; position: absolute; top: 30px; left: 30px; 
+            opacity: 0; 
+        }
+        .brand-card h2 { 
+            font-family: 'Montserrat'; font-weight: 900; font-size: 1.5rem; margin-top: 15px; 
+            color: var(--white); z-index: 2; transition: 0.6s; text-transform: uppercase; 
+            opacity: 0; transform: translateY(20px); 
+        }
+        .brand-desc { 
+            opacity: 0; transform: translateY(20px); transition: 0.6s; font-size: 0.95rem; 
+            color: #DDD; z-index: 2; font-family: 'Open Sans'; line-height: 1.5; margin-bottom: 15px;
         }
         
+        .product-img { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: opacity 0.8s ease, transform 0.8s ease; 
+            z-index: 0; 
+        }
+        
+        .img-main { opacity: 1; }
+        .img-hover { opacity: 0; transform: scale(1.05); }
+        
         .card-btn { 
-            margin-top: 15px; padding: 12px 20px; border: 2px solid var(--mango); color: var(--mango); 
+            padding: 12px 20px; border: 2px solid var(--mango); color: var(--mango); 
             text-decoration: none; font-size: 0.8rem; font-family: 'Montserrat'; font-weight: 700; 
             text-align: center; opacity: 0; transition: 0.6s; z-index: 3; text-transform: uppercase; border-radius: 50px;
         }
@@ -254,261 +316,60 @@
 
         /* Efectos Hover en PC (Arriba de 1200px) */
         @media (min-width: 1201px) and (hover: hover) {
-            .brand-card:hover { flex: 2.5; background: #0a0a0a; border-color: var(--mango); }
+            .brand-card:hover { flex: 2.5; border-color: var(--mango); }
             .brand-card:hover::before { opacity: 1; }
-            .brand-card:hover .card-num { color: var(--mango); }
-            .brand-card:hover h2 { font-size: 2.5rem; color: var(--mango); }
+            
+            .brand-card:hover .card-num { color: var(--mango); opacity: 1; }
+            .brand-card:hover h2 { font-size: 2.5rem; color: var(--mango); opacity: 1; transform: translateY(0); }
             .brand-card:hover .brand-desc, .brand-card:hover .card-btn { opacity: 1; transform: translateY(0); }
-            .brand-card:hover .product-img { left: 75%; transform: translate(-50%, -50%) scale(1.1); }
+            
+            .brand-card:hover .img-main { opacity: 0; transform: scale(1.1); } 
+            .brand-card:hover .img-hover { opacity: 1; transform: scale(1); }
         }
 
         /* =========================================================
            5. ÁREA DE VENTAS: CAPACIDAD EN ACCIÓN (Full Width y Texto Izq)
            ========================================================= */
-        .capacidad-accion-container {
-            background-color: var(--dark); 
-            color: var(--white);
-            padding: 150px 5%; 
-            position: relative;
-        }
-
-        .capacidad-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr; 
-            gap: 80px;
-            max-width: 1400px; 
-            margin: 0 auto;
-            align-items: center;
-        }
-
-        .capacidad-left {
-            text-align: left;
-            display: flex;
-            flex-direction: column;
-            gap: 40px;
-        }
-
-        .capacidad-header h2 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: clamp(3rem, 5vw, 4.5rem);
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            color: var(--white);
-        }
+        .capacidad-accion-container { background-color: var(--dark); color: var(--white); padding: 150px 5%; position: relative; }
+        .capacidad-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; max-width: 1400px; margin: 0 auto; align-items: center; }
+        .capacidad-left { text-align: left; display: flex; flex-direction: column; gap: 40px; }
+        .capacidad-header h2 { font-family: 'Montserrat', sans-serif; font-size: clamp(3rem, 5vw, 4.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 20px; text-transform: uppercase; color: var(--white); }
         .capacidad-header h2 span { color: var(--mango); }
-        
-        .capacidad-header p {
-            color: #AAA;
-            font-size: 1.2rem;
-            line-height: 1.6;
-            max-width: 90%;
-        }
-
-        .datos-clave-block {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .datos-title {
-            color: var(--white);
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 900;
-            text-transform: uppercase;
-        }
+        .capacidad-header p { color: #AAA; font-size: 1.2rem; line-height: 1.6; max-width: 90%; }
+        .datos-clave-block { display: flex; flex-direction: column; gap: 20px; }
+        .datos-title { color: var(--white); font-family: 'Montserrat', sans-serif; font-size: 1.8rem; font-weight: 900; text-transform: uppercase; }
         .datos-title span { color: var(--mango); }
-
-        .cat-features { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 20px; 
-        }
-        
-        .feature-tag { 
-            background: #111; 
-            color: var(--white); 
-            padding: 25px 15px; 
-            border-radius: 16px; 
-            border: 1px solid #333; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            gap: 15px; 
-            text-align: center; 
-            transition: 0.4s; 
-        }
-        .feature-tag:hover { 
-            border-color: var(--mango); 
-            background: rgba(253, 234, 20, 0.05); 
-            transform: translateY(-5px); 
-        }
-        .f-icon { 
-            font-size: 2.5rem; 
-            line-height: 1; 
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); 
-        }
-        .f-text { 
-            font-family: 'Open Sans'; 
-            font-size: 0.9rem; 
-            font-weight: 700; 
-            text-transform: uppercase; 
-        }
-
-        .capacidad-right {
-            display: flex;
-            flex-direction: column;
-            gap: 35px;
-            align-items: center; 
-            text-align: center;
-        }
-
-        .production-img {
-            width: 100%;
-            height: auto;
-            max-height: 450px;
-            object-fit: cover;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-        }
-        
-        .growth-badge { 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 15px; 
-            color: var(--mango); 
-            font-family: 'Montserrat'; 
-            font-size: 4rem; 
-            font-weight: 900; 
-            line-height: 1; 
-        }
-        
-        .growth-badge .small-text { 
-            color: var(--white); 
-            font-size: 1rem; 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-            line-height: 1.2; 
-            text-align: left; 
-        }
-
-        .negotiation-block {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            width: 100%;
-        }
-
-        /* TEXTO LLAMATIVO Y ANIMADO PARA LOS BOTONES */
-        .negotiation-title {
-            color: var(--white);
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin: 0 0 10px 0;
-            font-weight: 900;
-            text-shadow: 0 0 15px rgba(253, 234, 20, 0.3);
-        }
-        .negotiation-title span {
-            color: var(--mango);
-        }
-        .arrow-down {
-            display: inline-block;
-            font-size: 1.5rem;
-            animation: bounceDown 1.5s infinite ease-in-out;
-        }
-        
-        @keyframes bounceDown {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(8px); }
-        }
-
-        .negotiation-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            width: 100%;
-            flex-wrap: wrap;
-        }
-
-        .btn-negotiate {
-            flex: 1;
-            min-width: 180px;
-            max-width: 250px;
-            background-color: var(--mango);
-            color: var(--dark);
-            border: none;
-            border-radius: 50px;
-            padding: 16px 20px;
-            font-size: 0.95rem;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 900;
-            text-transform: uppercase;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-negotiate:hover {
-            background-color: var(--white);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(253, 234, 20, 0.3);
-        }
+        .cat-features { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .feature-tag { background: #111; color: var(--white); padding: 25px 15px; border-radius: 16px; border: 1px solid #333; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 15px; text-align: center; transition: 0.4s; }
+        .feature-tag:hover { border-color: var(--mango); background: rgba(253, 234, 20, 0.05); transform: translateY(-5px); }
+        .f-icon { font-size: 2.5rem; line-height: 1; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); }
+        .f-text { font-family: 'Open Sans'; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; }
+        .capacidad-right { display: flex; flex-direction: column; gap: 35px; align-items: center; text-align: center; }
+        .production-img { width: 100%; height: auto; max-height: 450px; object-fit: cover; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5); }
+        .growth-badge { display: flex; align-items: center; justify-content: center; gap: 15px; color: var(--mango); font-family: 'Montserrat'; font-size: 4rem; font-weight: 900; line-height: 1; }
+        .growth-badge .small-text { color: var(--white); font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; line-height: 1.2; text-align: left; }
+        .negotiation-block { display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; }
+        .negotiation-title { color: var(--white); font-family: 'Montserrat', sans-serif; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 10px 0; font-weight: 900; text-shadow: 0 0 15px rgba(253, 234, 20, 0.3); }
+        .negotiation-title span { color: var(--mango); }
+        .arrow-down { display: inline-block; font-size: 1.5rem; animation: bounceDown 1.5s infinite ease-in-out; }
+        @keyframes bounceDown { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+        .negotiation-buttons { display: flex; gap: 15px; justify-content: center; width: 100%; flex-wrap: wrap; }
+        .btn-negotiate { flex: 1; min-width: 180px; max-width: 250px; background-color: var(--mango); color: var(--dark); border: none; border-radius: 50px; padding: 16px 20px; font-size: 0.95rem; font-family: 'Montserrat', sans-serif; font-weight: 900; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: all 0.3s ease; }
+        .btn-negotiate:hover { background-color: var(--white); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(253, 234, 20, 0.3); }
 
         /* =========================================================
            6. TALENTO
            ========================================================= */
-        .talento { 
-            background: var(--white); 
-            padding-top: 80px; 
-            padding-bottom: 60px; 
-            min-height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-        }
-        
-        .talento .section-desc { 
-            margin-bottom: 40px; 
-        }
-        
-        .jobs-container { 
-            max-width: 1000px; 
-            margin: 0 auto; 
-            background: var(--light-bg); 
-            border-radius: 30px; 
-            padding: 30px 40px; 
-            box-shadow: var(--shadow-soft); 
-            width: 100%;
-        }
-        
-        .job-row { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 15px 30px; 
-            background: rgba(28,28,28,0.95); 
-            border-radius: 16px; 
-            margin-bottom: 12px; 
-            border: 1px solid rgba(255,255,255,0.1); 
-            transition: 0.3s; 
-        }
+        .talento { background: var(--white); padding-top: 80px; padding-bottom: 60px; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+        .talento .section-desc { margin-bottom: 40px; }
+        .jobs-container { max-width: 1000px; margin: 0 auto; background: var(--light-bg); border-radius: 30px; padding: 30px 40px; box-shadow: var(--shadow-soft); width: 100%; }
+        .job-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: rgba(28,28,28,0.95); border-radius: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
         .job-row:last-child { margin-bottom: 0; }
         .job-row:hover { transform: scale(1.02); background: var(--dark); border-color: var(--mango); box-shadow: 0 10px 20px rgba(0,0,0,0.2);}
-        
         .job-info h4 { font-size: 1.1rem; color: var(--white); margin-bottom: 5px; font-weight: 700; }
         .job-info p { color: #BBB; font-size: 0.85rem; }
-        
         .job-btn { padding: 10px 25px; background: var(--mango); color: var(--dark); border-radius: 50px; font-weight: 700; text-decoration: none; transition: 0.3s; text-align: center; border: 2px solid var(--mango); font-size: 0.9rem;}
         .job-row:hover .job-btn { background: var(--white); border-color: var(--white); }
-        
         .talento-footer { text-align: center; margin-top: 30px; }
         .talento-footer h3 { color: var(--dark); font-size: 1.2rem; margin-bottom: 5px; }
 
@@ -529,85 +390,39 @@
             section { padding: 80px 5%; }
             .que-es { padding: 80px 5%; }
             .metodologia { padding: 100px 5% 0; }
-            
             .sticky-left { top: 120px; padding-bottom: 100px; }
             .scroll-right { margin-top: 150px; padding-bottom: 100px; }
-
             .unidad-card { height: 400px; }
             .card-front, .card-back { padding: 30px 20px; }
-            .u-icon { width: 50px; height: 50px; margin: 0 auto 20px; }
             
+            .u-icon { 
+                width: 100px; 
+                height: 100px; 
+                margin: 0 auto 20px;
+                padding: 0; 
+            }
             .bento-card { padding: 40px 20px; }
             .bento-card h3 { font-size: clamp(2.2rem, 4vw, 3.5rem); }
         }
 
         /* =========================================================
-           AJUSTE PARA TABLETS (Hasta 1200px) - EVITA QUE SE APLASTEN LAS MARCAS
+           AJUSTE PARA TABLETS (Hasta 1200px)
            ========================================================= */
         @media (max-width: 1200px) {
-            .expansion-container { 
-                flex-wrap: wrap; 
-                height: auto; 
-                justify-content: center; 
-                gap: 20px;
-                padding: 0 10px;
-            }
-            .brand-card { 
-                /* Forzamos a que sean exactamente 2 tarjetas por fila */
-                flex: 0 0 calc(50% - 10px); 
-                width: calc(50% - 10px); 
-                height: auto; 
-                min-height: 420px;
-                align-items: center; 
-                text-align: center;
-                padding: 30px 20px;
-                padding-top: 180px; 
-            }
-            .brand-card::before { 
-                opacity: 0.85; 
-                height: 100%; 
-                background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.1)); 
-            } 
-            .brand-card .brand-desc, .brand-card .card-btn { 
-                opacity: 1; 
-                transform: translateY(0); 
-                position: relative; 
-                z-index: 5; 
-            }
-            .brand-card h2 { 
-                font-size: 1.8rem; 
-                color: var(--mango); 
-                position: relative; 
-                z-index: 5; 
-                margin-top: 0;
-            }
-            .brand-card .card-num { 
-                color: rgba(255,255,255,0.5); 
-                position: absolute; 
-                top: 25px; 
-                left: 25px; 
-            }
+            .expansion-container { flex-wrap: wrap; height: auto; justify-content: center; gap: 20px; padding: 0 10px; }
+            .brand-card { flex: 0 0 calc(50% - 10px); width: calc(50% - 10px); height: auto; min-height: 420px; align-items: center; text-align: center; padding: 40px 20px; justify-content: flex-end; }
             
-            .brand-card .product-img { 
-                filter: none; 
-                left: 50%; 
-                top: 100px; 
-                transform: translate(-50%, -50%) scale(1); 
-                z-index: 2; 
-                max-height: 130px; 
-            }
+            .brand-card::before { opacity: 0.85; } 
+            .brand-card .brand-desc, .brand-card .card-btn, .brand-card h2, .brand-card .card-num { opacity: 1 !important; transform: translateY(0) !important; position: relative; z-index: 5; }
+            .brand-card .card-num { position: absolute; }
+            .brand-card h2 { font-size: 1.8rem; color: var(--mango); margin-top: 0; }
+            
+            .brand-card .product-img { z-index: 0; }
             
             @media (hover: hover) {
-                .brand-card:hover { 
-                    /* Evita que se estire horizontalmente al hacer hover en este tamaño */
-                    flex: 0 0 calc(50% - 10px); 
-                    transform: translateY(-10px); 
-                    border-color: var(--mango); 
-                }
-                .brand-card:hover .product-img { 
-                    left: 50%; 
-                    transform: translate(-50%, -50%) scale(1.1); 
-                }
+                .brand-card:hover { flex: 0 0 calc(50% - 10px); transform: translateY(-10px); border-color: var(--mango); }
+                .brand-card:hover .img-main { opacity: 0; transform: scale(1.1); } 
+                .brand-card:hover .img-hover { opacity: 1; transform: scale(1); }
             }
         }
 
@@ -623,11 +438,7 @@
         @media (max-width: 992px) {
             nav { width: 100%; top: 0; left: 0; border-radius: 0; padding: 15px 5%; }
             .hamburger { display: flex; }
-            .nav-links { 
-                position: fixed; top: 0; left: 100%; width: 100%; height: 100vh; 
-                background: var(--white); flex-direction: column; justify-content: center; 
-                align-items: center; gap: 40px; transition: 0.4s; z-index: 1001;
-            }
+            .nav-links { position: fixed; top: 0; left: 100%; width: 100%; height: 100vh; background: var(--white); flex-direction: column; justify-content: center; align-items: center; gap: 40px; transition: 0.4s; z-index: 1001; }
             .nav-links.active { left: 0; }
             .hero { height: 100svh !important; padding: 80px 5% 20px; }
             .hero-buttons { flex-direction: column; }
@@ -636,87 +447,30 @@
             .sticky-left { position: relative; top: 0; width: 100%; text-align: center; }
             .scroll-right { width: 100%; margin-top: 0; }
             
-            /* CARRUSEL UNIDADES (Se mantiene igual) */
-            .unidades-grid { 
-                display: flex !important; overflow-x: auto; scroll-snap-type: x mandatory; gap: 20px;
-                padding: 10px 5%; margin: 0 -5%; scrollbar-width: none;
-            }
+            .unidades-grid { display: flex !important; overflow-x: auto; scroll-snap-type: x mandatory; gap: 20px; padding: 10px 5%; margin: 0 -5%; scrollbar-width: none; }
             .unidad-card { flex: 0 0 85vw; scroll-snap-align: center; }
+            
+            .u-icon {
+                width: 90px; 
+                height: 90px;
+                margin: 0 auto 25px; 
+                padding: 0;
+            }
+
             .carousel-nav { display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
             .carousel-dot { width: 10px; height: 10px; background: #D0D0D0; border-radius: 50%; }
             .carousel-dot.active { background: var(--mango); }
 
-            /* --- FIX SECCIÓN MARCAS CELULAR (AQUÍ ESTÁ EL TRUCO) --- */
             .marcas-expansion { padding-top: 80px; padding-bottom: 60px; }
-            
-            .expansion-container { 
-                flex-direction: column; /* Cambia a una sola columna */
-                height: auto; 
-                gap: 50px; /* Espacio entre marcas */
-                padding: 0 5%; 
-                width: 100%;
-                align-items: center;
-            }
+            .expansion-container { flex-direction: column; height: auto; gap: 30px; padding: 0 5%; width: 100%; align-items: center; }
+            .brand-card { flex: none; width: 100%; max-width: 400px; min-height: 480px; padding: 40px 30px; align-items: center; text-align: center; border-radius: 25px; justify-content: flex-end; }
 
-            .brand-card { 
-                flex: none; 
-                width: 100%; 
-                max-width: 400px; /* Para que no se vea deforme en tablets */
-                min-height: 480px; 
-                padding: 30px;
-                padding-top: 220px; /* Empuja el texto hacia abajo para dejar espacio a la imagen */
-                align-items: center; 
-                text-align: center;
-                border-radius: 25px;
-            }
+            .brand-card::before { opacity: 0.95; }
+            .brand-card h2 { font-size: 2rem; color: var(--mango); position: relative; z-index: 5; margin-top: 0; opacity: 1 !important; transform: translateY(0) !important;}
+            .brand-card .card-num { opacity: 1 !important; }
+            .brand-desc, .card-btn { opacity: 1 !important; transform: translateY(0) !important; position: relative; z-index: 5; display: block; }
+            .brand-card .card-btn { width: 100%; padding: 15px; }
 
-            /* Hacemos que todo sea visible sin necesidad de pasar el mouse */
-            .brand-card::before { 
-                opacity: 0.95; 
-                height: 100%; 
-                background: linear-gradient(to top, rgba(0,0,0,0.95) 50%, rgba(0,0,0,0.3)); 
-            }
-
-            .brand-card h2 { 
-                font-size: 2rem; 
-                color: var(--mango); 
-                position: relative; 
-                z-index: 5; 
-                margin-top: 0;
-            }
-
-            .brand-desc, .card-btn { 
-                opacity: 1 !important; 
-                transform: translateY(0) !important; 
-                position: relative; 
-                z-index: 5; 
-                display: block; /* Asegura que se vean */
-            }
-
-            .brand-card .card-btn { 
-                width: 100%; 
-                padding: 15px;
-            }
-
-            /* Imagen Centrada "Al Cien" arriba */
-            .brand-card .product-img { 
-                left: 50%; 
-                top: 110px; /* La posiciona en la parte superior del card */
-                transform: translate(-50%, -50%) scale(1.1); 
-                max-height: 180px; 
-                z-index: 2; 
-                filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
-            }
-
-            .brand-card .card-num { 
-                position: absolute; 
-                top: 20px; 
-                left: 20px; 
-                opacity: 0.5; 
-                color: var(--white);
-            }
-
-            /* VENTAS Y TALENTO MÓVIL */
             .capacidad-grid { grid-template-columns: 1fr; }
             .cat-features { grid-template-columns: 1fr; }
             .job-row { flex-direction: column; text-align: center; gap: 15px; }
@@ -827,7 +581,8 @@
                 <div class="unidad-card">
                     <div class="card-inner">
                         <div class="card-front">
-                            <div class="u-icon">F</div>
+                            
+                            <div class="u-icon"><img src="iconos-1-01.png" alt="Icono Franquicias"></div>
                             <h3>Franquicias</h3>
                             <div class="u-sub">Desarrollo e Inversión</div>
                             <p>El modelo probado que te da autonomía sin empezar de cero. Producto validado, modelo operativo y acompañamiento continuo.</p>
@@ -847,7 +602,8 @@
                 <div class="unidad-card">
                     <div class="card-inner">
                         <div class="card-front">
-                            <div class="u-icon">M</div>
+                            
+                            <div class="u-icon"><img src="iconos-1-02.png" alt="Icono Marca Propia"></div>
                             <h3>Marca Propia</h3>
                             <div class="u-sub">Maquila para terceros</div>
                             <p>Tu idea, nuestra fábrica. Nos encargamos desde la formulación hasta el empaque final con total confidencialidad.</p>
@@ -867,7 +623,8 @@
                 <div class="unidad-card">
                     <div class="card-inner">
                         <div class="card-front">
-                            <div class="u-icon">L</div>
+                            
+                            <div class="u-icon"><img src="iconos-1-03.png" alt="Icono Logistics"></div>
                             <h3>Logistics</h3>
                             <div class="u-sub">Entregas a retail</div>
                             <p>Tu producto en puntos de venta sin complicaciones. Entregas directas a retail y servicio de última milla para empresas.</p>
@@ -894,7 +651,6 @@
         </div>
     </section>
 
-    <!-- SECCIÓN DE MARCAS -->
     <section class="marcas-expansion" id="marcas">
         <div class="reveal">
             <h2 class="section-title">NUESTRAS <br><span>MARCAS</span></h2>
@@ -903,18 +659,21 @@
         <div class="bg-marquee"><div class="marquee-content">MANGO BUSINESS CENTER — MANGO BUSINESS CENTER — </div></div>
         
         <div class="expansion-container">
+            
             <div class="brand-card reveal delay-1">
-                <div class="card-num">01</div>
+                <div class="card-num"></div>
                 <h2>DELI BARRAS</h2>
-                <img src="https://cdn.alsuper.com/products/449095_p.webp" alt="Deli Barras" class="product-img">
+                <img src="1mg.jpg" alt="Deli Barras" class="product-img img-main">
+                <img src="2mg.jpg" alt="Deli Barras Hover" class="product-img img-hover">
                 <div class="brand-desc">Snacks saludables líderes. Venta en línea y distribución minorista.</div>
                 <a href="#ventas" class="card-btn">Distribución</a>
             </div>
             
             <div class="brand-card reveal delay-2">
-                <div class="card-num">02</div>
+                <div class="card-num"></div>
                 <h2>SABOR MÍO</h2>
-                <img src="https://srv1.supermay.mx/web/image/product.product/6682/image_1024/%5B1000659%5D%20SABOR%20MIO%20BBQ%20EMPANIZADOR%20170%20G?unique=9def32f" alt="Sabor Mío" class="product-img">
+                <img src="SABOR-MÍO-UNO.jpg" alt="Sabor Mío" class="product-img img-main">
+                <img src="SABOR-MÍO-DOS.jpg" alt="Sabor Mío Hover" class="product-img img-hover">
                 <div class="brand-desc">Empanizadores y mezclas industriales de alta gama.</div>
                 <a href="#ventas" class="card-btn">Ver Catálogo</a>
             </div>
@@ -922,7 +681,8 @@
             <div class="brand-card reveal delay-3">
                 <div class="card-num">03</div>
                 <h2>CAMPESINAS</h2>
-                <img src="https://lagranbodega.vteximg.com.br/arquivos/ids/204369-600-600/63APND041_1.jpg?v=636790600972800000" alt="Campesinas" class="product-img">
+                <img src="https://lagranbodega.vteximg.com.br/arquivos/ids/204369-600-600/63APND041_1.jpg?v=636790600972800000" alt="Campesinas" class="product-img img-main">
+                <img src="TU_SEGUNDA_IMAGEN_AQUI.jpg" alt="Campesinas Hover" class="product-img img-hover">
                 <div class="brand-desc">Repostería premium y galletas de receta tradicional.</div>
                 <a href="#ventas" class="card-btn">Puntos de Venta</a>
             </div>
@@ -930,7 +690,8 @@
             <div class="brand-card reveal delay-4">
                 <div class="card-num">04</div>
                 <h2>NANNÁ & FIBRA MAX</h2>
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKEJ9JkknjGCiwpujLZ2vDTqPtuYmy2N7PZw&s" alt="Nanná" class="product-img">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKEJ9JkknjGCiwpujLZ2vDTqPtuYmy2N7PZw&s" alt="Nanná" class="product-img img-main">
+                <img src="TU_SEGUNDA_IMAGEN_AQUI.jpg" alt="Nanná Hover" class="product-img img-hover">
                 <div class="brand-desc">Bebidas naturales y tecnología aplicada a la salud digestiva.</div>
                 <a href="#ventas" class="card-btn">Más Información</a>
             </div>
@@ -938,17 +699,17 @@
              <div class="brand-card reveal delay-5">
                 <div class="card-num">05</div>
                 <h2>PRÓXIMAMENTE</h2>
-                <img src="new-removebg-preview.png" alt="Nuevos Lanzamientos" class="product-img">
+                <img src="new-removebg-preview.png" alt="Nuevos Lanzamientos" class="product-img img-main">
+                <img src="TU_SEGUNDA_IMAGEN_AQUI.jpg" alt="Próximamente Hover" class="product-img img-hover">
                 <div class="brand-desc">Descubre lo nuevo que tenemos preparado para ti este trimestre.</div>
                 <a href="#ventas" class="card-btn">Mantente al tanto</a>
             </div>
         </div>
     </section>
 
-    <!-- ÁREA DE VENTAS / CAPACIDAD EN ACCIÓN (Full Width y Texto Izq) -->
     <section class="capacidad-accion-container" id="ventas">
         <div class="capacidad-grid reveal">
-            <!-- Izquierda: Textos y Datos -->
+            
             <div class="capacidad-left">
                 <div class="capacidad-header">
                     <h2>CAPACIDAD EN <span>ACCIÓN</span></h2>
@@ -978,9 +739,8 @@
                 </div>
             </div>
 
-            <!-- Derecha: Imagen y CTA con Botones Divididos -->
             <div class="capacidad-right">
-                <img src="IMG8954.jpg" alt="Deli Barras en Producción" class="production-img">
+                <img src="IMG_8954.jpg" alt="Deli Barras en Producción" class="production-img">
                 
                 <div class="growth-badge">
                     +30% 
@@ -1048,7 +808,7 @@
                 <div class="footer-logo" style="margin-bottom: 20px;">
                     <img src="Logos Vectorizados.png" alt="Mango BC" style="height: 50px; width: auto; filter: brightness(0) invert(1);">
                 </div>
-                <p style="color: #888; font-size: 0.9rem; line-height: 1.6;">Morelia, Michoacán<br>México, CP 58000<br>+52 XX XXXX XXXX</p>
+                <p style="color: #888; font-size: 0.9rem; line-height: 1.6;">Morelia, Michoacán<br>México, CP 58000<br>+52 443 332 7430</p>
             </div>
             <div class="footer-col">
                 <h4>Contacto Directo</h4>

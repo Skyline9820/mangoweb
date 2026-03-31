@@ -7,7 +7,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -21,6 +21,10 @@
             --glass-border: rgba(255, 255, 255, 0.3);
             --shadow-soft: 0 20px 40px rgba(0, 0, 0, 0.05);
             --shadow-hover: 0 30px 60px rgba(0, 0, 0, 0.2);
+            
+            /* VARIABLES DE FUENTES */
+            --font-title: 'Syncopate', sans-serif;
+            --font-text: 'Inter', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -29,12 +33,12 @@
         body {
             background-color: var(--light-bg);
             color: var(--dark);
-            font-family: 'Open Sans', sans-serif;
+            font-family: var(--font-text);
             overflow-x: hidden;
             width: 100%;
         }
 
-        h1, h2, h3, h4, .font-title { font-family: 'Montserrat', sans-serif; }
+        h1, h2, h3, h4, .font-title { font-family: var(--font-title); }
 
         /* PRELOADER */
         #loader {
@@ -63,7 +67,7 @@
         .nav-logo { height: 35px; width: auto; object-fit: contain; }
         
         .nav-links { display: flex; gap: 30px; align-items: center; }
-        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 600; font-size: 0.85rem; transition: color 0.3s; }
+        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 600; font-size: 0.85rem; transition: color 0.3s; letter-spacing: 0.5px;}
         .nav-links a:hover { color: #888; }
         
         .nav-cta { background: var(--dark); color: var(--white) !important; padding: 10px 24px; border-radius: 50px; transition: 0.4s;}
@@ -81,18 +85,18 @@
 
         /* SECCIONES BASE */
         section { padding: 120px 5%; position: relative; }
-        .section-title { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 900; color: var(--dark); margin-bottom: 20px; text-transform: uppercase; line-height: 1; text-align: center; }
+        .section-title { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 700; color: var(--dark); margin-bottom: 20px; text-transform: uppercase; line-height: 1.2; text-align: center; }
         .section-title span { color: var(--mango); }
         .section-desc { font-size: 1.2rem; color: #555; max-width: 700px; margin-bottom: 60px; line-height: 1.8; text-align: center; margin-left: auto; margin-right: auto; }
 
         /* BOTONES GLOBALES */
-        .btn-mango { background: var(--mango); color: var(--dark); padding: 18px 40px; border-radius: 50px; font-family: 'Montserrat'; font-weight: 700; text-decoration: none; text-transform: uppercase; font-size: 0.85rem; transition: 0.4s; box-shadow: 0 10px 20px rgba(253, 234, 20, 0.3); display: inline-block; text-align: center; }
+        .btn-mango { background: var(--mango); color: var(--dark); padding: 18px 40px; border-radius: 50px; font-family: var(--font-title); font-weight: 700; text-decoration: none; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; transition: 0.4s; box-shadow: 0 10px 20px rgba(253, 234, 20, 0.3); display: inline-block; text-align: center; }
         .btn-mango:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(253, 234, 20, 0.5); background: var(--white); }
         
-        .btn-white { background: var(--white); color: var(--dark); padding: 18px 40px; border-radius: 50px; font-family: 'Montserrat'; font-weight: 700; text-decoration: none; text-transform: uppercase; font-size: 0.85rem; transition: 0.4s; display: inline-block; text-align: center; }
+        .btn-white { background: var(--white); color: var(--dark); padding: 18px 40px; border-radius: 50px; font-family: var(--font-title); font-weight: 700; text-decoration: none; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; transition: 0.4s; display: inline-block; text-align: center; }
         .btn-white:hover { transform: translateY(-5px); background: #eee; }
 
-        .btn-outline { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.5); padding: 16px 40px; border-radius: 50px; font-family: 'Montserrat'; font-weight: 700; text-decoration: none; text-transform: uppercase; font-size: 0.85rem; transition: 0.4s; display: inline-block; text-align: center; backdrop-filter: blur(5px); margin-top: 20px; }
+        .btn-outline { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.5); padding: 16px 40px; border-radius: 50px; font-family: var(--font-title); font-weight: 700; text-decoration: none; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; transition: 0.4s; display: inline-block; text-align: center; backdrop-filter: blur(5px); margin-top: 20px; }
         .btn-outline:hover { background: rgba(255,255,255,0.1); border-color: var(--white); transform: translateY(-5px); }
 
         /* 1. HERO */
@@ -110,41 +114,42 @@
         .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(28,28,28,0.9) 0%, rgba(28,28,28,0.6) 100%); z-index: -1; }
         
         .hero-content { text-align: center; z-index: 1; max-width: 1000px; padding: 0 5%; display: flex; flex-direction: column; align-items: center;}
-        .hero-content h2 { font-size: clamp(1.2rem, 2vw, 1.8rem); color: var(--mango); font-weight: 600; margin-bottom: 30px; }
-        .hero-content p { color: #DDD; font-size: 1.1rem; line-height: 1.8; max-width: 800px; margin: 0 auto 40px; }
+        .hero-content h2 { font-size: clamp(1rem, 2vw, 1.5rem); color: var(--mango); font-weight: 700; margin-bottom: 30px; letter-spacing: 2px; line-height: 1.5; }
+        .mobile-br { display: none; } 
+        
+        .hero-content p { color: #DDD; font-size: 1.1rem; line-height: 1.8; max-width: 800px; margin: 0 auto 40px; font-weight: 300;}
         .hero-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; width: 100%; }
 
         /* 2. ¿QUÉ ES MANGO? */
         .que-es { background: var(--white); padding: 150px 5%; }
         .que-es-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; max-width: 1400px; margin: 0 auto; align-items: center; }
         
-        .narrativa-box .section-title { font-size: clamp(2.5rem, 5vw, 4.5rem); margin-bottom: 30px; text-align: left; }
-        .narrativa-box p { font-size: clamp(1.2rem, 2vw, 1.6rem); color: var(--dark); line-height: 1.8; font-weight: 300; }
-        .narrativa-box strong { color: var(--dark); font-weight: 700; background: rgba(253,234,20,0.4); padding: 4px 8px; border-radius: 6px; }
+        .narrativa-box .section-title { font-size: clamp(2rem, 5vw, 4rem); margin-bottom: 30px; text-align: left; }
+        .narrativa-box p { font-size: clamp(1.1rem, 2vw, 1.4rem); color: var(--dark); line-height: 1.8; font-weight: 300; }
+        .narrativa-box strong { color: var(--dark); font-weight: 600; background: rgba(253,234,20,0.4); padding: 4px 8px; border-radius: 6px; }
         
         .stats-bento { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
         .bento-card { background: var(--light-bg); padding: 50px 30px; border-radius: 30px; transition: 0.4s; border: 1px solid rgba(0,0,0,0.03); text-align: left; }
         .bento-card:hover { transform: translateY(-10px); background: var(--white); box-shadow: var(--shadow-hover); border-color: var(--mango);}
-        .bento-card h3 { font-size: clamp(3rem, 5vw, 4.5rem); color: var(--mango); line-height: 1; margin-bottom: 15px; letter-spacing: -2px; }
-        .bento-card p { font-size: 1rem; font-weight: 700; text-transform: uppercase; color: var(--dark); letter-spacing: 1px; }
+        .bento-card h3 { font-size: clamp(2.5rem, 5vw, 3.5rem); color: var(--mango); line-height: 1; margin-bottom: 15px; letter-spacing: -2px; }
+        .bento-card p { font-size: 0.9rem; font-weight: 700; text-transform: uppercase; color: var(--dark); letter-spacing: 1px; }
 
         /* 3. METODOLOGÍA */
         .metodologia { background: var(--dark); color: var(--white); padding: 150px 5% 0; }
         .sticky-wrapper { display: flex; max-width: 1400px; margin: 0 auto; gap: 5%; justify-content: space-between; align-items: flex-start; }
         .sticky-left { position: sticky; top: 200px; width: 45%; padding-bottom: 150px; }
-        .sticky-left h2 { font-size: clamp(2.5rem, 4vw, 4rem); line-height: 1.05; margin-bottom: 20px; color: var(--white); text-align: left; }
+        .sticky-left h2 { font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1.2; margin-bottom: 20px; color: var(--white); text-align: left; }
         .sticky-left h2 span { color: var(--mango); display: block; }
-        .sticky-left p { color: #AAA; font-size: 1.1rem; line-height: 1.6; max-width: 90%; text-align: left; }
+        .sticky-left p { color: #AAA; font-size: 1.1rem; line-height: 1.6; max-width: 90%; text-align: left; font-weight: 300;}
         
         .scroll-right { width: 50%; display: flex; flex-direction: column; gap: 80px; margin-top: 260px; padding-bottom: 200px; }
         .metodo-card { display: flex; gap: 30px; align-items: flex-start; background: rgba(255,255,255,0.03); padding: 50px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.05); transition: 0.5s; backdrop-filter: blur(10px); }
         .metodo-card:hover { transform: translateX(-20px); border-color: var(--mango); background: rgba(253, 234, 20, 0.05); }
         
-        /* --- NUEVO ESTILO PARA LOS NÚMEROS DE METODOLOGÍA --- */
         .m-num { 
-            font-size: 2.2rem; 
-            font-family: 'Montserrat'; 
-            font-weight: 900; 
+            font-size: 1.8rem; 
+            font-family: var(--font-title); 
+            font-weight: 700; 
             color: var(--dark); 
             background: var(--mango); 
             min-width: 75px; 
@@ -155,18 +160,17 @@
             border-radius: 20px; 
             box-shadow: 0 10px 20px rgba(253, 234, 20, 0.15); 
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            flex-shrink: 0; /* Evita que el número se aplaste si hay mucho texto */
+            flex-shrink: 0; 
         }
         
-        /* Efecto al pasar el mouse por encima de la tarjeta */
         .metodo-card:hover .m-num { 
             background: var(--white); 
             transform: scale(1.1) rotate(-5deg); 
             box-shadow: 0 15px 30px rgba(255, 255, 255, 0.2);
         }
 
-        .m-text h4 { font-size: 1.5rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
-        .m-text p { color: #CCC; font-size: 1.1rem; line-height: 1.7; font-weight: 300; }
+        .m-text h4 { font-size: 1.2rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; font-family: var(--font-title); font-weight: 700;}
+        .m-text p { color: #CCC; font-size: 1rem; line-height: 1.7; font-weight: 300; }
 
         /* =========================================================
            4. UNIDADES DE NEGOCIO (TARJETAS 3D GIRATORIAS)
@@ -188,7 +192,6 @@
         .card-front { background: var(--white); color: var(--dark); }
         .unidad-card:hover .card-front { border-color: var(--mango); }
         
-        /* Iconos de las tarjetas de negocio */
         .u-icon { 
             width: 120px; 
             height: 120px; 
@@ -202,24 +205,20 @@
             padding: 0; 
         }
         
-        .u-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain; 
-        }
+        .u-icon img { width: 100%; height: 100%; object-fit: contain; }
 
-        .card-front h3 { font-size: 1.8rem; margin-bottom: 10px; color: var(--dark); font-weight: 900; }
-        .card-front .u-sub { color: var(--dark); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 25px; letter-spacing: 1px; background: rgba(253, 234, 20, 0.3); display: inline-block; padding: 4px 10px; border-radius: 6px; align-self: center;}
-        .card-front p { color: #666; line-height: 1.7; flex-grow: 1; margin-bottom: 10px;}
-        .flip-hint { font-size: 0.8rem; color: var(--mango); font-weight: 700; text-transform: uppercase; margin-top: auto; display: flex; align-items: center; justify-content: center; gap: 5px;}
+        .card-front h3 { font-size: 1.5rem; margin-bottom: 10px; color: var(--dark); font-weight: 700; font-family: var(--font-title);}
+        .card-front .u-sub { color: var(--dark); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 25px; letter-spacing: 1px; background: rgba(253, 234, 20, 0.3); display: inline-block; padding: 6px 12px; border-radius: 6px; align-self: center;}
+        .card-front p { color: #666; line-height: 1.7; flex-grow: 1; margin-bottom: 10px; font-weight: 300;}
+        .flip-hint { font-size: 0.75rem; color: var(--mango); font-weight: 700; text-transform: uppercase; margin-top: auto; display: flex; align-items: center; justify-content: center; gap: 5px;}
 
         .card-back {
             background: var(--dark); color: var(--white); transform: rotateY(180deg); justify-content: center;
             align-items: flex-start; text-align: left; border-color: var(--mango);
         }
-        .card-back h3 { color: var(--mango); font-size: 1.5rem; margin-bottom: 20px; font-weight: 900; }
+        .card-back h3 { color: var(--mango); font-size: 1.2rem; margin-bottom: 20px; font-weight: 700; font-family: var(--font-title);}
         .card-back ul { list-style: none; padding: 0; margin: 0; }
-        .card-back ul li { margin-bottom: 20px; font-size: 0.95rem; line-height: 1.5; color: #EEE; display: flex; align-items: flex-start; gap: 10px; }
+        .card-back ul li { margin-bottom: 20px; font-size: 0.9rem; line-height: 1.5; color: #EEE; display: flex; align-items: flex-start; gap: 10px; font-weight: 300;}
         .card-back ul li::before { content: '✓'; color: var(--mango); font-weight: bold; font-size: 1.1rem; }
 
         .carousel-container { position: relative; max-width: 1400px; margin: 0 auto; }
@@ -249,8 +248,8 @@
         }
         
         .marquee-content { 
-            display: inline-block; font-family: 'Montserrat'; font-weight: 900; 
-            font-size: 15vw; animation: marquee 25s linear infinite; 
+            display: inline-block; font-family: var(--font-title); font-weight: 700; 
+            font-size: 10vw; animation: marquee 25s linear infinite; 
             color: var(--white); 
         }
         
@@ -279,18 +278,18 @@
         }
         
         .card-num { 
-            font-family: 'Montserrat'; font-weight: 900; font-size: 1.2rem; color: #666; 
+            font-family: var(--font-title); font-weight: 700; font-size: 1rem; color: #666; 
             z-index: 2; transition: 0.6s; position: absolute; top: 30px; left: 30px; 
             opacity: 0; 
         }
         .brand-card h2 { 
-            font-family: 'Montserrat'; font-weight: 900; font-size: 1.5rem; margin-top: 15px; 
+            font-family: var(--font-title); font-weight: 700; font-size: 1.2rem; margin-top: 15px; 
             color: var(--white); z-index: 2; transition: 0.6s; text-transform: uppercase; 
-            opacity: 0; transform: translateY(20px); 
+            opacity: 0; transform: translateY(20px); letter-spacing: 1px;
         }
         .brand-desc { 
-            opacity: 0; transform: translateY(20px); transition: 0.6s; font-size: 0.95rem; 
-            color: #DDD; z-index: 2; font-family: 'Open Sans'; line-height: 1.5; margin-bottom: 15px;
+            opacity: 0; transform: translateY(20px); transition: 0.6s; font-size: 0.9rem; 
+            color: #DDD; z-index: 2; font-weight: 300; line-height: 1.6; margin-bottom: 15px;
         }
         
         .product-img { 
@@ -309,8 +308,8 @@
         
         .card-btn { 
             padding: 12px 20px; border: 2px solid var(--mango); color: var(--mango); 
-            text-decoration: none; font-size: 0.8rem; font-family: 'Montserrat'; font-weight: 700; 
-            text-align: center; opacity: 0; transition: 0.6s; z-index: 3; text-transform: uppercase; border-radius: 50px;
+            text-decoration: none; font-size: 0.75rem; font-family: var(--font-title); font-weight: 700; 
+            text-align: center; opacity: 0; transition: 0.6s; z-index: 3; text-transform: uppercase; border-radius: 50px; letter-spacing: 1px;
         }
         .card-btn:hover { background: var(--mango); color: var(--dark); }
 
@@ -320,7 +319,7 @@
             .brand-card:hover::before { opacity: 1; }
             
             .brand-card:hover .card-num { color: var(--mango); opacity: 1; }
-            .brand-card:hover h2 { font-size: 2.5rem; color: var(--mango); opacity: 1; transform: translateY(0); }
+            .brand-card:hover h2 { font-size: 2rem; color: var(--mango); opacity: 1; transform: translateY(0); }
             .brand-card:hover .brand-desc, .brand-card:hover .card-btn { opacity: 1; transform: translateY(0); }
             
             .brand-card:hover .img-main { opacity: 0; transform: scale(1.1); } 
@@ -333,28 +332,28 @@
         .capacidad-accion-container { background-color: var(--dark); color: var(--white); padding: 150px 5%; position: relative; }
         .capacidad-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; max-width: 1400px; margin: 0 auto; align-items: center; }
         .capacidad-left { text-align: left; display: flex; flex-direction: column; gap: 40px; }
-        .capacidad-header h2 { font-family: 'Montserrat', sans-serif; font-size: clamp(3rem, 5vw, 4.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 20px; text-transform: uppercase; color: var(--white); }
+        .capacidad-header h2 { font-family: var(--font-title); font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; line-height: 1.2; margin-bottom: 20px; text-transform: uppercase; color: var(--white); }
         .capacidad-header h2 span { color: var(--mango); }
-        .capacidad-header p { color: #AAA; font-size: 1.2rem; line-height: 1.6; max-width: 90%; }
+        .capacidad-header p { color: #AAA; font-size: 1.1rem; line-height: 1.6; max-width: 90%; font-weight: 300;}
         .datos-clave-block { display: flex; flex-direction: column; gap: 20px; }
-        .datos-title { color: var(--white); font-family: 'Montserrat', sans-serif; font-size: 1.8rem; font-weight: 900; text-transform: uppercase; }
+        .datos-title { color: var(--white); font-family: var(--font-title); font-size: 1.5rem; font-weight: 700; text-transform: uppercase; }
         .datos-title span { color: var(--mango); }
         .cat-features { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .feature-tag { background: #111; color: var(--white); padding: 25px 15px; border-radius: 16px; border: 1px solid #333; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 15px; text-align: center; transition: 0.4s; }
         .feature-tag:hover { border-color: var(--mango); background: rgba(253, 234, 20, 0.05); transform: translateY(-5px); }
         .f-icon { font-size: 2.5rem; line-height: 1; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); }
-        .f-text { font-family: 'Open Sans'; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; }
+        .f-text { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
         .capacidad-right { display: flex; flex-direction: column; gap: 35px; align-items: center; text-align: center; }
         .production-img { width: 100%; height: auto; max-height: 450px; object-fit: cover; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5); }
-        .growth-badge { display: flex; align-items: center; justify-content: center; gap: 15px; color: var(--mango); font-family: 'Montserrat'; font-size: 4rem; font-weight: 900; line-height: 1; }
-        .growth-badge .small-text { color: var(--white); font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; line-height: 1.2; text-align: left; }
+        .growth-badge { display: flex; align-items: center; justify-content: center; gap: 15px; color: var(--mango); font-family: var(--font-title); font-size: 3rem; font-weight: 700; line-height: 1; }
+        .growth-badge .small-text { color: var(--white); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; line-height: 1.4; text-align: left; font-family: var(--font-text); font-weight: 400;}
         .negotiation-block { display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; }
-        .negotiation-title { color: var(--white); font-family: 'Montserrat', sans-serif; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 10px 0; font-weight: 900; text-shadow: 0 0 15px rgba(253, 234, 20, 0.3); }
+        .negotiation-title { color: var(--white); font-family: var(--font-title); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 10px 0; font-weight: 700; text-shadow: 0 0 15px rgba(253, 234, 20, 0.3); }
         .negotiation-title span { color: var(--mango); }
         .arrow-down { display: inline-block; font-size: 1.5rem; animation: bounceDown 1.5s infinite ease-in-out; }
         @keyframes bounceDown { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
         .negotiation-buttons { display: flex; gap: 15px; justify-content: center; width: 100%; flex-wrap: wrap; }
-        .btn-negotiate { flex: 1; min-width: 180px; max-width: 250px; background-color: var(--mango); color: var(--dark); border: none; border-radius: 50px; padding: 16px 20px; font-size: 0.95rem; font-family: 'Montserrat', sans-serif; font-weight: 900; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: all 0.3s ease; }
+        .btn-negotiate { flex: 1; min-width: 180px; max-width: 250px; background-color: var(--mango); color: var(--dark); border: none; border-radius: 50px; padding: 16px 20px; font-size: 0.8rem; font-family: var(--font-title); font-weight: 700; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: all 0.3s ease; letter-spacing: 1px;}
         .btn-negotiate:hover { background-color: var(--white); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(253, 234, 20, 0.3); }
 
         /* =========================================================
@@ -366,22 +365,22 @@
         .job-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: rgba(28,28,28,0.95); border-radius: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
         .job-row:last-child { margin-bottom: 0; }
         .job-row:hover { transform: scale(1.02); background: var(--dark); border-color: var(--mango); box-shadow: 0 10px 20px rgba(0,0,0,0.2);}
-        .job-info h4 { font-size: 1.1rem; color: var(--white); margin-bottom: 5px; font-weight: 700; }
-        .job-info p { color: #BBB; font-size: 0.85rem; }
-        .job-btn { padding: 10px 25px; background: var(--mango); color: var(--dark); border-radius: 50px; font-weight: 700; text-decoration: none; transition: 0.3s; text-align: center; border: 2px solid var(--mango); font-size: 0.9rem;}
+        .job-info h4 { font-size: 1rem; color: var(--white); margin-bottom: 5px; font-weight: 600; font-family: var(--font-title); text-transform: uppercase;}
+        .job-info p { color: #BBB; font-size: 0.85rem; font-weight: 300;}
+        .job-btn { padding: 10px 25px; background: var(--mango); color: var(--dark); border-radius: 50px; font-weight: 700; text-decoration: none; transition: 0.3s; text-align: center; border: 2px solid var(--mango); font-size: 0.8rem; font-family: var(--font-title); text-transform: uppercase; letter-spacing: 1px;}
         .job-row:hover .job-btn { background: var(--white); border-color: var(--white); }
         .talento-footer { text-align: center; margin-top: 30px; }
-        .talento-footer h3 { color: var(--dark); font-size: 1.2rem; margin-bottom: 5px; }
+        .talento-footer h3 { color: var(--dark); font-size: 1.1rem; margin-bottom: 5px; font-family: var(--font-title); font-weight: 700;}
 
         /* =========================================================
            7. FOOTER CORPORATIVO
            ========================================================= */
         footer { background: var(--dark); padding: 80px 5% 40px; color: var(--white); }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 50px; max-width: 1400px; margin: 0 auto; }
-        .footer-col h4 { color: var(--mango); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 25px; }
-        .footer-col a { color: #AAA; text-decoration: none; display: block; margin-bottom: 15px; font-size: 0.9rem; transition: 0.3s; }
+        .footer-col h4 { color: var(--mango); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 25px; font-family: var(--font-title); font-weight: 700;}
+        .footer-col a { color: #AAA; text-decoration: none; display: block; margin-bottom: 15px; font-size: 0.9rem; transition: 0.3s; font-weight: 300;}
         .footer-col a:hover { color: var(--white); transform: translateX(5px); }
-        .footer-bottom { text-align: center; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 60px; padding-top: 30px; color: #666; font-size: 0.8rem; }
+        .footer-bottom { text-align: center; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 60px; padding-top: 30px; color: #666; font-size: 0.8rem; font-weight: 300; letter-spacing: 1px;}
 
         /* =========================================================
            AJUSTE PARA LAPTOPS Y PANTALLAS MEDIANAS (Hasta 1440px)
@@ -402,7 +401,7 @@
                 padding: 0; 
             }
             .bento-card { padding: 40px 20px; }
-            .bento-card h3 { font-size: clamp(2.2rem, 4vw, 3.5rem); }
+            .bento-card h3 { font-size: clamp(2rem, 4vw, 3rem); }
         }
 
         /* =========================================================
@@ -415,7 +414,7 @@
             .brand-card::before { opacity: 0.85; } 
             .brand-card .brand-desc, .brand-card .card-btn, .brand-card h2, .brand-card .card-num { opacity: 1 !important; transform: translateY(0) !important; position: relative; z-index: 5; }
             .brand-card .card-num { position: absolute; }
-            .brand-card h2 { font-size: 1.8rem; color: var(--mango); margin-top: 0; }
+            .brand-card h2 { font-size: 1.5rem; color: var(--mango); margin-top: 0; }
             
             .brand-card .product-img { z-index: 0; }
             
@@ -442,6 +441,9 @@
             .nav-links.active { left: 0; }
             .hero { height: 100svh !important; padding: 80px 5% 20px; }
             .hero-buttons { flex-direction: column; }
+            
+            .mobile-br { display: block; content: ""; }
+            
             .que-es-grid { grid-template-columns: 1fr; }
             .sticky-wrapper { flex-direction: column; }
             .sticky-left { position: relative; top: 0; width: 100%; text-align: center; }
@@ -466,7 +468,7 @@
             .brand-card { flex: none; width: 100%; max-width: 400px; min-height: 480px; padding: 40px 30px; align-items: center; text-align: center; border-radius: 25px; justify-content: flex-end; }
 
             .brand-card::before { opacity: 0.95; }
-            .brand-card h2 { font-size: 2rem; color: var(--mango); position: relative; z-index: 5; margin-top: 0; opacity: 1 !important; transform: translateY(0) !important;}
+            .brand-card h2 { font-size: 1.5rem; color: var(--mango); position: relative; z-index: 5; margin-top: 0; opacity: 1 !important; transform: translateY(0) !important;}
             .brand-card .card-num { opacity: 1 !important; }
             .brand-desc, .card-btn { opacity: 1 !important; transform: translateY(0) !important; position: relative; z-index: 5; display: block; }
             .brand-card .card-btn { width: 100%; padding: 15px; }
@@ -511,7 +513,9 @@
             <img src="mbc.png" alt="Mango Business Center" style="width: 90%; max-width: 450px; height: auto; margin-bottom: 25px; filter: brightness(0) invert(1) drop-shadow(0 10px 20px rgba(0,0,0,0.5));">
             
             <h1 style="display: none;">MANGO BUSINESS CENTER</h1>
-            <h2>El ecosistema que conecta la producción, la distribución y el talento.</h2>
+            
+            <h2>El ecosistema que conecta <br class="mobile-br">la producción, <br>la distribución y el talento.</h2>
+            
             <p>Somos el centro de operaciones donde las marcas crecen, los emprendedores escalan y el talento encuentra su lugar. Construimos una plataforma integral desde la maquila hasta la entrega directa.</p>
             
             <div class="hero-buttons">
@@ -661,16 +665,19 @@
         <div class="expansion-container">
             
             <div class="brand-card reveal delay-1">
-                <div class="card-num"></div>
+                <div class="card-num">01</div>
                 <h2>DELI BARRAS</h2>
                 <img src="1mg.jpg" alt="Deli Barras" class="product-img img-main">
                 <img src="2mg.jpg" alt="Deli Barras Hover" class="product-img img-hover">
                 <div class="brand-desc">Snacks saludables líderes. Venta en línea y distribución minorista.</div>
-                <a href="#ventas" class="card-btn">Distribución</a>
+                
+                <!-- AQUÍ ESTÁ EL ENLACE CONECTADO -->
+                <a href="deli.html" class="card-btn">Distribución</a>
+                
             </div>
             
             <div class="brand-card reveal delay-2">
-                <div class="card-num"></div>
+                <div class="card-num">02</div>
                 <h2>SABOR MÍO</h2>
                 <img src="SABOR-MÍO-UNO.jpg" alt="Sabor Mío" class="product-img img-main">
                 <img src="SABOR-MÍO-DOS.jpg" alt="Sabor Mío Hover" class="product-img img-hover">
@@ -679,7 +686,7 @@
             </div>
             
             <div class="brand-card reveal delay-3">
-                <div class="card-num"></div>
+                <div class="card-num">03</div>
                 <h2>CAMPESINAS</h2>
                 <img src="CAMPESINAS-UNO.jpg" alt="Campesinas" class="product-img img-main">
                 <img src="CAMPESINAS-DOS.jpg" alt="Campesinas Hover" class="product-img img-hover">
@@ -688,10 +695,10 @@
             </div>
             
             <div class="brand-card reveal delay-4">
-                <div class="card-num"></div>
-                <h2>NANNÁ</h2>
-                <img src="nanna-uno.jpg" alt="Nanná" class="product-img img-main">
-                <img src="nanna-dos.jpg" alt="Nanná Hover" class="product-img img-hover">
+                <div class="card-num">04</div>
+                <h2>NANNÁ & FIBRA MAX</h2>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKEJ9JkknjGCiwpujLZ2vDTqPtuYmy2N7PZw&s" alt="Nanná" class="product-img img-main">
+                <img src="TU_SEGUNDA_IMAGEN_AQUI.jpg" alt="Nanná Hover" class="product-img img-hover">
                 <div class="brand-desc">Bebidas naturales y tecnología aplicada a la salud digestiva.</div>
                 <a href="#ventas" class="card-btn">Más Información</a>
             </div>
@@ -699,8 +706,8 @@
              <div class="brand-card reveal delay-5">
                 <div class="card-num">05</div>
                 <h2>PRÓXIMAMENTE</h2>
-                <img src="proximamente.jpg" alt="Nuevos Lanzamientos" class="product-img img-main">
-                <img src="nuevos productos.jpg" alt="Próximamente Hover" class="product-img img-hover">
+                <img src="new-removebg-preview.png" alt="Nuevos Lanzamientos" class="product-img img-main">
+                <img src="TU_SEGUNDA_IMAGEN_AQUI.jpg" alt="Próximamente Hover" class="product-img img-hover">
                 <div class="brand-desc">Descubre lo nuevo que tenemos preparado para ti este trimestre.</div>
                 <a href="#ventas" class="card-btn">Mantente al tanto</a>
             </div>
@@ -740,7 +747,7 @@
             </div>
 
             <div class="capacidad-right">
-                <img src="IMG8954.jpg" alt="Deli Barras en Producción" class="production-img">
+                <img src="IMG_8954.jpg" alt="Deli Barras en Producción" class="production-img">
                 
                 <div class="growth-badge">
                     +30% 

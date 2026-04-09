@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiénes Somos | Mango BC</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Syncopate:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-yellow: #FFFF00; 
+            --pure-black: #000000;    
+            --pure-white: #FFFFFF;    
+            --dark-grey: #111111;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        @media (hover: hover) and (pointer: fine) { 
+            * { cursor: none !important; } 
+            input, select, textarea { cursor: text !important; }
+            .close-modal { cursor: pointer !important; }
+        }
+
+        body { background-color: var(--pure-black); color: var(--pure-white); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+        #scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--primary-yellow); width: 0%; z-index: 9999999; box-shadow: 0 0 10px var(--primary-yellow); transition: width 0.1s; }
+
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--pure-black); display: flex; justify-content: center; align-items: center; z-index: 999999; transition: opacity 0.8s ease, visibility 0.8s ease; }
+        .loader-text { font-family: 'Syncopate'; font-size: 2vw; color: var(--pure-white); letter-spacing: 5px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; color: var(--primary-yellow); text-shadow: 0 0 20px rgba(255,255,0,0.5); } }
+
+        /* OPTIMIZACIÓN 2: Textura SVG en base64 (0kb) */
+        body::before { 
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); 
+            opacity: 0.04; pointer-events: none; z-index: 9999; 
+        }
+        .dot-grid-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 30px 30px; mask-image: linear-gradient(to bottom, black 40%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%); }
+
+        #cursor { width: 15px; height: 15px; background: rgba(255, 255, 0, 0.1); border: 1px solid rgba(255, 255, 0, 0.3); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999999 !important; will-change: transform; transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1), height 0.4s cubic-bezier(0.23, 1, 0.32, 1), background 0.4s ease, border-color 0.4s ease; }
+        body.hover-active #cursor { width: 90px; height: 90px; background: rgba(255, 255, 0, 0.05); border-color: rgba(255, 255, 0, 0.8); box-shadow: 0 0 20px rgba(255,255,0,0.2); }
+
+        nav { position: fixed; width: 100%; padding: 25px 5%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: rgba(0,0,0,0.5); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .logo { text-decoration: none; display: inline-block; transition: transform 0.4s; }
+        .logo:hover { transform: scale(1.05); }
+        .menu-btn { background: none; border: none; color: white; font-family: 'Syncopate'; font-size: 0.7rem; letter-spacing: 2px; cursor: pointer; }
+
+        .nav-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 5000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.6s cubic-bezier(0.85, 0, 0.15, 1); }
+        .nav-overlay.active { opacity: 1; visibility: visible; }
+        .menu-container { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1400px; padding: 0 5%; }
+        .menu-main { display: flex; flex-direction: column; gap: 15px; }
+        .menu-main a { font-family: 'Syncopate'; font-size: clamp(2rem, 5vw, 6rem); color: white; text-decoration: none; line-height: 1.1; display: flex; align-items: center; transition: all 0.4s ease; transform: translateY(50px); opacity: 0; }
+        .menu-num { font-family: 'Inter'; font-size: 1rem; color: var(--primary-yellow); margin-right: 30px; margin-top: -30px; font-weight: 900; transition: 0.4s ease; }
+        .menu-main:hover a { color: rgba(255,255,255,0.2); -webkit-text-stroke: 0; } 
+        .menu-main a:hover, .menu-main a.active-link { color: transparent !important; -webkit-text-stroke: 2px var(--primary-yellow) !important; transform: translateX(30px) !important; }
+        .menu-main a:hover .menu-num, .menu-main a.active-link .menu-num { color: var(--primary-yellow); -webkit-text-stroke: 0; }
+        .menu-secondary { display: flex; flex-direction: column; gap: 50px; max-width: 300px; }
+        .menu-info-block { transform: translateY(30px); opacity: 0; transition: all 0.4s ease; }
+        .menu-info-block h4 { font-family: 'Syncopate'; font-size: 0.8rem; color: var(--primary-yellow); margin-bottom: 15px; letter-spacing: 2px; }
+        .menu-info-block p, .menu-sublink { font-family: 'Inter'; color: #aaa; font-size: 1rem; line-height: 1.6; text-decoration: none; display: block; margin-bottom: 10px; transition: color 0.3s; cursor: pointer; }
+        .menu-sublink:hover { color: var(--pure-white); padding-left: 10px; }
+        
+        .nav-overlay.active .menu-main a { transform: translateY(0) translateX(0); opacity: 1; }
+        .nav-overlay.active .menu-main a.active-link { transform: translateX(30px); opacity: 1; }
+        .nav-overlay.active .menu-main a:nth-child(1) { transition-delay: 0.1s; }
+        .nav-overlay.active .menu-main a:nth-child(2) { transition-delay: 0.2s; }
+        .nav-overlay.active .menu-main a:nth-child(3) { transition-delay: 0.3s; }
+        .nav-overlay.active .menu-main a:nth-child(4) { transition-delay: 0.4s; }
+        .nav-overlay.active .menu-main a:nth-child(5) { transition-delay: 0.5s; }
+        .nav-overlay.active .menu-info-block { transform: translateY(0); opacity: 1; }
+        .nav-overlay.active .menu-info-block:nth-child(1) { transition-delay: 0.4s; }
+        .nav-overlay.active .menu-info-block:nth-child(2) { transition-delay: 0.5s; }
+
+        /* --- MENÚ FLOTANTE INTELIGENTE --- */
+        .floating-menu {
+            position: fixed; bottom: 30px; right: 30px;
+            display: flex; flex-direction: column; align-items: flex-end; gap: 15px;
+            z-index: 10000; padding: 20px; margin-right: -20px; margin-bottom: -20px;
+        }
+
+        /* Escudo Invisible Fijo */
+        .floating-menu::before {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            width: 200px;  /* Ancho fijo para cubrir todo */
+            height: 300px; /* Alto fijo para cubrir todos los botones hacia arriba */
+            background: transparent; 
+            z-index: -1;
+        }
+
+        .floating-items {
+            display: flex; flex-direction: column; gap: 15px;
+            transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), visibility 0.4s;
+            transform-origin: bottom center;
+        }
+
+        .floating-menu.collapsed .floating-items {
+            opacity: 0; visibility: hidden; 
+            transform: translateY(30px) scale(0.6); 
+            pointer-events: none;
+        }
+
+        .floating-btn {
+            background: var(--primary-yellow); width: 65px; height: 65px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 10px 25px rgba(255,255,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            text-decoration: none; color: var(--pure-black);
+            font-family: 'Syncopate'; font-size: 1.5rem; cursor: pointer;
+        }
+
+        .floating-btn:hover {
+            transform: translateY(-5px) scale(1.05); box-shadow: 0 15px 35px rgba(255,255,0,0.5); cursor: none !important;
+        }
+        .floating-btn svg { width: 35px; height: 35px; fill: var(--pure-black); }
+
+        /* BOTÓN PRINCIPAL: Animación de Pastilla a Círculo y Crossfade */
+        .main-toggle-btn { 
+            width: 150px; 
+            height: 65px; 
+            padding: 0; 
+            border-radius: 35px; 
+            font-size: 0.9rem; 
+            font-weight: 900; 
+            position: relative;
+            transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease; 
+        }
+
+        .floating-menu:not(.collapsed) .main-toggle-btn {
+            width: 65px;
+        }
+
+        .floating-menu .toggle-icon, 
+        .floating-menu .toggle-text { 
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            white-space: nowrap;
+        }
+
+        .floating-menu:not(.collapsed) .toggle-text { 
+            opacity: 0; 
+            transform: translate(-50%, -50%) scale(0.5); 
+            pointer-events: none;
+        }
+
+        .floating-menu:not(.collapsed) .toggle-icon { 
+            opacity: 1; 
+            transform: translate(-50%, -50%) scale(1) rotate(90deg); 
+        }
+
+        .floating-menu.collapsed .toggle-icon { 
+            opacity: 0; 
+            transform: translate(-50%, -50%) scale(0.5) rotate(-90deg); 
+            pointer-events: none;
+        }
+
+        .floating-menu.collapsed .toggle-text { 
+            opacity: 1; 
+            transform: translate(-50%, -50%) scale(1); 
+        }
+
+        .floating-menu.collapsed .main-toggle-btn {
+            background: var(--pure-white); color: var(--pure-black); box-shadow: 0 10px 25px rgba(255,255,255,0.2);
+        }
+
+        /* SECCIONES Y FONDOS NEGROS */
+        section { padding: 120px 5%; position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2; overflow: hidden; background-color: var(--pure-black) !important; }
+        .hero-unidades, .hotrolls-section { background-color: var(--dark-grey) !important; }
+
+        .section-title { font-family: 'Syncopate'; font-size: 2.5rem; color: var(--pure-white); margin-bottom: 50px; text-transform: uppercase; text-align: center; }
+        .section-title span { color: var(--primary-yellow); }
+
+        .hero-nosotros { min-height: 75vh; background: var(--dark-grey) !important; text-align: center; position: relative; padding-bottom: 60px; padding-top: 100px; border-bottom: 1px solid var(--primary-yellow); overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .bg-marquee-hero { position: absolute; top: 50%; left: 0; transform: translateY(-50%); white-space: nowrap; width: 100%; opacity: 0.03; z-index: 0; pointer-events: none; }
+        .marquee-content-hero { display: inline-block; font-family: 'Syncopate'; font-size: 18vw; font-weight: 900; animation: marquee-hero 40s linear infinite; }
+        @keyframes marquee-hero { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .hero-content { position: relative; z-index: 2; width: 100%; }
+        .hero-title { font-family: 'Syncopate'; font-size: 6vw; color: var(--pure-white); line-height: 1.1; margin-bottom: 20px; text-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        .hero-subtitle { font-size: 1.2rem; color: #aaa; font-weight: 300; max-width: 700px; margin: 0 auto; line-height: 1.6; }
+
+        .historia-section { background: var(--pure-black); padding: 150px 5%; }
+        .editorial-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; max-width: 1400px; width: 100%; align-items: center; }
+        .editorial-text h2 { font-family: 'Syncopate'; font-size: 3rem; color: var(--pure-white); margin-bottom: 30px; line-height: 1.1; }
+        .editorial-text h2 span { color: var(--primary-yellow); }
+        .editorial-text p { color: #aaa; font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; }
+        
+        .infraestructura-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 50px; }
+        .infra-stat { border-left: 2px solid var(--primary-yellow); padding-left: 20px; }
+        .infra-stat h4 { font-family: 'Syncopate'; font-size: 2.5rem; color: var(--primary-yellow); margin-bottom: 5px; text-shadow: 0 0 15px rgba(255,255,0,0.2); }
+        .infra-stat p { font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 2px; }
+
+        .image-collage { position: relative; width: 100%; height: 500px; }
+        .img-back, .img-front { position: absolute; border-radius: 10px; object-fit: cover; filter: grayscale(100%) brightness(0.6); transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        .img-back { width: 70%; height: 350px; top: 0; right: 0; z-index: 1; }
+        .img-front { width: 65%; height: 350px; bottom: 0; left: 0; z-index: 2; border: 5px solid var(--pure-black); }
+        .image-collage:hover .img-back { filter: grayscale(0%) brightness(1); transform: translate(10px, -10px); }
+        .image-collage:hover .img-front { filter: grayscale(0%) brightness(1); transform: translate(-10px, 10px); }
+
+        .mv-section { display: flex; flex-direction: column; gap: 120px; padding: 150px 5%; background: var(--dark-grey) !important; }
+        .mv-row { display: flex; width: 100%; max-width: 1400px; margin: 0 auto; align-items: center; gap: 60px; }
+        .mv-title-wrapper { flex: 1; display: flex; }
+        .mv-row.mision .mv-title-wrapper { justify-content: flex-start; }
+        .mv-row.vision .mv-title-wrapper { justify-content: flex-end; }
+        .mv-title { font-family: 'Syncopate'; font-size: clamp(4rem, 8vw, 9rem); color: transparent; -webkit-text-stroke: 2px rgba(255,255,255,0.1); font-weight: 900; line-height: 1; transition: all 0.5s ease; user-select: none; }
+        .mv-row:hover .mv-title { -webkit-text-stroke: 2px var(--primary-yellow); color: rgba(255,255,0,0.05); }
+        .mv-content { flex: 1; padding: 20px 0; border-left: 3px solid var(--primary-yellow); padding-left: 40px; }
+        .mv-row.vision .mv-content { border-left: none; border-right: 3px solid var(--primary-yellow); padding-left: 0; padding-right: 40px; text-align: right; }
+        .mv-content h3 { font-family: 'Inter'; font-weight: 900; color: var(--primary-yellow); letter-spacing: 5px; text-transform: uppercase; font-size: 1rem; margin-bottom: 20px; }
+        .mv-content p { font-family: 'Syncopate'; font-size: 2.2rem; color: var(--pure-white); line-height: 1.4; text-transform: uppercase; margin: 0; }
+
+        .valores-section { background: var(--pure-black); padding-top: 150px;}
+        .grid-valores { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; max-width: 1200px; width: 100%; }
+        .valor-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 50px 40px; border-radius: 12px; transition: all 0.4s ease; text-align: center; overflow: hidden; position: relative; }
+        .valor-card:hover { border-color: var(--primary-yellow); background: rgba(255,255,0,0.02); transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
+        .valor-num { font-family: 'Syncopate'; font-size: 5rem; color: rgba(255,255,255,0.03); position: absolute; top: -10px; left: 10px; transition: 0.4s; line-height: 1; pointer-events: none; }
+        .valor-card:hover .valor-num { color: rgba(255,255,0,0.1); transform: scale(1.1); }
+        .valor-card h3 { font-family: 'Syncopate'; color: var(--pure-white); font-size: 1.2rem; margin-bottom: 15px; position: relative; z-index: 2; margin-top: 20px; }
+        .valor-card p { color: #aaa; line-height: 1.6; font-size: 0.95rem; position: relative; z-index: 2; }
+
+        .talento-section { background: var(--dark-grey) !important; padding: 150px 5%; text-align: center; }
+        .talento-content { max-width: 800px; margin: 0 auto; }
+        .talento-content h2 { font-family: 'Syncopate'; font-size: clamp(2rem, 4vw, 3.5rem); margin-bottom: 20px; }
+        .talento-content p { color: #888; font-size: 1.1rem; line-height: 1.8; margin-bottom: 50px; }
+        
+        .magnetic-wrap { display: inline-block; padding: 20px; cursor: pointer; }
+        .btn-main { display: inline-block; padding: 25px 50px; background: var(--primary-yellow); color: var(--pure-black); font-family: 'Syncopate'; font-weight: 900; text-decoration: none; font-size: 1rem; border-radius: 5px; transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s; will-change: transform; cursor: pointer;}
+        .btn-main:hover { box-shadow: 0 15px 30px rgba(255,255,0,0.3); }
+
+        footer { background: var(--pure-black) !important; padding: 100px 5% 50px; border-top: 1px solid #111; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 50px; }
+        .footer-col h4 { font-family: 'Syncopate'; font-size: 0.7rem; color: #555; margin-bottom: 25px; }
+        .footer-link { display: block; color: white; text-decoration: none; font-size: 0.8rem; margin-bottom: 15px; text-transform: uppercase; transition: 0.3s; cursor: pointer;}
+        .footer-link:hover { color: var(--primary-yellow); letter-spacing: 1px; }
+
+        .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 1s cubic-bezier(0.23, 1, 0.32, 1), transform 1s cubic-bezier(0.23, 1, 0.32, 1); will-change: opacity, transform; }
+        .fade-in.is-visible { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 992px) {
+            section { padding: 80px 5%; }
+            .historia-section, .mv-section, .valores-section, .talento-section { padding-top: 80px; padding-bottom: 80px; }
+            .hero-nosotros { min-height: 60vh; height: auto; padding: 140px 5% 60px 5%; }
+            .hero-title { font-size: 11vw; } 
+            .hero-subtitle { font-size: 1rem; margin-top: 15px; padding: 0 10px; }
+            .menu-container { flex-direction: column; align-items: flex-start; justify-content: center; gap: 50px; height: 100vh; overflow-y: auto; padding-top: 100px;}
+            .menu-num { display: none; }
+            .menu-main a { font-size: 10vw; }
+            .menu-main:hover a { color: white; -webkit-text-stroke: 0; }
+            .menu-main a:hover, .menu-main a.active-link { -webkit-text-stroke: 0 !important; color: var(--primary-yellow) !important; transform: none !important; }
+            .editorial-grid { grid-template-columns: 1fr; gap: 40px; }
+            .editorial-text h2 { font-size: 2.5rem; }
+            .image-collage { height: 350px; margin-top: 20px; }
+            .mv-row { flex-direction: column; text-align: center; gap: 30px; }
+            .mv-title-wrapper { justify-content: center !important; }
+            .mv-content { border-left: none !important; border-right: none !important; border-top: 3px solid var(--primary-yellow); padding: 30px 0 0 0 !important; text-align: center !important; }
+            .mv-content p { font-size: 1.5rem; }
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 15px 5%; }
+            .logo span.main { font-size: 1.2rem; }
+            .menu-main a { font-size: 12vw; }
+            .infraestructura-stats { grid-template-columns: 1fr; gap: 20px; }
+            .image-collage { height: 250px; }
+            .img-back { width: 80%; height: 200px; }
+            .img-front { width: 75%; height: 200px; }
+            .grid-valores { grid-template-columns: 1fr; }
+            .valor-card { padding: 30px 20px; }
+            
+            .floating-menu { bottom: 20px; right: 20px; padding: 0; margin: 0; }
+            /* Ajuste para móvil para que el botón no se vea deforme */
+            .main-toggle-btn { font-size: 0.8rem; padding: 0; height: 55px; width: 130px; }
+            .floating-menu:not(.collapsed) .main-toggle-btn { width: 55px; }
+            
+            .floating-btn { width: 55px; height: 55px; }
+            .floating-btn svg { width: 25px; height: 25px; }
+
+            .contact-modal { padding: 30px 20px; }
+            .close-modal { top: 15px; right: 15px; }
+            footer { padding: 60px 5% 100px; text-align: center; gap: 30px; }
+        }
+
+        @media (max-width: 992px), (hover: none) and (pointer: coarse) {
+            #cursor { display: none !important; }
+        }
+
+        /* MODAL */
+        .contact-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 999999; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
+        .contact-modal-overlay.active { opacity: 1; visibility: visible; }
+        .contact-modal { background: var(--dark-grey); width: 90%; max-width: 500px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); position: relative; transform: translateY(50px); transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); box-shadow: 0 25px 50px rgba(0,0,0,0.5); overflow: hidden; padding: 50px; }
+        .contact-modal-overlay.active .contact-modal { transform: translateY(0); }
+        .close-modal { position: absolute; top: 20px; right: 25px; background: transparent; border: none; color: #888; font-size: 1.5rem; cursor: pointer; transition: 0.3s; }
+        .close-modal:hover { color: var(--primary-yellow); transform: scale(1.2); }
+        .modal-content h3 { font-family: 'Syncopate'; color: var(--primary-yellow); font-size: 1.5rem; margin-bottom: 10px; line-height: 1.2; }
+        .modal-content p { color: #aaa; font-size: 0.9rem; margin-bottom: 30px; line-height: 1.5; }
+        .input-group { margin-bottom: 20px; text-align: left; }
+        .input-group label { font-size: 0.8rem; color: #aaaaaa; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; display: block; }
+        .input-group input, .input-group select { width: 100%; padding: 15px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-family: 'Inter'; font-size: 0.9rem; transition: 0.3s; outline: none; }
+        .input-group input:focus, .input-group select:focus { border-color: var(--primary-yellow); background: rgba(255,255,0,0.02); }
+        
+        .btn-submit { width: 100%; padding: 18px; background: var(--primary-yellow); color: var(--pure-black); font-family: 'Syncopate'; font-weight: 900; font-size: 0.9rem; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; margin-top: 10px; }
+        .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,255,0,0.2); }
+        .btn-submit.loading { background: #555; color: transparent; pointer-events: none; box-shadow: none; transform: none; }
+        .btn-submit.loading::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+        
+        .modal-success { display: none; text-align: center; opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
+        .modal-success.active { display: block; opacity: 1; transform: translateY(0); }
+        .success-icon { font-size: 4rem; color: var(--primary-yellow); margin-bottom: 20px; text-shadow: 0 0 30px rgba(255,255,0,0.3); }
+    </style>
+</head>
+<body>
+
+    <div id="scroll-progress"></div>
+    <div id="loader"><div class="loader-text">MANGO BC</div></div>
+    <div id="cursor"></div>
+
+    <nav>
+        <a href="index.html#inicio" class="logo" data-hoverable="true">
+            <img src="Logos Vectorizados.png" alt="Mango BC Logo" style="height: 50px; width: auto; display: block;" decoding="async">
+        </a>
+        <button class="menu-btn" data-hoverable="true" onclick="toggleMenu()">MENÚ</button>
+    </nav>
+
+    <div class="nav-overlay" id="menuOverlay">
+        <div class="menu-container">
+            <div class="menu-main">
+                <a href="index.html#inicio" data-hoverable="true"><span class="menu-num">01</span>INICIO</a>
+                <a href="quienes-somos.html" class="active-link" data-hoverable="true"><span class="menu-num">02</span>QUIÉNES SOMOS</a>
+                <a href="unidades.html" data-hoverable="true"><span class="menu-num">03</span>UNIDADES DE NEGOCIO</a>
+                <a href="emprendedores.html" data-hoverable="true"><span class="menu-num">04</span>EMPRENDEDORES</a>
+                <a href="distribuidores.html" data-hoverable="true"><span class="menu-num">05</span>DISTRIBUIDORES</a>
+            </div>
+            
+            <div class="menu-secondary">
+                <div class="menu-info-block">
+                    <h4>SEDE CENTRAL</h4>
+                    <p>Morelia, Michoacán<br>México</p>
+                </div>
+                <div class="menu-info-block">
+                    <h4>CONTACTO DIRECTO</h4>
+                    <a href="javascript:void(0)" onclick="openContactModal(); toggleMenu();" class="menu-sublink" data-hoverable="true">Soporte Distribuidores</a>
+                    <a href="javascript:void(0)" onclick="openContactModal(); toggleMenu();" class="menu-sublink" data-hoverable="true">Expansión & Franquicias</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="floating-menu" id="floatingMenu">
+        <div class="floating-items">
+            <a href="javascript:void(0)" onclick="openContactModal()" class="floating-btn" data-hoverable="true" aria-label="Abrir Formulario de Contacto">
+                ✉️
+            </a>
+            <a href="https://wa.me/TUNUMERO" class="floating-btn" target="_blank" aria-label="Contáctanos por WhatsApp" data-hoverable="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157.1zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
+                </svg>
+            </a>
+        </div>
+    
+        <div class="floating-btn main-toggle-btn" id="mainToggleBtn" data-hoverable="true">
+            <span class="toggle-text">OPCIONES</span>
+            <span class="toggle-icon">✖</span>
+        </div>
+    </div>
+
+    <section class="hero-nosotros">
+        <div class="bg-marquee-hero"><div class="marquee-content-hero">QUIÉNES SOMOS — MOTOR INDUSTRIAL — </div></div>
+        <div class="hero-content">
+            <h1 class="hero-title fade-in">EL MOTOR<br><span>INDUSTRIAL</span></h1>
+            <p class="hero-subtitle fade-in" style="transition-delay: 0.2s;">Somos el epicentro operativo detrás de las marcas líderes en el sector alimentario. Innovación, infraestructura y calidad masiva.</p>
+        </div>
+    </section>
+
+    <section class="historia-section">
+        <div class="dot-grid-bg"></div>
+        <div class="editorial-grid fade-in">
+            <div class="editorial-text">
+                <h2>NUESTRA<br><span>HISTORIA</span></h2>
+                <p>Nacimos con una premisa clara: industrializar la calidad. Lo que comenzó como una operación regional, rápidamente evolucionó hasta convertirse en Mango Business Center, un hub corporativo capaz de sostener la producción, logística y distribución a nivel nacional.</p>
+                <p>Nuestra infraestructura actual nos permite no solo abastecer la demanda de nuestras propias unidades de negocio, sino garantizar a nuestros socios comerciales un estándar de excelencia inquebrantable.</p>
+                
+                <div class="infraestructura-stats">
+                    <div class="infra-stat" data-hoverable="true">
+                        <h4>ALTA</h4>
+                        <p>Capacidad Tecnológica</p>
+                    </div>
+                    <div class="infra-stat" data-hoverable="true">
+                        <h4>NACIONAL</h4>
+                        <p>Cobertura Logística</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="image-collage" data-hoverable="true">
+                <img src="IMG8954.jpg" class="img-back" alt="Infraestructura Industrial MangoBC" decoding="async">
+                <img src="MG9175.jpg" class="img-front" alt="Operaciones MangoBC" decoding="async">
+            </div>
+        </div>
+    </section>
+
+    <section class="mv-section">
+        
+        <div class="mv-row mision fade-in" data-hoverable="true">
+            <div class="mv-title-wrapper">
+                <div class="mv-title">MISIÓN</div>
+            </div>
+            <div class="mv-content">
+                <h3>PROPÓSITO</h3>
+                <p>Desarrollar y escalar marcas alimentarias líderes mediante excelencia operativa y tecnológica.</p>
+            </div>
+        </div>
+
+        <div class="mv-row vision fade-in" data-hoverable="true" style="transition-delay: 0.2s;">
+            <div class="mv-content">
+                <h3>EL HORIZONTE</h3>
+                <p>Ser el grupo industrial de referencia en el sector alimentario de México, impulsando el crecimiento de nuestros socios y brindando bienestar a los consumidores a través de la excelencia y la innovación logística.</p>
+            </div>
+            <div class="mv-title-wrapper">
+                <div class="mv-title">VISIÓN</div>
+            </div>
+        </div>
+        
+    </section>
+
+    <section class="valores-section" id="valores">
+        <h2 class="section-title fade-in">VALORES <span>CORPORATIVOS</span></h2>
+        
+        <div class="grid-valores fade-in">
+            <div class="valor-card" data-hoverable="true">
+                <div class="valor-num">01</div>
+                <h3>Integridad</h3>
+                <p>Transparencia total en nuestros procesos, ingredientes y relaciones comerciales. Lo que ves es lo que entregamos.</p>
+            </div>
+            <div class="valor-card" data-hoverable="true" style="transition-delay: 0.1s;">
+                <div class="valor-num">02</div>
+                <h3>Innovación</h3>
+                <p>Mejora continua en nuestra tecnología de producción para mantenernos siempre un paso adelante del mercado.</p>
+            </div>
+            <div class="valor-card" data-hoverable="true" style="transition-delay: 0.2s;">
+                <div class="valor-num">03</div>
+                <h3>Calidad Masiva</h3>
+                <p>Estandarización rigurosa. Aseguramos que la unidad un millón tenga la misma excelencia que la unidad uno.</p>
+            </div>
+            <div class="valor-card" data-hoverable="true" style="transition-delay: 0.3s;">
+                <div class="valor-num">04</div>
+                <h3>Liderazgo</h3>
+                <p>No seguimos tendencias, las creamos. Guiamos a nuestros colaboradores y socios hacia el crecimiento constante.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="talento-section" id="talento">
+        <div class="talento-content fade-in">
+            <h2>NUESTRO MAYOR ACTIVO ES EL <span>TALENTO</span></h2>
+            <p>Detrás de cada planta de producción, ruta logística y estrategia de mercado, hay un equipo de profesionales extraordinarios. En Mango BC siempre estamos en la búsqueda de mentes brillantes dispuestas a impactar la industria alimentaria.</p>
+            
+            <div class="magnetic-wrap" data-hoverable="true">
+                <a href="javascript:void(0)" onclick="openContactModal()" class="btn-main cta-magnet">VER VACANTES Y APLICAR</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-col">
+            <a href="index.html#inicio" class="logo" data-hoverable="true">
+                <img src="Logos Vectorizados.png" alt="Mango BC Logo" style="height: 50px; width: auto; display: block;" decoding="async">
+            </a>
+            <p style="color:#444; font-size:0.7rem; margin-top:20px;">LIDERANDO EL SECTOR ALIMENTARIO INDUSTRIAL.</p>
+        </div>
+        <div class="footer-col">
+            <h4>NEGOCIO</h4>
+            <a href="javascript:void(0)" onclick="openContactModal()" class="footer-link">Bolsa de Trabajo</a>
+            <a href="unidades.html#logistics" class="footer-link">Mango Logistics</a>
+            <a href="unidades.html#hot-rolls" class="footer-link">Hot Rolls</a>
+        </div>
+        <div class="footer-col">
+            <h4>CONTACTO</h4>
+            <a href="javascript:void(0)" onclick="openContactModal()" class="footer-link">Soporte Distribuidores</a>
+            <a href="javascript:void(0)" onclick="openContactModal()" class="footer-link">Contrataciones / Emprendedores</a>
+        </div>
+        <div style="grid-column: 1/-1; text-align:center; color:#222; font-size:0.6rem; margin-top:50px;">© 2026 MANGO BUSINESS CENTER — TODOS LOS DERECHOS RESERVADOS</div>
+    </footer>
+
+    <div class="contact-modal-overlay" id="contactModal">
+        <div class="contact-modal" data-hoverable="true">
+            <button class="close-modal" onclick="closeContactModal()">✕</button>
+            
+            <div class="modal-content" id="modalContent">
+                <h3>ÚNETE A<br>MANGO BC</h3>
+                <p>Déjanos tus datos y área de interés. Nuestro equipo de Recursos Humanos o Dirección te contactará pronto.</p>
+                
+                <form id="fakeContactForm">
+                    <div class="input-group">
+                        <input type="text" id="nombreAtom" placeholder="Nombre Completo" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" id="emailAtom" placeholder="Correo Electrónico" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="tel" id="telefonoAtom" placeholder="10 dígitos" required>
+                    </div>
+                    <div class="input-group">
+                        <select id="interesAtom" required style="color: #aaa;">
+                            <option value="" disabled selected>Motivo de Contacto</option>
+                            <option value="vacante_operativa">Aplicar a Vacante Operativa</option>
+                            <option value="vacante_admin">Aplicar a Vacante Administrativa</option>
+                            <option value="proveedores">Ofrecer mis servicios (Proveedores)</option>
+                            <option value="contacto_corporativo">Contacto Corporativo General</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-submit" id="submitBtn">ENVIAR INFORMACIÓN</button>
+                </form>
+            </div>
+
+            <div class="modal-success" id="modalSuccess">
+                <div class="success-icon">✓</div>
+                <h3 style="font-family: 'Syncopate'; color: var(--pure-white); font-size: 1.5rem; margin-bottom: 10px;">¡DATOS RECIBIDOS!</h3>
+                <p style="color: #aaa; font-size: 0.9rem; line-height: 1.6;">Tu información ha sido registrada en nuestra base de datos. El departamento correspondiente se pondrá en contacto contigo.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // PRELOADER BLINDADO
+        const loader = document.getElementById('loader');
+        if (loader) {
+            const hideLoader = () => {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 800);
+            };
+            window.addEventListener('load', hideLoader);
+            setTimeout(hideLoader, 2500);
+        }
+
+        // Scroll Progress Bar con Throttle
+        let tickingScroll = false;
+        window.addEventListener('scroll', () => {
+            if (!tickingScroll) {
+                window.requestAnimationFrame(() => {
+                    const scrollTotal = document.documentElement.scrollTop;
+                    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                    const scrolled = (scrollTotal / height) * 100;
+                    document.getElementById('scroll-progress').style.width = scrolled + '%';
+                    tickingScroll = false;
+                });
+                tickingScroll = true;
+            }
+        }, { passive: true });
+
+        // Custom Cursor con requestAnimationFrame
+        const cursor = document.getElementById('cursor');
+        if (window.matchMedia("(pointer: fine)").matches) {
+            let mouseX = 0, mouseY = 0;
+            let tickingCursor = false;
+            
+            document.addEventListener('mousemove', (e) => { 
+                mouseX = e.clientX; 
+                mouseY = e.clientY; 
+                
+                if(!tickingCursor) {
+                    window.requestAnimationFrame(() => {
+                        cursor.style.transform = `translate3d(${mouseX - (cursor.offsetWidth/2)}px, ${mouseY - (cursor.offsetHeight/2)}px, 0)`;
+                        tickingCursor = false;
+                    });
+                    tickingCursor = true;
+                }
+            });
+        } else {
+            cursor.style.display = 'none';
+        }
+
+        function toggleMenu() { document.getElementById('menuOverlay').classList.toggle('active'); }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { 
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible'); 
+                }
+            });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        document.querySelectorAll('[data-hoverable="true"], button, input, select').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
+        });
+
+        // Botón Magnético con Throttle
+        const magnet = document.querySelector('.magnetic-wrap');
+        const magnetBtn = document.querySelector('.cta-magnet');
+        let tickingMagnet = false;
+        
+        if(magnet) {
+            magnet.addEventListener('mousemove', (e) => {
+                if (!tickingMagnet) {
+                    window.requestAnimationFrame(() => {
+                        const position = magnet.getBoundingClientRect();
+                        const x = e.clientX - position.left - position.width / 2;
+                        const y = e.clientY - position.top - position.height / 2;
+                        magnetBtn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+                        tickingMagnet = false;
+                    });
+                    tickingMagnet = true;
+                }
+            });
+            
+            magnet.addEventListener('mouseout', () => {
+                magnetBtn.style.transform = `translate(0px, 0px)`;
+            });
+        }
+
+        // Modal Form Logic + ATOM WEBHOOK
+        const modalOverlay = document.getElementById('contactModal');
+        const fakeForm = document.getElementById('fakeContactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const modalContent = document.getElementById('modalContent');
+        const modalSuccess = document.getElementById('modalSuccess');
+
+        function openContactModal() {
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeContactModal() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto'; 
+            
+            setTimeout(() => {
+                if(fakeForm) fakeForm.reset();
+                if(modalContent) modalContent.style.display = 'block';
+                if(modalSuccess) modalSuccess.classList.remove('active');
+                if(submitBtn) submitBtn.classList.remove('loading');
+            }, 500);
+        }
+
+        if(fakeForm) {
+            fakeForm.addEventListener('submit', function(e) {
+                e.preventDefault(); 
+                if(submitBtn) submitBtn.classList.add('loading');
+                
+                // Recolectar datos
+                const nombre = document.getElementById('nombreAtom') ? document.getElementById('nombreAtom').value : '';
+                const email = document.getElementById('emailAtom') ? document.getElementById('emailAtom').value : '';
+                const interes = document.getElementById('interesAtom') ? document.getElementById('interesAtom').value : '';
+                
+                // Limpiar y preparar teléfono
+                const rawPhone = document.getElementById('telefonoAtom') ? document.getElementById('telefonoAtom').value : '';
+                const cleanPhone = rawPhone.replace(/\D/g, ''); 
+                const atomPhone = "52" + cleanPhone;
+                
+                // Armar paquete JSON
+                const payloadAtom = {
+                    "phone": atomPhone,
+                    "nombre": nombre,   
+                    "correo": email,
+                    "interes": interes
+                };
+                
+                // Disparo a Atom Webhook
+                fetch('https://us-central1-atomchat-io.cloudfunctions.net/webhook/c97-011-4f6-b1e-58a', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payloadAtom)
+                })
+                .then(response => {
+                    if(modalContent) modalContent.style.display = 'none'; 
+                    if(modalSuccess) modalSuccess.classList.add('active'); 
+                })
+                .catch(error => {
+                    console.error('Error con Atom:', error);
+                    alert("Hubo un error de conexión. Por favor intenta de nuevo.");
+                    if(submitBtn) submitBtn.classList.remove('loading');
+                });
+            });
+        }
+
+        // --- LÓGICA DEL MENÚ FLOTANTE INTELIGENTE (HOVER + SCROLL) ---
+        const floatingMenu = document.getElementById('floatingMenu');
+        const mainToggleBtn = document.getElementById('mainToggleBtn');
+        
+        let isHovered = false;
+        let hoverTimeout; // Variable para el pequeño retraso
+
+        floatingMenu.addEventListener('mouseenter', () => {
+            clearTimeout(hoverTimeout); // Si regresas rápido, cancela el cierre
+            isHovered = true;
+            floatingMenu.classList.remove('collapsed');
+        });
+
+        floatingMenu.addEventListener('mouseleave', () => {
+            // Le damos 150ms de tolerancia antes de decidir cerrarlo
+            hoverTimeout = setTimeout(() => {
+                isHovered = false;
+                let scrollLimit = window.innerHeight * 0.5;
+                if (window.scrollY > scrollLimit) {
+                    floatingMenu.classList.add('collapsed');
+                }
+            }, 150);
+        });
+
+        window.addEventListener('scroll', () => {
+            let currentScrollPosition = window.scrollY;
+            let scrollLimit = window.innerHeight * 0.5;
+            
+            if (currentScrollPosition < scrollLimit) {
+                floatingMenu.classList.remove('collapsed');
+            } else if (currentScrollPosition > scrollLimit && !isHovered) {
+                floatingMenu.classList.add('collapsed');
+            }
+        });
+
+        // Soporte para celulares al hacer clic
+        mainToggleBtn.addEventListener('click', (e) => {
+            if (floatingMenu.classList.contains('collapsed')) {
+                e.preventDefault(); 
+                floatingMenu.classList.remove('collapsed');
+                isHovered = true; 
+            } else {
+                floatingMenu.classList.add('collapsed');
+                isHovered = false;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,567 @@
+<style> 
+    body, html, .elementor-page, .elementor-canvas, .elementor-section, .elementor-container, .elementor-widget-wrap, .e-con, .e-con-inner { 
+        max-width: 100% !important; width: 100vw !important; padding: 0 !important; margin: 0 !important; 
+        background-color: #000000 !important; 
+    } 
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&amp;family=Syncopate:wght@700;900&amp;display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --primary-yellow: #FFFF00; 
+        --pure-black: #000000;    
+        --pure-white: #FFFFFF;    
+        --dark-grey: #0a0a0a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    
+    @media (hover: hover) and (pointer: fine) { 
+        * { cursor: none !important; } 
+        input, select, textarea { cursor: text !important; }
+        .close-modal { cursor: pointer !important; }
+    }
+
+    body { background-color: var(--pure-black) !important; color: var(--pure-white); font-family: 'Inter', sans-serif; overflow-x: hidden; margin: 0; padding: 0; }
+
+    #scroll-progress { position: fixed; top: 0; left: 0; height: 3px; background: var(--primary-yellow); width: 0%; z-index: 9999999; box-shadow: 0 0 10px var(--primary-yellow); transition: width 0.1s; }
+
+    #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--pure-black); display: flex; justify-content: center; align-items: center; z-index: 999999; transition: opacity 0.8s ease, visibility 0.8s ease; }
+    .loader-text { font-family: 'Syncopate'; font-size: 2vw; color: var(--pure-white); letter-spacing: 5px; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; color: var(--primary-yellow); text-shadow: 0 0 20px rgba(255,255,0,0.5); } }
+
+    /* Textura SVG en base64 (0kb) */
+    body::before { 
+        content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); 
+        opacity: 0.04; pointer-events: none; z-index: 9999; 
+    }
+    .dot-grid-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px); background-size: 30px 30px; mask-image: linear-gradient(to bottom, black 40%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%); }
+
+    #cursor { width: 15px; height: 15px; background: rgba(255, 255, 0, 0.1); border: 1px solid rgba(255, 255, 0, 0.3); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999999 !important; will-change: transform; transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1), height 0.4s cubic-bezier(0.23, 1, 0.32, 1), background 0.4s ease, border-color 0.4s ease; }
+    body.hover-active #cursor { width: 90px; height: 90px; background: rgba(255, 255, 0, 0.05); border-color: rgba(255, 255, 0, 0.8); box-shadow: 0 0 20px rgba(255,255,0,0.2); }
+
+    /* NAVEGACIÓN CENTRADA EXACTA 90PX */
+    nav { position: fixed; top: 0; left: 0; width: 100%; height: 90px; padding: 0 5%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: rgba(0,0,0,0.5); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .logo { text-decoration: none; display: flex; align-items: center; transition: transform 0.4s; height: 100%; }
+    .logo:hover { transform: scale(1.05); }
+    .logo img { display: block; margin: 0; padding: 0; }
+    .menu-btn { background: none; border: none; color: white; font-family: 'Syncopate'; font-size: 0.7rem; letter-spacing: 2px; cursor: pointer; display: flex; align-items: center; margin: 0; padding: 0; }
+
+    .nav-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 5000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.6s cubic-bezier(0.85, 0, 0.15, 1); }
+    .nav-overlay.active { opacity: 1; visibility: visible; }
+    .menu-container { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1400px; padding: 0 5%; }
+    .menu-main { display: flex; flex-direction: column; gap: 15px; }
+    .menu-main a { font-family: 'Syncopate'; font-size: clamp(2rem, 5vw, 6rem); color: white; text-decoration: none; line-height: 1.1; display: flex; align-items: center; transition: all 0.4s ease; transform: translateY(50px); opacity: 0; }
+    .menu-num { font-family: 'Inter'; font-size: 1rem; color: var(--primary-yellow); margin-right: 30px; margin-top: -30px; font-weight: 900; transition: 0.4s ease; }
+    .menu-main:hover a { color: rgba(255,255,255,0.2); -webkit-text-stroke: 0; } 
+    .menu-main a:hover, .menu-main a.active-link { color: transparent !important; -webkit-text-stroke: 2px var(--primary-yellow) !important; transform: translateX(30px) !important; }
+    .menu-main a:hover .menu-num, .menu-main a.active-link .menu-num { color: var(--primary-yellow); -webkit-text-stroke: 0; }
+    .menu-secondary { display: flex; flex-direction: column; gap: 50px; max-width: 300px; }
+    .menu-info-block { transform: translateY(30px); opacity: 0; transition: all 0.4s ease; }
+    .menu-info-block h4 { font-family: 'Syncopate'; font-size: 0.8rem; color: var(--primary-yellow); margin-bottom: 15px; letter-spacing: 2px; }
+    .menu-info-block p, .menu-sublink { font-family: 'Inter'; color: #aaa; font-size: 1rem; line-height: 1.6; text-decoration: none; display: block; margin-bottom: 10px; transition: color 0.3s; cursor: pointer; }
+    .menu-sublink:hover { color: var(--pure-white); padding-left: 10px; }
+    
+    .nav-overlay.active .menu-main a { transform: translateY(0) translateX(0); opacity: 1; }
+    .nav-overlay.active .menu-main a.active-link { transform: translateX(30px); opacity: 1; }
+    .nav-overlay.active .menu-main a:nth-child(1) { transition-delay: 0.1s; }
+    .nav-overlay.active .menu-main a:nth-child(2) { transition-delay: 0.2s; }
+    .nav-overlay.active .menu-main a:nth-child(3) { transition-delay: 0.3s; }
+    .nav-overlay.active .menu-main a:nth-child(4) { transition-delay: 0.4s; }
+    .nav-overlay.active .menu-main a:nth-child(5) { transition-delay: 0.5s; }
+    .nav-overlay.active .menu-info-block { transform: translateY(0); opacity: 1; }
+    .nav-overlay.active .menu-info-block:nth-child(1) { transition-delay: 0.4s; }
+    .nav-overlay.active .menu-info-block:nth-child(2) { transition-delay: 0.5s; }
+
+    .sticky-contact-btn { position: fixed; bottom: 40px; right: 40px; background: var(--pure-white); color: var(--pure-black); padding: 15px 30px; border-radius: 50px; font-family: 'Syncopate'; font-size: 0.7rem; font-weight: 900; text-decoration: none; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 10px 20px rgba(255, 255, 255, 0.15); z-index: 4000; transition: transform 0.3s ease, box-shadow 0.3s ease; display: flex; align-items: center; border: 1px solid var(--pure-white); cursor: pointer;}
+    .sticky-contact-btn:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 15px 30px rgba(255, 255, 0, 0.3); background: var(--primary-yellow); border-color: var(--primary-yellow); }
+
+    /* SECCIONES Y FONDOS NEGROS */
+    section { padding: 120px 5%; position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2; overflow: hidden; background-color: var(--pure-black) !important; }
+    .hero-unidades, .hotrolls-section { background-color: var(--dark-grey) !important; }
+
+    .section-title { font-family: 'Syncopate'; font-size: 2.5rem; color: var(--pure-white); margin-bottom: 50px; text-transform: uppercase; text-align: center; }
+    .section-title span { color: var(--primary-yellow); }
+
+    .hero-unidades { height: 70vh; text-align: center; position: relative; padding-bottom: 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; }
+    .bg-marquee-hero { position: absolute; top: 50%; left: 0; transform: translateY(-50%); white-space: nowrap; width: 100%; opacity: 0.03; z-index: 0; pointer-events: none; }
+    .marquee-content-hero { display: inline-block; font-family: 'Syncopate'; font-size: 18vw; font-weight: 900; animation: marquee-hero 40s linear infinite; }
+    @keyframes marquee-hero { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    .hero-content { position: relative; z-index: 2; }
+    .hero-title { font-family: 'Syncopate'; font-size: 6vw; color: var(--pure-white); line-height: 1.1; margin-bottom: 20px; text-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+    .hero-subtitle { font-size: 1.2rem; color: #aaa; font-weight: 300; max-width: 700px; margin: 0 auto; line-height: 1.6; }
+    
+    .ecosistema-section { padding: 150px 5%; }
+    .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: auto auto; gap: 20px; max-width: 1400px; width: 100%; }
+
+    .bento-item { background: var(--dark-grey); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 50px; position: relative; overflow: hidden; transition: all 0.4s ease; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; }
+    .bento-item:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.5); border-color: rgba(255,255,0,0.3); }
+    .bento-logistics { grid-column: span 3; grid-row: span 1; background: #050505; }
+    .bento-consumo { grid-column: span 1; grid-row: span 2; display: flex; align-items: center; justify-content: center; text-align: center; background: var(--primary-yellow); color: var(--pure-black); border: none; }
+    .bento-hotrolls { grid-column: span 2; grid-row: span 1; }
+    .bento-contacto { grid-column: span 1; grid-row: span 1; display: flex; align-items: center; justify-content: center; border: 1px dashed rgba(255,255,0,0.5); background: transparent; text-align: center; cursor: pointer; }
+    .bento-contacto:hover { background: rgba(255,255,0,0.05); }
+
+    .bento-tag { display: inline-block; font-family: 'Inter'; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: var(--primary-yellow); margin-bottom: 25px; border: 1px solid var(--primary-yellow); padding: 8px 20px; border-radius: 50px; }
+    
+    .bento-item h3 { font-family: 'Syncopate'; font-size: 3rem; color: var(--pure-white); margin-bottom: 20px; line-height: 1.1; position: relative; z-index: 2; font-weight: 900; }
+    .bento-item p { color: #aaa; font-size: 1.1rem; line-height: 1.6; max-width: 600px; position: relative; z-index: 2; }
+    
+    .bento-consumo h3 { color: var(--pure-black); font-size: 2.2rem; }
+    .bento-consumo .bento-tag { color: var(--pure-black); border-color: var(--pure-black); }
+    
+    .arrow-icon { width: 50px; height: 50px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; margin-top: 40px; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); position: relative; z-index: 2; color: white; font-size: 1.2rem; }
+    .bento-logistics:hover .arrow-icon { background: var(--primary-yellow); color: var(--pure-black); border-color: var(--primary-yellow); transform: translateX(10px); }
+    .bento-hotrolls:hover .arrow-icon { background: var(--primary-yellow); color: var(--pure-black); border-color: var(--primary-yellow); transform: translateY(10px); }
+    .bento-consumo .arrow-icon { border-color: rgba(0,0,0,0.2); color: black; margin: 30px auto 0; }
+    .bento-consumo:hover .arrow-icon { background: var(--pure-black); color: var(--primary-yellow); transform: translateX(10px); }
+
+    .hotrolls-section { padding: 150px 5%; border-top: 1px solid rgba(255,255,255,0.05); }
+    .franquicia-container { display: flex; flex-wrap: wrap; max-width: 1400px; width: 100%; gap: 60px; align-items: flex-start; }
+    
+    .franquicia-info { flex: 1; min-width: 400px; }
+    .franquicia-info h2 { font-family: 'Syncopate'; font-size: 3.5rem; color: var(--pure-white); margin-bottom: 20px; line-height: 1; }
+    .franquicia-info p { color: #ccc; font-size: 1.1rem; line-height: 1.6; margin-bottom: 40px; }
+    
+    .franquicia-stats { display: flex; gap: 40px; margin-bottom: 40px; }
+    .f-stat h4 { font-family: 'Syncopate'; font-size: 2rem; color: var(--primary-yellow); }
+    .f-stat span { font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+
+    .franquicia-grid { flex: 1; min-width: 400px; display: grid; grid-template-columns: 1fr; gap: 20px; }
+    .info-box { background: var(--pure-black); border: 1px solid rgba(255,255,255,0.05); padding: 30px; border-radius: 12px; transition: 0.3s; }
+    .info-box:hover { border-left: 3px solid var(--primary-yellow); transform: translateX(10px); }
+    .info-box h3 { font-family: 'Syncopate'; font-size: 1.1rem; color: var(--pure-white); margin-bottom: 10px; }
+    .info-box p { color: #aaa; font-size: 0.9rem; line-height: 1.6; }
+
+    .cta-final { text-align: center; margin-top: 40px; position: relative; padding: 100px 5% 40px; }
+    .magnetic-wrap { display: inline-block; padding: 20px; cursor: pointer; }
+    .btn-main { display: inline-block; padding: 25px 50px; background: var(--primary-yellow); color: var(--pure-black); font-family: 'Syncopate'; font-weight: 900; text-decoration: none; font-size: 1rem; border-radius: 5px; transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s; will-change: transform; cursor: pointer; }
+    .btn-main:hover { box-shadow: 0 15px 30px rgba(255,255,0,0.3); }
+
+    footer { background: var(--pure-black) !important; padding: 100px 5% 50px; border-top: 1px solid #111; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 50px; }
+    .footer-col h4 { font-family: 'Syncopate'; font-size: 0.7rem; color: #555; margin-bottom: 25px; }
+    .footer-link { display: block; color: white; text-decoration: none; font-size: 0.8rem; margin-bottom: 15px; text-transform: uppercase; transition: 0.3s; cursor: pointer; }
+    .footer-link:hover { color: var(--primary-yellow); letter-spacing: 1px; }
+
+    .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 1s cubic-bezier(0.23, 1, 0.32, 1), transform 1s cubic-bezier(0.23, 1, 0.32, 1); will-change: opacity, transform; }
+    .fade-in.is-visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 992px) {
+        section { padding: 80px 5%; }
+        .ecosistema-section, .hotrolls-section { padding-top: 80px; padding-bottom: 80px; }
+        .hero-unidades { min-height: 60vh; height: auto; padding: 140px 5% 60px 5%; }
+        .hero-title { font-size: 11vw; } 
+        .hero-subtitle { font-size: 1rem; margin-top: 15px; padding: 0 10px; }
+        .menu-container { flex-direction: column; align-items: flex-start; justify-content: center; gap: 50px; height: 100vh; overflow-y: auto; padding-top: 100px;}
+        .menu-num { display: none; }
+        .menu-main a { font-size: 10vw; }
+        .menu-main:hover a { color: white; -webkit-text-stroke: 0; }
+        .menu-main a:hover, .menu-main a.active-link { -webkit-text-stroke: 0 !important; color: var(--primary-yellow) !important; transform: none !important; }
+        .bento-grid { grid-template-columns: 1fr 1fr; }
+        .bento-logistics { grid-column: span 2; }
+        .bento-consumo { grid-column: span 2; grid-row: span 1; padding: 50px 30px;}
+        .bento-hotrolls { grid-column: span 2; }
+        .bento-contacto { grid-column: span 2; padding: 60px; }
+    }
+
+    @media (max-width: 768px) {
+        nav { padding: 0 5%; height: 70px; }
+        .logo span.main { font-size: 1.2rem; }
+        .menu-main a { font-size: 12vw; }
+        .bento-grid { grid-template-columns: 1fr; }
+        .bento-logistics, .bento-consumo, .bento-hotrolls, .bento-contacto { grid-column: span 1; }
+        .bento-item { padding: 40px 30px; }
+        .bento-item h3 { font-size: 2rem; }
+        .franquicia-info, .franquicia-grid { min-width: 100%; }
+        .franquicia-container { gap: 40px; }
+        .franquicia-info h2 { font-size: 2.5rem; }
+        .contact-modal { padding: 30px 20px; }
+        .close-modal { top: 15px; right: 15px; }
+        footer { padding: 60px 5% 100px; text-align: center; gap: 30px; }
+    }
+
+    /* Ocultar el cursor personalizado en móviles y dispositivos táctiles */
+    @media (max-width: 992px), (hover: none) and (pointer: coarse) {
+        #cursor { display: none !important; }
+    }
+
+    .contact-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 999999; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
+    .contact-modal-overlay.active { opacity: 1; visibility: visible; }
+    .contact-modal { background: var(--dark-grey); width: 90%; max-width: 500px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); position: relative; transform: translateY(50px); transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); box-shadow: 0 25px 50px rgba(0,0,0,0.5); overflow: hidden; padding: 50px; }
+    .contact-modal-overlay.active .contact-modal { transform: translateY(0); }
+    .close-modal { position: absolute; top: 20px; right: 25px; background: transparent; border: none; color: #888; font-size: 1.5rem; cursor: pointer; transition: 0.3s; }
+    .close-modal:hover { color: var(--primary-yellow); transform: scale(1.2); }
+    
+    /* ESTILOS DEL FORMULARIO CORREGIDOS */
+    .modal-content h3 { font-family: 'Syncopate'; color: var(--primary-yellow); font-size: 1.5rem; margin-bottom: 10px; line-height: 1.2; }
+    .modal-content p { color: #aaa; font-size: 0.9rem; margin-bottom: 30px; line-height: 1.5; }
+    .input-group { margin-bottom: 20px; text-align: left; }
+    .input-group label { font-size: 0.8rem; color: #aaaaaa; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; display: block; }
+    .input-group input, .input-group select { width: 100%; padding: 15px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; font-family: 'Inter'; font-size: 0.9rem; transition: 0.3s; outline: none; }
+    .input-group input:focus, .input-group select:focus { border-color: var(--primary-yellow); background: rgba(255,255,0,0.02); }
+    
+    .btn-submit { width: 100%; padding: 18px; background: var(--primary-yellow); color: var(--pure-black); font-family: 'Syncopate'; font-weight: 900; font-size: 0.9rem; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; margin-top: 10px; }
+    .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(255,255,0,0.2); }
+    .btn-submit.loading { background: #555; color: transparent; pointer-events: none; box-shadow: none; transform: none; }
+    .btn-submit.loading::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+    
+    .modal-success { display: none; text-align: center; opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
+    .modal-success.active { display: block; opacity: 1; transform: translateY(0); }
+    .success-icon { font-size: 4rem; color: var(--primary-yellow); margin-bottom: 20px; text-shadow: 0 0 30px rgba(255,255,0,0.3); }
+</style>
+
+<div id="scroll-progress"></div>
+<div id="loader"><div class="loader-text">MANGO BC</div></div>
+<div id="cursor"></div>
+
+<nav>
+    <a href="https://mangobc.com/?page_id=1969" class="logo" data-hoverable="true">
+        <img src="https://mangobc.com/wp-content/uploads/2026/03/Logos-Vectorizados.png" alt="Mango BC Logo" style="height: 50px; width: auto; display: block;" decoding="async">
+    </a>
+    <button class="menu-btn" data-hoverable="true" onclick="toggleMenu()">MENÚ</button>
+</nav>
+
+<div class="nav-overlay" id="menuOverlay">
+    <div class="menu-container">
+        <div class="menu-main">
+            <a href="https://mangobc.com/?page_id=1969" data-hoverable="true"><span class="menu-num">01</span>INICIO</a>
+            <a href="https://mangobc.com/?page_id=2005" data-hoverable="true"><span class="menu-num">02</span>QUIÉNES SOMOS</a>
+            <a href="https://mangobc.com/?page_id=2010" class="active-link" data-hoverable="true"><span class="menu-num">03</span>UNIDADES DE NEGOCIO</a>
+            <a href="https://mangobc.com/?page_id=2012" data-hoverable="true"><span class="menu-num">04</span>EMPRENDEDORES</a>
+            <a href="https://mangobc.com/?page_id=2017" data-hoverable="true"><span class="menu-num">05</span>DISTRIBUIDORES</a>
+        </div>
+        
+        <div class="menu-secondary">
+            <div class="menu-info-block">
+                <h4>SEDE CENTRAL</h4>
+                <p>Morelia, Michoacán<br>México</p>
+            </div>
+            <div class="menu-info-block">
+                <h4>CONTACTO DIRECTO</h4>
+                <a href="javascript:void(0)" onclick="openContactModal(); toggleMenu();" class="menu-sublink" data-hoverable="true">Soporte Distribuidores</a>
+                <a href="javascript:void(0)" onclick="openContactModal(); toggleMenu();" class="menu-sublink" data-hoverable="true">Expansión & Franquicias</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="hero-unidades">
+    <div class="bg-marquee-hero"><div class="marquee-content-hero">UNIDADES DE NEGOCIO — ECOSISTEMA MANGO — </div></div>
+    <div class="hero-content">
+        <h1 class="hero-title fade-in">NUESTRO<br><span>ECOSISTEMA</span></h1>
+        <p class="hero-subtitle fade-in" style="transition-delay: 0.2s;">Diversificación estratégica. Controlamos desde la producción y logística masiva, hasta la creación de marcas de consumo y modelos de franquicia rentables.</p>
+    </div>
+</section>
+
+<section class="ecosistema-section">
+    <div class="dot-grid-bg"></div>
+    <div class="bento-grid fade-in">
+        
+        <a href="javascript:void(0)" onclick="openContactModal()" class="bento-item bento-logistics" data-hoverable="true">
+            <div>
+                <span class="bento-tag">Infraestructura</span>
+                <h3>MANGO<br>LOGISTICS</h3>
+                <p>El sistema nervioso de nuestro corporativo. Flotas especializadas, rutas de distribución nacional y un centro de almacenaje diseñado para abastecer el país sin interrupciones.</p>
+            </div>
+            <div class="arrow-icon">→</div>
+        </a>
+
+        <a href="https://mangobc.com/?page_id=1969#productos" class="bento-item bento-consumo" data-hoverable="true">
+            <div>
+                <span class="bento-tag">FMCG</span>
+                <h3>UNIDAD DE<br>CONSUMO</h3>
+                <p style="color: rgba(0,0,0,0.7); font-size: 0.9rem; margin-top: 15px;">Deli Barras, Sabor Mío, Campesinas y Nanná.</p>
+                <div class="arrow-icon">→</div>
+            </div>
+        </a>
+
+        <a href="#hotrolls" class="bento-item bento-hotrolls" data-hoverable="true">
+            <div>
+                <span class="bento-tag">Franquicias</span>
+                <h3>HOT ROLLS</h3>
+                <p>Modelo de negocio probado. Tiendas físicas con alta rentabilidad, diseño operativo eficiente y recuperación rápida de inversión.</p>
+            </div>
+            <div class="arrow-icon">↓</div>
+        </a>
+
+        <a href="javascript:void(0)" onclick="openContactModal()" class="bento-item bento-contacto" data-hoverable="true">
+            <div>
+                <h3 style="font-size: 1.2rem; color: var(--primary-yellow); font-family: 'Syncopate';">¿BUSCAS SER SOCIO?</h3>
+                <p style="margin: 0 auto; font-size: 0.8rem; color: #fff;">Contáctanos</p>
+            </div>
+        </a>
+
+    </div>
+</section>
+
+<section class="hotrolls-section" id="hotrolls">
+    <div class="franquicia-container fade-in">
+        <div class="franquicia-info">
+            <span style="color: var(--primary-yellow); font-family: 'Inter'; font-weight: 900; letter-spacing: 3px; font-size: 0.8rem; margin-bottom: 15px; display: block;">EXPANSIÓN FÍSICA</span>
+            <h2>HOT ROLLS<br>FRANCHISE</h2>
+            <p>Nuestra cadena de retail especializada. Hot Rolls no es solo una marca, es un sistema operativo llave en mano. Diseñamos un modelo de tienda que minimiza la merma, optimiza el personal y maximiza el ticket promedio.</p>
+            
+            <div class="franquicia-stats">
+                <div class="f-stat">
+                    <h4>ROI</h4>
+                    <span>Acelerado</span>
+                </div>
+                <div class="f-stat">
+                    <h4>360°</h4>
+                    <span>Soporte Op.</span>
+                </div>
+            </div>
+            
+            <div class="magnetic-wrap" data-hoverable="true" style="padding: 0;">
+                <a href="javascript:void(0)" onclick="openContactModal()" class="btn-main cta-magnet" style="padding: 15px 30px; font-size: 0.8rem;">SOLICITAR DOSSIER DE FRANQUICIA</a>
+            </div>
+        </div>
+        
+        <div class="franquicia-grid">
+            <div class="info-box" data-hoverable="true">
+                <h3>EL MODELO</h3>
+                <p>Locales de metraje optimizado (desde islas comerciales hasta locales a pie de calle). Equipamiento estandarizado y manuales de procesos estrictos para garantizar que el sabor y la experiencia sean idénticos en cualquier sucursal.</p>
+            </div>
+            <div class="info-box" data-hoverable="true">
+                <h3>NUESTRAS TIENDAS</h3>
+                <p>Actualmente operando con éxito en puntos de venta estratégicos. Cada tienda está respaldada por la logística de Mango BC, asegurando abastecimiento de insumos a precio de fábrica.</p>
+            </div>
+            <div class="info-box" data-hoverable="true">
+                <h3>CONTACTO DIRECTO</h3>
+                <p>Si tienes un local comercial disponible o buscas invertir en un modelo estructurado, nuestro equipo de expansión evalúa la viabilidad demográfica de tu zona sin costo.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-col">
+        <a href="https://mangobc.com/?page_id=1969" class="logo" data-hoverable="true">
+            <img src="https://mangobc.com/wp-content/uploads/2026/03/Logos-Vectorizados.png" alt="Mango BC Logo" style="height: 50px; width: auto; display: block; filter: brightness(0) saturate(100%) invert(91%) sepia(94%) saturate(5441%) hue-rotate(359deg) brightness(105%) contrast(106%);">
+        </a>
+        <p style="color:#444; font-size:0.7rem; margin-top:20px;">LIDERANDO EL SECTOR ALIMENTARIO INDUSTRIAL.</p>
+    </div>
+    <div class="footer-col">
+        <h4>NEGOCIO</h4>
+        <a href="https://mangobc.com/?page_id=2005#talento" class="footer-link">Bolsa de Trabajo</a>
+        <a href="https://mangobc.com/?page_id=2010#logistics" class="footer-link">Mango Logistics</a>
+        <a href="https://mangobc.com/?page_id=2010#hot-rolls" class="footer-link">Hot Rolls</a>
+    </div>
+    <div class="footer-col">
+        <h4>CONTACTO</h4>
+        <a href="javascript:void(0)" onclick="openContactModal()" class="footer-link">Soporte Distribuidores</a>
+        <a href="javascript:void(0)" onclick="openContactModal()" class="footer-link">Contrataciones / Emprendedores</a>
+    </div>
+    <div style="grid-column: 1/-1; text-align:center; color:#222; font-size:0.6rem; margin-top:50px;">© 2026 MANGO BUSINESS CENTER — TODOS LOS DERECHOS RESERVADOS</div>
+</footer>
+
+<div class="contact-modal-overlay" id="contactModal">
+    <div class="contact-modal" data-hoverable="true">
+        <button class="close-modal" onclick="closeContactModal()">✕</button>
+        
+        <div class="modal-content" id="modalContent">
+            <h3>SOLICITUD DE<br>CONTACTO</h3>
+            <p>Déjanos tus datos. Un asesor corporativo de Mango BC te contactará a la brevedad.</p>
+            
+            <form id="fakeContactForm">
+                <div class="input-group">
+                    <label>Nombre Completo / Empresa</label>
+                    <input type="text" id="nombreAtom" placeholder="Ej. Juan Pérez" required>
+                </div>
+                
+                <div class="input-group">
+                    <label>WhatsApp</label>
+                    <input type="tel" id="telefonoAtom" placeholder="10 dígitos" required>
+                </div>
+                
+                <div class="input-group">
+                    <label>Correo</label>
+                    <input type="email" id="emailAtom" placeholder="tu@correo.com" required>
+                </div>
+                
+                <div class="input-group">
+                    <label>Área de Interés</label>
+                    <select id="interesAtom" required>
+                        <option value="" disabled selected>Selecciona...</option>
+                        <option value="logistica">Servicios de Mango Logistics</option>
+                        <option value="franquicia">Información Franquicias Hot Rolls</option>
+                        <option value="distribucion">Convertirme en Distribuidor (B2B)</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn-submit" id="submitBtn">ENVIAR INFORMACIÓN</button>
+            </form>
+        </div>
+
+        <div class="modal-success" id="modalSuccess">
+            <div class="success-icon">✓</div>
+            <h3 style="font-family: 'Syncopate'; color: var(--pure-white); font-size: 1.5rem; margin-bottom: 10px;">¡SOLICITUD RECIBIDA!</h3>
+            <p style="color: #aaa; font-size: 0.9rem; line-height: 1.6;">Hemos registrado tus datos en nuestro sistema. El departamento correspondiente te contactará en menos de 24 horas.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // PRELOADER BLINDADO
+    const loader = document.getElementById('loader');
+    if (loader) {
+        const hideLoader = () => {
+            loader.style.opacity = '0';
+            setTimeout(() => loader.style.display = 'none', 800);
+        };
+        window.addEventListener('load', hideLoader);
+        setTimeout(hideLoader, 2500);
+    }
+
+    // Scroll Progress Bar con Throttle
+    let tickingScroll = false;
+    window.addEventListener('scroll', () => {
+        if (!tickingScroll) {
+            window.requestAnimationFrame(() => {
+                const scrollTotal = document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (scrollTotal / height) * 100;
+                document.getElementById('scroll-progress').style.width = scrolled + '%';
+                tickingScroll = false;
+            });
+            tickingScroll = true;
+        }
+    }, { passive: true });
+
+    // Custom Cursor con requestAnimationFrame
+    const cursor = document.getElementById('cursor');
+    if (window.matchMedia("(pointer: fine)").matches) {
+        let mouseX = 0, mouseY = 0;
+        let tickingCursor = false;
+        
+        document.addEventListener('mousemove', (e) => { 
+            mouseX = e.clientX; 
+            mouseY = e.clientY; 
+            
+            if(!tickingCursor) {
+                window.requestAnimationFrame(() => {
+                    cursor.style.transform = `translate3d(${mouseX - (cursor.offsetWidth/2)}px, ${mouseY - (cursor.offsetHeight/2)}px, 0)`;
+                    tickingCursor = false;
+                });
+                tickingCursor = true;
+            }
+        });
+    } else {
+        cursor.style.display = 'none';
+    }
+
+    function toggleMenu() { document.getElementById('menuOverlay').classList.toggle('active'); }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { 
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible'); 
+            }
+        });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    document.querySelectorAll('[data-hoverable="true"], button, input, select').forEach(el => {
+        el.addEventListener('mouseenter', () => document.body.classList.add('hover-active'));
+        el.addEventListener('mouseleave', () => document.body.classList.remove('hover-active'));
+    });
+
+    // Botón Magnético con Throttle
+    const magnet = document.querySelector('.magnetic-wrap');
+    const magnetBtn = document.querySelector('.cta-magnet');
+    let tickingMagnet = false;
+    
+    if(magnet) {
+        magnet.addEventListener('mousemove', (e) => {
+            if (!tickingMagnet) {
+                window.requestAnimationFrame(() => {
+                    const position = magnet.getBoundingClientRect();
+                    const x = e.clientX - position.left - position.width / 2;
+                    const y = e.clientY - position.top - position.height / 2;
+                    const magnetBtn = document.querySelector('.cta-magnet');
+                    magnetBtn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+                    tickingMagnet = false;
+                });
+                tickingMagnet = true;
+            }
+        });
+        
+        magnet.addEventListener('mouseout', () => {
+            document.querySelector('.cta-magnet').style.transform = `translate(0px, 0px)`;
+        });
+    }
+
+    // Modal Form Logic + ATOM WEBHOOK
+    const modalOverlay = document.getElementById('contactModal');
+    const fakeForm = document.getElementById('fakeContactForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const modalContent = document.getElementById('modalContent');
+    const modalSuccess = document.getElementById('modalSuccess');
+
+    function openContactModal() {
+        modalOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden'; 
+    }
+
+    function closeContactModal() {
+        modalOverlay.classList.remove('active');
+        document.body.style.overflow = 'auto'; 
+        
+        setTimeout(() => {
+            if(fakeForm) fakeForm.reset();
+            if(modalContent) modalContent.style.display = 'block';
+            if(modalSuccess) modalSuccess.classList.remove('active');
+            if(submitBtn) submitBtn.classList.remove('loading');
+        }, 500);
+    }
+
+    if(fakeForm) {
+        fakeForm.addEventListener('submit', function(e) {
+            e.preventDefault(); 
+            if(submitBtn) submitBtn.classList.add('loading');
+            
+            // Recolectar datos
+            const nombre = document.getElementById('nombreAtom') ? document.getElementById('nombreAtom').value : '';
+            const email = document.getElementById('emailAtom') ? document.getElementById('emailAtom').value : '';
+            const interes = document.getElementById('interesAtom') ? document.getElementById('interesAtom').value : '';
+            
+            // Limpiar y preparar teléfono
+            const rawPhone = document.getElementById('telefonoAtom') ? document.getElementById('telefonoAtom').value : '';
+            const cleanPhone = rawPhone.replace(/\D/g, ''); 
+            const atomPhone = "52" + cleanPhone;
+            
+            // Armar paquete JSON
+            const payloadAtom = {
+                "phone": atomPhone,
+                "nombre": nombre,   
+                "correo": email,
+                "interes": interes
+            };
+            
+            // Disparo a Atom Webhook
+            fetch('https://us-central1-atomchat-io.cloudfunctions.net/webhook/c97-011-4f6-b1e-58a', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payloadAtom)
+            })
+            .then(response => {
+                if(modalContent) modalContent.style.display = 'none'; 
+                if(modalSuccess) modalSuccess.classList.add('active'); 
+            })
+            .catch(error => {
+                console.error('Error con Atom:', error);
+                alert("Hubo un error de conexión. Por favor intenta de nuevo.");
+                if(submitBtn) submitBtn.classList.remove('loading');
+            });
+        });
+    }
+</script>

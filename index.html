@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mango BC | Industrial Excellence</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* EL AMARILLO ELÉCTRICO Y PALETA LIMPIA */
+            --mango: #fdea14; 
+            --dark: #1C1C1C;  
+            --white: #FFFFFF;
+            --light-bg: #F5F5F7; 
+            /* Opacidad reducida para mejor efecto cristal */
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --shadow-soft: 0 20px 40px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 30px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark);
+            font-family: 'Open Sans', sans-serif;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        h1, h2, h3, h4, .font-title { font-family: 'Montserrat', sans-serif; }
+
+        /* PRELOADER */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--dark);
+            display: flex; justify-content: center; align-items: center; z-index: 9999999;
+            /* OPTIMIZACIÓN: Solo animar opacity y visibility */
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), visibility 1s;
+        }
+        .loader-logo { width: 180px; animation: pulse 2s ease-in-out infinite; filter: brightness(0) invert(1); will-change: transform, opacity; }
+        @keyframes pulse { 0%, 100% { transform: scale(1) translateZ(0); opacity: 0.8; } 50% { transform: scale(1.05) translateZ(0); opacity: 1; filter: drop-shadow(0 0 30px rgba(253, 234, 20, 0.6)); } }
+
+        /* =========================================================
+           0. SECCIÓN MANIFESTO (VIDEO + LOGO CASI INVISIBLE)
+           ========================================================= */
+        .manifesto-section {
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: #000;
+        }
+        .manifesto-video {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            opacity: 0.7;
+        }
+        .manifesto-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .manifesto-logo {
+            width: 80%;
+            max-width: 550px;
+            opacity: 0.7;
+            filter: brightness(0) invert(1);
+            pointer-events: none;
+        }
+        .manifesto-scroll {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.7rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            letter-spacing: 2px;
+            opacity: 1;
+        }
+        .m-mouse {
+            width: 26px; height: 42px;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 20px;
+            position: relative;
+        }
+        .m-mouse::before {
+            content: '';
+            width: 4px; height: 8px;
+            background: var(--mango);
+            position: absolute;
+            top: 8px; left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+            animation: scroll-anim 2s infinite;
+            will-change: transform, opacity;
+        }
+        @keyframes scroll-anim {
+            0% { opacity: 1; transform: translate(-50%, 0); }
+            100% { opacity: 0; transform: translate(-50%, 17px); }
+        }
+        /* =========================================================
+           NAVEGACIÓN EFECTO CRISTAL 
+           ========================================================= */
+        nav {
+            position: fixed; width: 90%; top: 20px; left: 5%; padding: 15px 30px; 
+            background: var(--glass-bg); 
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border); 
+            border-radius: 100px;
+            display: flex; justify-content: space-between; align-items: center; z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+            /* OPTIMIZACIÓN: Se quitó el 'all' */
+            transition: transform 0.4s ease, background-color 0.4s ease;
+        }
+        .logo { text-decoration: none; display: flex; align-items: center; z-index: 1002; }
+        
+        .nav-logo { height: 35px; width: auto; object-fit: contain; }
+        
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 600; font-size: 0.85rem; transition: color 0.3s; }
+        .nav-links a:hover { color: #888; }
+        
+        .nav-cta { background: var(--dark); color: var(--white) !important; padding: 10px 24px; border-radius: 50px; transition: background-color 0.4s, color 0.4s;}
+        .nav-cta:hover { background: var(--mango); color: var(--dark) !important; }
+
+        /* HAMBURGUESA PARA MÓVIL */
+        .hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; z-index: 1002; }
+        .hamburger span { width: 30px; height: 3px; background-color: var(--dark); border-radius: 3px; transition: transform 0.4s, opacity 0.4s; }
+
+        /* REVEAL ANIMATIONS */
+        /* OPTIMIZACIÓN: Reemplazo de 'all' por transform y opacity con GPU acceleration */
+        .reveal { 
+            opacity: 0; 
+            transform: translateY(40px) translateZ(0); 
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); 
+            will-change: opacity, transform;
+        }
+        .reveal.active { opacity: 1; transform: translateY(0) translateZ(0); }
+        .delay-1 { transition-delay: 0.1s; } .delay-2 { transition-delay: 0.2s; } .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; } .delay-5 { transition-delay: 0.5s; }
+
+        /* SECCIONES BASE */
+        section { padding: 120px 5%; position: relative; }
+        .section-title { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 900; color: var(--dark); margin-bottom: 20px; text-transform: uppercase; line-height: 1; text-align: center; }
+        .section-title span { color: var(--mango); }
+        .section-desc { font-size: 1.2rem; color: #555; max-width: 700px; margin-bottom: 60px; line-height: 1.8; text-align: center; margin-left: auto; margin-right: auto; }
+
+        /* BOTONES GLOBALES */
+        .btn-mango { background: var(--mango); color: var(--dark); padding: 18px 40px; border-radius: 50px; font-family: 'Montserrat'; font-weight: 700; text-decoration: none; text-transform: uppercase; font-size: 0.85rem; transition: transform 0.4s, box-shadow 0.4s, background-color 0.4s; box-shadow: 0 10px 20px rgba(253, 234, 20, 0.3); display: inline-block; text-align: center; border: none; cursor: pointer;}
+        .btn-mango:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(253, 234, 20, 0.5); background: var(--white); }
+        
+        .btn-white { background: var(--white); color: var(--dark); padding: 18px 40px; border-radius: 50px; font-family: 'Montserrat'; font-weight: 700; text-decoration: none; text-transform: uppercase; font-size: 0.85rem; transition: transform 0.4s, background-color 0.4s; display: inline-block; text-align: center; }
+        .btn-white:hover { transform: translateY(-5px); background: #eee; }
+
+        .btn-outline { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.5); padding: 16px 40px; border-radius: 50px; font-family: 'Montserrat'; font-weight: 700; text-decoration: none; text-transform: uppercase; font-size: 0.85rem; transition: transform 0.4s, background-color 0.4s, border-color 0.4s; display: inline-block; text-align: center; backdrop-filter: blur(5px); margin-top: 20px; }
+        .btn-outline:hover { background: rgba(255,255,255,0.1); border-color: var(--white); transform: translateY(-5px); }
+
+        /* 1. HERO */
+        .hero { 
+            height: 100vh; 
+            min-height: 700px; 
+            padding-top: 120px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            position: relative; 
+            overflow: hidden; 
+            
+        }
+        .hero-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(28,28,28,0.9) 0%, rgba(28,28,28,0.6) 100%); z-index: -1; }
+        
+        .hero-content { text-align: center; z-index: 1; max-width: 1000px; padding: 0 5%; display: flex; flex-direction: column; align-items: center;}
+        .hero-content h2 { font-size: clamp(1.2rem, 2vw, 1.8rem); color: var(--mango); font-weight: 600; margin-bottom: 30px; }
+        .hero-content p { color: #DDD; font-size: 1.1rem; line-height: 1.8; max-width: 800px; margin: 0 auto 40px; }
+        .hero-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; width: 100%; }
+
+        /* =========================================================
+           2. ¿QUÉ ES MANGO?
+           ========================================================= */
+        .que-es { background: var(--white); padding: 150px 5%; }
+        .que-es-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; max-width: 1400px; margin: 0 auto; align-items: center; }
+        
+        .narrativa-box .section-title { font-size: clamp(2.5rem, 5vw, 4.5rem); margin-bottom: 30px; text-align: left; }
+        .narrativa-box p { font-size: clamp(1.2rem, 2vw, 1.6rem); color: var(--dark); line-height: 1.8; font-weight: 300; }
+        .narrativa-box strong { color: var(--dark); font-weight: 700; background: rgba(253,234,20,0.4); padding: 4px 8px; border-radius: 6px; }
+        
+        /* TARJETAS BENTO 3D */
+        .stats-bento { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; position: relative; }
+        
+        .bento-flip-card { 
+            background: transparent; 
+            height: 260px; 
+            perspective: 1500px; 
+            cursor: pointer; 
+        }
+        
+        .bento-inner {
+            position: relative; 
+            width: 100%; 
+            height: 100%; 
+            text-align: left; 
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            transform-style: preserve-3d;
+            will-change: transform; /* OPTIMIZACIÓN GPU */
+        }
+        
+        .bento-flip-card:hover .bento-inner { 
+            transform: rotateY(180deg); 
+        }
+        
+        .bento-front, .bento-back {
+            position: absolute; 
+            width: 100%; 
+            height: 100%; 
+            backface-visibility: hidden; 
+            -webkit-backface-visibility: hidden;
+            border-radius: 30px; 
+            padding: 40px 30px; 
+            display: flex; 
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: var(--shadow-soft); 
+            border: 1px solid rgba(0,0,0,0.03); 
+            transition: box-shadow 0.4s, border-color 0.4s, background-color 0.4s;
+        }
+        
+        .bento-front {
+            background: var(--light-bg); 
+            color: var(--dark);
+        }
+        
+        .bento-flip-card:hover .bento-front { 
+            border-color: var(--mango); 
+            background: var(--white);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .bento-front h3 { font-size: clamp(2.5rem, 4vw, 4.5rem); color: var(--mango); line-height: 1; margin-bottom: 10px; letter-spacing: -2px; }
+        .bento-front p { font-size: 1rem; font-weight: 700; text-transform: uppercase; color: var(--dark); letter-spacing: 1px; }
+        .flip-hint-bento { font-size: 0.75rem; color: #888; font-weight: 700; text-transform: uppercase; margin-top: auto; display: flex; align-items: center; gap: 5px;}
+        
+        .bento-back {
+            background: var(--dark); 
+            color: var(--white); 
+            transform: rotateY(180deg); 
+            border-color: var(--mango);
+            align-items: flex-start;
+        }
+        
+        .bento-back h4 { color: var(--mango); font-size: 1.2rem; margin-bottom: 15px; font-weight: 900; text-transform: uppercase; }
+        .bento-back p { font-size: 0.95rem; line-height: 1.6; color: #EEE; }
+        .bento-back ul { list-style: none; padding: 0; margin: 0; width: 100%; }
+        .bento-back ul li { margin-bottom: 8px; font-size: 0.9rem; color: #EEE; display: flex; align-items: center; gap: 8px; }
+        .bento-back ul li::before { content: '✓'; color: var(--mango); font-weight: bold; }
+        
+        /* =========================================
+           TARJETA MAPA: GIRO, EXPANSIÓN Y CENTRADO
+           ========================================= */
+        #tarjeta-mapa {
+            z-index: 1;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            will-change: transform;
+        }
+
+        #tarjeta-mapa:hover {
+            z-index: 100;
+            /* Se escala al tamaño completo y la empujamos para que no invada el texto a la izquierda */
+            transform: scale(1.6) translate(15%, -15%) translateZ(0); /* Aceleración GPU */
+        }
+
+        #tarjeta-mapa .bento-back.map-back {
+            padding: 0;
+            background-color: var(--white); /* Fondo limpio en caso de sobras */
+            border: 2px solid var(--mango);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #tarjeta-mapa .map-img {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            object-fit: contain !important; /* Ajuste perfecto sin recortes */
+            opacity: 1 !important; 
+            transform: none !important; /* Adiós al zoom indeseado */
+            transition: none !important; 
+        }
+        .map-text-overlay { position: relative; z-index: 1; background: rgba(28,28,28,0.85); padding: 10px 20px; border-radius: 50px; font-weight: 900; color: var(--mango); border: 1px solid var(--mango); backdrop-filter: blur(5px); text-transform: uppercase; font-family: 'Montserrat'; letter-spacing: 1px;}
+
+
+        /* 3. METODOLOGÍA */
+        .metodologia { background: var(--dark); color: var(--white); padding: 150px 5% 0; }
+        .sticky-wrapper { display: flex; max-width: 1400px; margin: 0 auto; gap: 5%; justify-content: space-between; align-items: flex-start; }
+        .sticky-left { position: sticky; top: 200px; width: 45%; padding-bottom: 150px; }
+        .sticky-left h2 { font-size: clamp(2.5rem, 4vw, 4rem); line-height: 1.05; margin-bottom: 20px; color: var(--white); text-align: left; }
+        .sticky-left h2 span { color: var(--mango); display: block; }
+        .sticky-left p { color: #AAA; font-size: 1.1rem; line-height: 1.6; max-width: 90%; text-align: left; }
+        
+        .scroll-right { width: 50%; display: flex; flex-direction: column; gap: 80px; margin-top: 260px; padding-bottom: 200px; }
+        .metodo-card { display: flex; gap: 30px; align-items: flex-start; background: rgba(255,255,255,0.03); padding: 50px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.5s, border-color 0.5s, background-color 0.5s; backdrop-filter: blur(10px); will-change: transform;}
+        .metodo-card:hover { transform: translateX(-20px) translateZ(0); border-color: var(--mango); background: rgba(253, 234, 20, 0.05); }
+        
+        /* --- NUEVO ESTILO PARA LOS NÚMEROS DE METODOLOGÍA --- */
+        .m-num { 
+            font-size: 2.2rem; 
+            font-family: 'Montserrat'; 
+            font-weight: 900; 
+            color: var(--dark); 
+            background: var(--mango); 
+            min-width: 75px; 
+            height: 75px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 20px rgba(253, 234, 20, 0.15); 
+            transition: background-color 0.4s, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
+            flex-shrink: 0; 
+            will-change: transform;
+        }
+        
+        .metodo-card:hover .m-num { 
+            background: var(--white); 
+            transform: scale(1.1) rotate(-5deg) translateZ(0); 
+            box-shadow: 0 15px 30px rgba(255, 255, 255, 0.2);
+        }
+
+        .m-text h4 { font-size: 1.5rem; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .m-text p { color: #CCC; font-size: 1.1rem; line-height: 1.7; font-weight: 300; }
+
+        /* =========================================================
+           4. UNIDADES DE NEGOCIO (TARJETAS 3D GIRATORIAS)
+           ========================================================= */
+        .unidades { background: var(--light-bg); overflow: hidden; } 
+        .carousel-nav { display: none; } 
+        .unidades-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; max-width: 1400px; margin: 0 auto; transition: transform 0.5s ease-in-out; }
+        
+        .unidad-card { perspective: 1500px; background: transparent; height: 480px; cursor: pointer; }
+        .card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; will-change: transform; }
+        .unidad-card:hover .card-inner, .unidad-card.is-flipped .card-inner { transform: rotateY(180deg); }
+
+        .card-front, .card-back {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+            border-radius: 30px; padding: 40px 30px; display: flex; flex-direction: column;
+            box-shadow: var(--shadow-soft); border: 1px solid rgba(0,0,0,0.03); transition: border-color 0.4s;
+        }
+
+        .card-front { background: var(--white); color: var(--dark); }
+        .unidad-card:hover .card-front { border-color: var(--mango); }
+        
+        /* Iconos de las tarjetas de negocio */
+        .u-icon { 
+            width: 120px; 
+            height: 120px; 
+            background: transparent; 
+            border-radius: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            margin: 0 auto 30px; 
+            overflow: visible; 
+            padding: 0; 
+        }
+        
+        .u-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; 
+        }
+
+        .card-front h3 { font-size: 1.8rem; margin-bottom: 10px; color: var(--dark); font-weight: 900; }
+        .card-front .u-sub { color: var(--dark); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 25px; letter-spacing: 1px; background: rgba(253, 234, 20, 0.3); display: inline-block; padding: 4px 10px; border-radius: 6px; align-self: center;}
+        .card-front p { color: #666; line-height: 1.7; flex-grow: 1; margin-bottom: 10px;}
+        .flip-hint { font-size: 0.8rem; color: var(--mango); font-weight: 700; text-transform: uppercase; margin-top: auto; display: flex; align-items: center; justify-content: center; gap: 5px;}
+
+        .card-back {
+            background: var(--dark); color: var(--white); transform: rotateY(180deg); justify-content: center;
+            align-items: flex-start; text-align: left; border-color: var(--mango);
+        }
+        .card-back h3 { color: var(--mango); font-size: 1.5rem; margin-bottom: 20px; font-weight: 900; }
+        .card-back ul { list-style: none; padding: 0; margin: 0; }
+        .card-back ul li { margin-bottom: 20px; font-size: 0.95rem; line-height: 1.5; color: #EEE; display: flex; align-items: flex-start; gap: 10px; }
+        .card-back ul li::before { content: '✓'; color: var(--mango); font-weight: bold; font-size: 1.1rem; }
+
+        .carousel-container { position: relative; max-width: 1400px; margin: 0 auto; }
+        .carousel-track { display: flex; gap: 40px; transition: transform 0.5s ease; }
+        .carousel-dot { width: 10px; height: 10px; border-radius: 50%; background: #CCC; cursor: pointer; transition: background-color 0.3s, transform 0.3s; }
+        .carousel-dot.active { background: var(--mango); transform: scale(1.2); }
+
+        /* =========================================================
+           4.5 SECCIÓN: MARCAS (Fondo Oscuro Sólido)
+           ========================================================= */
+        .marcas-expansion { 
+            background: var(--dark); 
+            color: var(--white); 
+            z-index: 3; 
+            flex-direction: column; 
+            padding-top: 120px; 
+            overflow: hidden; 
+        }
+        
+        .marcas-expansion .section-title { color: var(--white); }
+        .marcas-expansion .section-desc { color: #CCC; }
+
+        .bg-marquee { 
+            position: absolute; top: 50%; transform: translateY(-50%); 
+            white-space: nowrap; overflow: hidden; width: 100%; 
+            opacity: 0.03; z-index: 0; pointer-events: none;
+        }
+        
+        .marquee-content { 
+            display: inline-block; font-family: 'Montserrat'; font-weight: 900; 
+            font-size: 15vw; animation: marquee 25s linear infinite; 
+            color: var(--white); 
+            /* OPTIMIZACIÓN GPU PARA EL TEXTO CORREDIZO */
+            will-change: transform;
+            transform: translateZ(0);
+        }
+        
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        
+        .expansion-container { 
+            display: flex; width: 94%; max-width: 1400px; height: 60vh; min-height: 500px; 
+            gap: 15px; align-items: center; z-index: 2; margin: 0 auto; 
+        }
+.brand-card { 
+            flex: 1; height: 100%; 
+            background: #252525; 
+            border-radius: 20px; 
+            padding: 40px; display: flex; flex-direction: column; 
+            transition: flex 0.5s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.5s, transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); 
+            position: relative; 
+            overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            border: 1px solid rgba(255,255,255,0.05); 
+            justify-content: flex-end; 
+            
+            /* 🔥 EL HACK DE ACELERACIÓN HARDWARE EXTREMA 🔥 */
+            will-change: flex, transform;
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -webkit-perspective: 1000px;
+            perspective: 1000px;
+        }
+        
+        .brand-card::before { 
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; 
+            background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.2)); 
+            opacity: 0; transition: opacity 0.5s ease; z-index: 1; 
+        }
+        
+        .card-num { 
+            font-family: 'Montserrat'; font-weight: 900; font-size: 1.2rem; color: #666; 
+            z-index: 2; transition: opacity 0.5s, color 0.5s; position: absolute; top: 30px; left: 30px; 
+            opacity: 0; 
+        }
+        .brand-card h2 { 
+            font-family: 'Montserrat'; font-weight: 900; font-size: 1.5rem; margin-top: 15px; 
+            color: var(--white); z-index: 2; transition: opacity 0.5s, transform 0.5s, font-size 0.5s, color 0.5s; text-transform: uppercase; 
+            opacity: 0; transform: translateY(20px); 
+        }
+        .brand-desc { 
+            opacity: 0; transform: translateY(20px); transition: opacity 0.5s, transform 0.5s; font-size: 0.95rem; 
+            color: #DDD; z-index: 2; font-family: 'Open Sans'; line-height: 1.5; margin-bottom: 15px;
+        }
+        
+        .product-img { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+            /* OPTIMIZACIÓN: Tiempo reducido a 0.5s */
+            transition: opacity 0.5s ease, transform 0.5s ease; 
+            z-index: 0; 
+            /* OPTIMIZACIÓN GPU */
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+        }
+        
+        .img-main { opacity: 1; }
+        .img-hover { opacity: 0; transform: scale(1.05); }
+        
+        .card-btn { 
+            padding: 12px 20px; border: 2px solid var(--mango); color: var(--mango); 
+            text-decoration: none; font-size: 0.8rem; font-family: 'Montserrat'; font-weight: 700; 
+            text-align: center; opacity: 0; transition: opacity 0.5s, transform 0.5s, background-color 0.4s, color 0.4s; z-index: 3; text-transform: uppercase; border-radius: 50px;
+        }
+        .card-btn:hover { background: var(--mango); color: var(--dark); }
+
+        /* Efectos Hover en PC (Arriba de 1200px) */
+        @media (min-width: 1201px) and (hover: hover) {
+            .brand-card:hover { flex: 2.5; border-color: var(--mango); }
+            .brand-card:hover::before { opacity: 1; }
+            
+            .brand-card:hover .card-num { color: var(--mango); opacity: 1; }
+            .brand-card:hover h2 { font-size: 2.5rem; color: var(--mango); opacity: 1; transform: translateY(0) translateZ(0); }
+            .brand-card:hover .brand-desc, .brand-card:hover .card-btn { opacity: 1; transform: translateY(0) translateZ(0); }
+            
+            .brand-card:hover .img-main { opacity: 0; transform: scale(1.1) translateZ(0); } 
+            .brand-card:hover .img-hover { opacity: 1; transform: scale(1) translateZ(0); }
+        }
+
+        /* =========================================================
+           5. NUEVA SECCIÓN DE VENTAS (GLOW SUTIL EN HOVER, TARJETAS IGUALES)
+           ========================================================= */
+        .seccion-ventas {
+            padding: 80px 5%; 
+            background-color: var(--dark);
+            color: var(--white);
+            position: relative;
+            text-align: center;
+            overflow: hidden;
+        }
+        .ventas-header {
+            margin-bottom: 50px;
+        }
+        .ventas-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem); 
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            color: var(--white);
+        }
+        .ventas-header h2 span { color: var(--mango); }
+        .ventas-header p {
+            font-size: 1.1rem;
+            color: #AAA;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .ventas-grid-dios { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 30px; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            align-items: center;
+        }
+        
+        /* Todas las tarjetas son idénticas en diseño base */
+        .venta-dios-card {
+            background: rgba(28,28,28,0.95); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 30px; padding: 40px 30px; 
+            display: flex; flex-direction: column;
+            transition: transform 0.4s ease, border-color 0.4s ease, background-color 0.4s ease;
+            position: relative; text-align: left;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        /* El brillo inicia oculto */
+        .venta-dios-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(45deg, var(--mango), #ff8a00, var(--mango));
+            z-index: -1; border-radius: 32px; filter: blur(0px); opacity: 0; transition: all 0.4s ease;
+        }
+        
+        /* Al hacer hover, se activa un glow brillante pero controlado */
+        .venta-dios-card:hover {
+            transform: translateY(-8px) translateZ(0); 
+            border-color: var(--mango); 
+            background: rgba(28, 28, 28, 1);
+        }
+        .venta-dios-card:hover::before { 
+            opacity: 0.65; /* Subimos el brillo aquí */
+            filter: blur(14px); 
+            top: -4px; left: -4px; right: -4px; bottom: -4px; 
+        }
+
+        .vd-features { list-style: none; margin: 20px 0; padding: 0; flex-grow: 1; }
+        .vd-features li { color: #DDD; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; }
+        .vd-features li::before { content: '✓'; color: var(--mango); font-weight: 900; }
+        
+        .prueba-social-ventas { margin-top: 50px; text-align: center; } 
+        .prueba-social-ventas p { color: #888; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; font-weight: 700; }
+        .testimonios-pill { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+        .t-pill { background: rgba(255,255,255,0.05); padding: 8px 20px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px; transition: transform 0.3s; cursor: default; }
+        .t-pill:hover { transform: translateY(-3px); border-color: var(--mango); }
+        .t-stars { color: var(--mango); letter-spacing: 2px; font-size: 1rem; }
+        .t-text { color: var(--white); font-size: 0.85rem; font-weight: 600; }
+
+        /* =========================================================
+           6. TALENTO (Acordeón)
+           ========================================================= */
+        .talento { background: var(--white); padding-top: 80px; padding-bottom: 60px; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+        .talento .section-desc { margin-bottom: 40px; }
+        .jobs-container { max-width: 1000px; margin: 0 auto; background: var(--light-bg); border-radius: 30px; padding: 30px 40px; box-shadow: var(--shadow-soft); width: 100%; }
+        
+        .job-card { background: rgba(28,28,28,0.95); border-radius: 16px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.1); transition: border-color 0.3s, box-shadow 0.3s; overflow: hidden; }
+        .job-card:hover { border-color: var(--mango); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        
+        .job-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; cursor: pointer; transition: background-color 0.3s; }
+        .job-info h4 { font-size: 1.1rem; color: var(--white); margin-bottom: 5px; font-weight: 700; }
+        .job-info p { color: #BBB; font-size: 0.85rem; }
+        
+        .job-btn-more { padding: 8px 25px; background: transparent; color: var(--mango); border-radius: 50px; font-weight: 700; cursor: pointer; transition: background-color 0.3s, color 0.3s; text-align: center; border: 2px solid var(--mango); font-size: 0.85rem; font-family: 'Montserrat', sans-serif; text-transform: uppercase; }
+        .job-header:hover .job-btn-more { background: var(--mango); color: var(--dark); }
+        .job-card.open .job-btn-more { background: var(--mango); color: var(--dark); }
+        
+        /* Detalles ocultos por defecto */
+        /* OPTIMIZACIÓN: Cambio de 'all' por propiedades puntuales */
+        .job-details { max-height: 0; padding: 0 30px; opacity: 0; transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out, opacity 0.4s ease-in-out; color: #DDD; font-size: 0.95rem; line-height: 1.6; }
+        .job-details p { margin-bottom: 12px; }
+        .job-details strong { color: var(--mango); font-weight: 700; }
+        
+        /* Estado Abierto */
+        .job-card.open .job-details { max-height: 600px; padding: 20px 30px 30px; opacity: 1; border-top: 1px solid rgba(255,255,255,0.05); }
+        
+        .apply-container { text-align: center; margin-top: 30px; }
+        
+        .talento-footer { text-align: center; margin-top: 30px; }
+        .talento-footer h3 { color: var(--dark); font-size: 1.2rem; margin-bottom: 5px; }
+
+        /* =========================================================
+           7. FOOTER CORPORATIVO
+           ========================================================= */
+        footer { background: var(--dark); padding: 80px 5% 40px; color: var(--white); }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 50px; max-width: 1400px; margin: 0 auto; }
+        .footer-col h4 { color: var(--mango); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 25px; }
+        .footer-col a { color: #AAA; text-decoration: none; display: block; margin-bottom: 15px; font-size: 0.9rem; transition: color 0.3s, transform 0.3s; }
+        .footer-col a:hover { color: var(--white); transform: translateX(5px); }
+        .footer-bottom { text-align: center; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 60px; padding-top: 30px; color: #666; font-size: 0.8rem; }
+
+        /* =========================================================
+           AJUSTE PARA LAPTOPS Y PANTALLAS MEDIANAS (Hasta 1440px)
+           ========================================================= */
+        @media (max-width: 1440px) {
+            section { padding: 80px 5%; }
+            .que-es { padding: 80px 5%; }
+            .metodologia { padding: 100px 5% 0; }
+            .sticky-left { top: 120px; padding-bottom: 100px; }
+            .scroll-right { margin-top: 150px; padding-bottom: 100px; }
+            .unidad-card { height: 400px; }
+            .card-front, .card-back { padding: 30px 20px; }
+            
+            .u-icon { 
+                width: 100px; 
+                height: 100px; 
+                margin: 0 auto 20px;
+                padding: 0; 
+            }
+        }
+
+        /* =========================================================
+           AJUSTE PARA TABLETS (Hasta 1200px)
+           ========================================================= */
+        @media (max-width: 1200px) {
+            .expansion-container { flex-wrap: wrap; height: auto; justify-content: center; gap: 20px; padding: 0 10px; }
+            .brand-card { flex: 0 0 calc(50% - 10px); width: calc(50% - 10px); height: auto; min-height: 420px; align-items: center; text-align: center; padding: 40px 20px; justify-content: flex-end; }
+            
+            .brand-card::before { opacity: 0.85; } 
+            .brand-card .brand-desc, .brand-card .card-btn, .brand-card h2, .brand-card .card-num { opacity: 1 !important; transform: translateY(0) !important; position: relative; z-index: 5; }
+            .brand-card .card-num { position: absolute; }
+            .brand-card h2 { font-size: 1.8rem; color: var(--mango); margin-top: 0; }
+            
+            .brand-card .product-img { z-index: 0; }
+            
+            @media (hover: hover) {
+                .brand-card:hover { flex: 0 0 calc(50% - 10px); transform: translateY(-10px) translateZ(0); border-color: var(--mango); }
+                .brand-card:hover .img-main { opacity: 0; transform: scale(1.1) translateZ(0); } 
+                .brand-card:hover .img-hover { opacity: 1; transform: scale(1) translateZ(0); }
+            }
+        }
+
+        /* Ajuste de seguridad para pantallas con poca altura */
+        @media (max-height: 800px) {
+            .hero-content img { width: 70% !important; max-width: 320px !important; margin-bottom: 15px !important; }
+            .hero-content p { font-size: 0.95rem; margin-bottom: 25px; }
+        }
+
+       /* =========================================
+           MAGIA RESPONSIVE (CELULAR Y TABLET)
+           ========================================= */
+        @media (max-width: 992px) {
+            nav { width: 100%; top: 0; left: 0; border-radius: 0; padding: 15px 5%; }
+            .hamburger { display: flex; }
+            .nav-links { position: fixed; top: 0; left: 100%; width: 100%; height: 100vh; background: var(--white); flex-direction: column; justify-content: center; align-items: center; gap: 40px; transition: left 0.4s ease; z-index: 1001; }
+            .nav-links.active { left: 0; }
+            .hero { height: 100svh !important; padding: 80px 5% 20px; }
+            .hero-buttons { flex-direction: column; }
+            .que-es-grid { grid-template-columns: 1fr; }
+            
+            /* Ajuste para que las tarjetas de ¿QUÉ ES MANGO? no se aplasten en celular */
+            .stats-bento { grid-template-columns: 1fr; }
+
+            .sticky-wrapper { flex-direction: column; }
+            .sticky-left { position: relative; top: 0; width: 100%; text-align: center; }
+            .scroll-right { width: 100%; margin-top: 0; }
+            
+            .unidades-grid { display: flex !important; overflow-x: auto; scroll-snap-type: x mandatory; gap: 20px; padding: 10px 5%; margin: 0 -5%; scrollbar-width: none; }
+            .unidad-card { flex: 0 0 85vw; scroll-snap-align: center; }
+            
+            .u-icon {
+                width: 90px; 
+                height: 90px;
+                margin: 0 auto 25px; 
+                padding: 0;
+            }
+
+            .carousel-nav { display: flex; justify-content: center; gap: 8px; margin-top: 10px; }
+            .carousel-dot { width: 10px; height: 10px; background: #D0D0D0; border-radius: 50%; }
+            .carousel-dot.active { background: var(--mango); }
+
+            .marcas-expansion { padding-top: 80px; padding-bottom: 60px; }
+            .expansion-container { flex-direction: column; height: auto; gap: 30px; padding: 0 5%; width: 100%; align-items: center; }
+            .brand-card { flex: none; width: 100%; max-width: 400px; min-height: 480px; padding: 40px 30px; align-items: center; text-align: center; border-radius: 25px; justify-content: flex-end; }
+
+            .brand-card::before { opacity: 0.95; }
+            .brand-card h2 { font-size: 2rem; color: var(--mango); position: relative; z-index: 5; margin-top: 0; opacity: 1 !important; transform: translateY(0) !important;}
+            .brand-card .card-num { opacity: 1 !important; }
+            .brand-desc, .card-btn { opacity: 1 !important; transform: translateY(0) !important; position: relative; z-index: 5; display: block; }
+            .brand-card .card-btn { width: 100%; padding: 15px; }
+
+            /* Ajustes para la nueva sección de ventas en celular */
+            .ventas-grid-dios { grid-template-columns: 1fr; gap: 30px; }
+            
+            /* Ajustes para el acordeón en móviles */
+            .job-header { flex-direction: column; text-align: center; gap: 15px; }
+            .job-btn-more { width: 100%; }
+            .job-card.open .job-details { padding: 20px 15px; }
+        }
+        /* =========================================
+           FUSIÓN DE VIDEOS (VERSIÓN POTENCIADA)
+           ========================================= */
+        
+        /* 1. Sombra oscura al final del primer video (Más alta e intensa) */
+        .manifesto-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%; /* Subimos la sombra hasta la mitad de la pantalla */
+            /* Agregamos paradas de color para que el negro se espese antes de llegar al borde */
+            background: linear-gradient(to bottom, transparent 0%, rgba(28, 28, 28, 0.7) 60%, rgba(28, 28, 28, 1) 100%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* 2. Sombra oscura al inicio del segundo video (Más profunda) */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 30%; /* Hacemos que el degradado baje más en la segunda sección */
+            /* El color denso dura más tiempo arriba antes de hacerse transparente */
+            background: linear-gradient(to bottom, rgba(28, 28, 28, 1) 0%, rgba(28, 28, 28, 0.7) 40%, transparent 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <img src="Logos Vectorizados.png" class="loader-logo" alt="Cargando Mango BC">
+    </div>
+<section class="manifesto-section" id="manifesto">
+        <video class="manifesto-video" autoplay muted loop playsinline>
+            <source src="principal.mp4" type="video/mp4">
+        </video>
+        <div class="manifesto-content reveal">
+            <img src="mbc.png" alt="Mango BC" class="manifesto-logo">
+        </div>
+        <a href="#inicio" class="manifesto-scroll">
+            <span>SCROLL</span>
+            <div class="m-mouse"></div>
+        </a>
+    </section>
+    <nav id="navbar">
+        <a href="#inicio" class="logo">
+            <img src="mbc.png" alt="Mango BC" class="nav-logo">
+        </a>
+        
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="nav-links" id="nav-links">
+            <a href="#que-es" class="nav-item">¿QUÉ ES MANGO?</a>
+            <a href="#metodologia" class="nav-item">METODOLOGÍA</a>
+            <a href="#unidades" class="nav-item">UNIDADES</a>
+            <a href="#marcas" class="nav-item">MARCAS</a>
+            <a href="#ventas" class="nav-item">VENTAS</a>
+            <a href="#talento" class="nav-cta nav-item">JOBS</a>
+        </div>
+    </nav>
+
+    <section class="hero" id="inicio">
+        <video class="hero-video" autoplay muted loop playsinline><source src="loopdeli.mp4" type="video/mp4"></video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content reveal">
+            <img src="mbc.png" alt="Mango Business Center" style="width: 90%; max-width: 450px; height: auto; margin-bottom: 25px; filter: brightness(0) invert(1) drop-shadow(0 10px 20px rgba(0,0,0,0.5));">
+            
+            <h1 style="display: none;">MANGO BUSINESS CENTER</h1>
+            <h2>El ecosistema que conecta la producción, la distribución y el talento.</h2>
+            <p>Somos el centro de operaciones donde las marcas crecen, los emprendedores escalan y el talento encuentra su lugar. Construimos una plataforma integral desde la maquila hasta la entrega directa.</p>
+            
+            <div class="hero-buttons">
+                <a href="#ventas" class="btn-mango">Soy socio comercial &rarr;</a>
+                <a href="#talento" class="btn-white">Quiero trabajar aquí &rarr;</a>
+                <a href="#unidades" class="btn-outline">Conoce nuestras unidades &darr;</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="que-es" id="que-es">
+        <div class="que-es-grid">
+            <div class="narrativa-box reveal">
+                <h2 class="section-title">¿QUÉ ES <span>MANGO?</span></h2>
+                <p>Creemos que el crecimiento no tiene que ser complicado. Por eso hemos creado un modelo donde <strong>la producción, la logística y la comercialización</strong> conviven bajo un mismo entorno. Somos el aliado estratégico para que te enfoques en vender más.</p>
+            </div>
+            
+            <div class="stats-bento reveal delay-1">
+                
+                <div class="bento-flip-card">
+                    <div class="bento-inner">
+                        <div class="bento-front">
+                            <h3>+10</h3>
+                            <p>Años de experiencia</p>
+                            <div class="flip-hint-bento">↺</div>
+                        </div>
+                        <div class="bento-back">
+                            <h4>Lo que hacemos</h4>
+                            <p>Desarrollamos, maquilamos y distribuimos productos líderes con estándares de calidad premium, conectando la producción directa con tu éxito comercial.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bento-flip-card">
+                    <div class="bento-inner">
+                        <div class="bento-front">
+                            <h3>500k</h3>
+                            <p>Productos al mes</p>
+                            <div class="flip-hint-bento">↺</div>
+                        </div>
+                        <div class="bento-back">
+                            <h4>Nuestras líneas</h4>
+                            <ul>
+                                <li>Deli Barras (Snacks Saludables)</li>
+                                <li>Sabor Mío (Grado Industrial)</li>
+                                <li>Campesinas (Repostería Premium)</li>
+                                <li>Nanná (Bebidas Naturales)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bento-flip-card" id="tarjeta-mapa"> <div class="bento-inner">
+                        <div class="bento-front">
+                            <h3>+15k</h3>
+                            <p>Puntos de venta</p>
+                            <div class="flip-hint-bento">↺</div>
+                        </div>
+                        <div class="bento-back map-back">
+                            <img src="mapa.jpg" alt="Mapa de cobertura" class="map-img" loading="lazy" decoding="async">
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="bento-flip-card">
+                    <div class="bento-inner">
+                        <div class="bento-front">
+                            <h3>+50</h3>
+                            <p>Marcas confían</p>
+                            <div class="flip-hint-bento">↺</div>
+                        </div>
+                        <div class="bento-back">
+                            <h4>Presencia en:</h4>
+                            <p style="font-weight:700; color:#FFF; font-size: 1.05rem; line-height: 1.8;">
+                                OXXO, Chedraui, Walmart, Soriana, Farmacias del Ahorro, 7-Eleven y miles de tiendas de conveniencia en el país.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="metodologia" id="metodologia">
+        <div class="sticky-wrapper">
+            <div class="sticky-left reveal">
+                <h2>NUESTRA <span>METODOLOGÍA</span></h2>
+                <p>El proceso estratégico que nos permite escalar negocios de manera sostenida y eficiente en la industria alimentaria.</p>
+            </div>
+            <div class="scroll-right">
+                <div class="metodo-card reveal">
+                    <div class="m-num">01</div>
+                    <div class="m-text">
+                        <h4>Entendemos el mercado</h4>
+                        <p>Analizamos datos, no corazonadas. Identificamos lo que el consumidor ya está buscando para lanzar productos con demanda real, no con suerte.</p>
+                    </div>
+                </div>
+                <div class="metodo-card reveal">
+                    <div class="m-num">02</div>
+                    <div class="m-text">
+                        <h4>Operamos con eficiencia</h4>
+                        <p>Cada proceso está medido: desde la compra de insumos hasta la entrega final. Eso se traduce en tiempos ágiles y costos competitivos.</p>
+                    </div>
+                </div>
+                <div class="metodo-card reveal">
+                    <div class="m-num">03</div>
+                    <div class="m-text">
+                        <h4>Construimos relaciones</h4>
+                        <p>Construimos con confianza. Nuestros socios comerciales no son clientes; son parte de nuestra red de crecimiento sólido a largo plazo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="unidades" id="unidades">
+        <div class="reveal">
+            <h2 class="section-title">UNIDADES DE <br><span>NEGOCIO</span></h2>
+            <p class="section-desc">Soluciones integrales diseñadas para cada etapa del ecosistema alimentario.</p>
+        </div>
+        
+        <div class="carousel-container reveal delay-1">
+            <div class="unidades-grid" id="carousel-track">
+                
+                <div class="unidad-card">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="u-icon"><img src="iconos-1-01.png" alt="Icono Franquicias" loading="lazy" decoding="async"></div>
+                            <h3>Franquicias</h3>
+                            <div class="u-sub">Desarrollo e Inversión</div>
+                            <p>El modelo probado que te da autonomía sin empezar de cero. Producto validado, modelo operativo y acompañamiento continuo.</p>
+                            <div class="flip-hint">Ver beneficios ↺</div>
+                        </div>
+                        <div class="card-back">
+                            <h3>Beneficios Clave</h3>
+                            <ul>
+                                <li>Retorno de inversión (ROI) acelerado.</li>
+                                <li>Capacitación operativa y gerencial.</li>
+                                <li>Proveeduría de insumos garantizada.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="unidad-card">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="u-icon"><img src="iconos-1-02.png" alt="Icono Marca Propia" loading="lazy" decoding="async"></div>
+                            <h3>Marca Propia</h3>
+                            <div class="u-sub">Maquila para terceros</div>
+                            <p>Tu idea, nuestra fábrica. Nos encargamos desde la formulación hasta el empaque final con total confidencialidad.</p>
+                            <div class="flip-hint">Ver beneficios ↺</div>
+                        </div>
+                        <div class="card-back">
+                            <h3>Beneficios Clave</h3>
+                            <ul>
+                                <li>Ahorro total en compra de maquinaria.</li>
+                                <li>Capacidad de producción escalable.</li>
+                                <li>Procesos con certificaciones de calidad.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="unidad-card">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="u-icon"><img src="iconos-1-03.png" alt="Icono Logistics" loading="lazy" decoding="async"></div>
+                            <h3>Logistics</h3>
+                            <div class="u-sub">Entregas a retail</div>
+                            <p>Tu producto en puntos de venta sin complicaciones. Entregas directas a retail y servicio de última milla para empresas.</p>
+                            <div class="flip-hint">Ver beneficios ↺</div>
+                        </div>
+                        <div class="card-back">
+                            <h3>Beneficios Clave</h3>
+                            <ul>
+                                <li>Reducción de costos de flota propia.</li>
+                                <li>Monitoreo de envíos 24/7.</li>
+                                <li>Cobertura garantizada en retail.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="carousel-nav" id="carousel-nav">
+                <div class="carousel-dot active" data-index="0"></div>
+                <div class="carousel-dot" data-index="1"></div>
+                <div class="carousel-dot" data-index="2"></div>
+            </div>
+        </div>
+    </section>
+
+   <section class="marcas-expansion" id="marcas">
+        <div class="reveal">
+            <h2 class="section-title">NUESTRAS <br><span>MARCAS</span></h2>
+        </div>
+        
+        <div class="bg-marquee"><div class="marquee-content">MANGO BUSINESS CENTER — MANGO BUSINESS CENTER — </div></div>
+        
+        <div class="expansion-container" style="will-change: transform;">
+            
+            <div class="brand-card" style="transform: translateZ(0);">
+                <div class="card-num"></div>
+                <h2>DELI BARRAS</h2>
+                <img src="1mg.jpg" alt="Deli Barras" class="product-img img-main" fetchpriority="high">
+                <img src="2mg.jpg" alt="Deli Barras Hover" class="product-img img-hover" loading="lazy" decoding="async">
+                <div class="brand-desc">Snacks saludables líderes. Venta en línea y distribución minorista.</div>
+                <a href="Deli.html" class="card-btn">Distribución</a>
+            </div>
+            
+            <div class="brand-card" style="transform: translateZ(0);">
+                <div class="card-num"></div>
+                <h2>SABOR MÍO</h2>
+                <img src="SABOR-MÍO-UNO.jpg" alt="Sabor Mío" class="product-img img-main" fetchpriority="high">
+                <img src="SABOR-MÍO-DOS.jpg" alt="Sabor Mío Hover" class="product-img img-hover" loading="lazy" decoding="async">
+                <div class="brand-desc">Empanizadores y mezclas industriales de alta gama.</div>
+                <a href="#ventas" class="card-btn">Ver Catálogo</a>
+            </div>
+            
+            <div class="brand-card" style="transform: translateZ(0);">
+                <div class="card-num"></div>
+                <h2>CAMPESINAS</h2>
+                <img src="CAMPESINAS-UNO.jpg" alt="Campesinas" class="product-img img-main" fetchpriority="high">
+                <img src="CAMPESINAS-DOS.jpg" alt="Campesinas Hover" class="product-img img-hover" loading="lazy" decoding="async">
+                <div class="brand-desc">Repostería premium y galletas de receta tradicional.</div>
+                <a href="#ventas" class="card-btn">Puntos de Venta</a>
+            </div>
+            
+            <div class="brand-card" style="transform: translateZ(0);">
+                <div class="card-num"></div>
+                <h2>NANNÁ</h2>
+                <img src="nanna-uno.jpg" alt="Nanná" class="product-img img-main" fetchpriority="high">
+                <img src="nanna-dos.jpg" alt="Nanná Hover" class="product-img img-hover" loading="lazy" decoding="async">
+                <div class="brand-desc">Bebidas naturales y tecnología aplicada a la salud digestiva.</div>
+                <a href="#ventas" class="card-btn">Más Información</a>
+            </div>
+            
+             <div class="brand-card" style="transform: translateZ(0);">
+                <div class="card-num"></div>
+                <h2>PRÓXIMAMENTE</h2>
+                <img src="proximamente.jpg" alt="Nuevos Lanzamientos" class="product-img img-main" fetchpriority="high">
+                <img src="nuevos productos.jpg" alt="Próximamente Hover" class="product-img img-hover" loading="lazy" decoding="async">
+                <div class="brand-desc">Descubre lo nuevo que tenemos preparado para ti este trimestre.</div>
+                <a href="#ventas" class="card-btn">Mantente al tanto</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="seccion-ventas" id="ventas">
+        <div class="ventas-header reveal">
+            <h2>MODELOS DE <br><span>COLABORACIÓN</span></h2>
+            <p>Integramos soluciones comerciales para cada tipo de aliado estratégico. Desarrolla y escala tu negocio bajo estándares industriales de excelencia.</p>
+        </div>
+        
+        <div class="ventas-grid-dios reveal delay-1">
+            
+            <div class="venta-dios-card">
+                <h3 style="font-size: 1.6rem; color: var(--white); font-family: 'Montserrat'; font-weight: 900; margin-bottom: 8px; text-transform: uppercase;">Distribución Comercial</h3>
+                <p style="color: #AAA; font-size: 0.9rem; margin-bottom: 15px;">Para empresas o emprendedores con canales de venta establecidos que buscan líneas de alta demanda.</p>
+                
+                <ul class="vd-features">
+                    <li>Precios corporativos por volumen</li>
+                    <li>Soporte logístico directo a retail</li>
+                    <li>Acceso al catálogo de marcas líderes</li>
+                    <li>Material de apoyo comercial</li>
+                </ul>
+                <a href="distribuidores.html" class="btn-outline" style="width: 100%; margin-top: auto;">Plan de Distribución</a>
+            </div>
+
+            <div class="venta-dios-card">
+                <h3 style="font-size: 1.6rem; color: var(--white); font-family: 'Montserrat'; font-weight: 900; margin-bottom: 8px; text-transform: uppercase;">Desarrollo de Franquicia</h3>
+                <p style="color: #AAA; font-size: 0.9rem; margin-bottom: 15px;">El modelo ideal para operar un negocio estructurado con retorno de inversión proyectado y respaldo total.</p>
+                
+                <ul class="vd-features">
+                    <li>Modelo operativo validado (ROI Acelerado)</li>
+                    <li>Capacitación integral y gerencial</li>
+                    <li>Proveeduría de insumos corporativa</li>
+                    <li>Asesoría y soporte técnico constante</li>
+                </ul>
+                <a href="emprendedores.html" class="btn-outline" style="width: 100%; margin-top: auto;">Conocer Modelo</a>
+            </div>
+
+            <div class="venta-dios-card">
+                <h3 style="font-size: 1.6rem; color: var(--white); font-family: 'Montserrat'; font-weight: 900; margin-bottom: 8px; text-transform: uppercase;">Maquila / Marca Propia</h3>
+                <p style="color: #AAA; font-size: 0.9rem; margin-bottom: 15px;">Tercerización estratégica. Desarrollamos y fabricamos tu producto sin necesidad de infraestructura propia.</p>
+                
+                <ul class="vd-features">
+                    <li>Desarrollo y formulación de producto</li>
+                    <li>Maquila con certificaciones vigentes</li>
+                    <li>Acuerdos de confidencialidad absoluta</li>
+                    <li>Optimización de costos operativos</li>
+                </ul>
+                <a href="mailto:socios@mangobusiness.com" class="btn-outline" style="width: 100%; margin-top: auto;">Atención Corporativa</a>
+            </div>
+
+        </div>
+
+        <div class="prueba-social-ventas reveal delay-2">
+            <p>Empresas y directivos que confían en nuestro ecosistema</p>
+            <div class="testimonios-pill">
+                <div class="t-pill">
+                    <span class="t-stars">★★★★★</span>
+                    <span class="t-text">"Optimizar nuestra cadena de suministro con Mango BC fue un acierto estratégico." - Grupo M.</span>
+                </div>
+                <div class="t-pill">
+                    <span class="t-stars">★★★★★</span>
+                    <span class="t-text">"Calidad constante que respalda nuestra marca." - Director de Operaciones</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="talento" id="talento">
+        <div class="reveal">
+            <h2 class="section-title">EL TALENTO <br><span>MUEVE A MANGO</span></h2>
+            <p class="section-desc">Buscamos personas que no solo quieran un empleo, sino que quieran construir autonomía, desarrollo y excelencia.</p>
+        </div>
+        
+        <div class="jobs-container reveal delay-1">
+            
+            <div class="job-card">
+                <div class="job-header">
+                    <div class="job-info">
+                        <h4>Ejecutivo de Cuentas Retail</h4>
+                        <p>Ubicación: Morelia | Tiempo Completo</p>
+                    </div>
+                    <button class="job-btn-more">Saber más</button>
+                </div>
+                <div class="job-details">
+                    <p><strong>Descripción del puesto:</strong> Serás responsable de la gestión de cuentas clave en canales de retail moderno. Buscamos a alguien capaz de mantener relaciones comerciales a largo plazo, analizar datos de ventas y proponer estrategias de crecimiento en punto de venta.</p>
+                    <p><strong>Sueldo:</strong> $15,000 - $20,000 MXN mensuales + Comisiones no topadas.</p>
+                    <p><strong>Requisitos:</strong> Lic. en Administración, Mercadotecnia o afín. Mínimo 2 años de experiencia en ventas retail.</p>
+                    <div class="apply-container">
+                        <a href="https://www.linkedin.com/jobs/mango-business-center-jobs-worldwide?f_C=91182438" target="_blank" class="btn-mango">Postularme</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="job-card">
+                <div class="job-header">
+                    <div class="job-info">
+                        <h4>Coordinador Logístico</h4>
+                        <p>Ubicación: Morelia | Tiempo Completo</p>
+                    </div>
+                    <button class="job-btn-more">Saber más</button>
+                </div>
+                <div class="job-details">
+                    <p><strong>Descripción del puesto:</strong> Tu misión será asegurar que los productos de nuestras marcas lleguen a tiempo y en perfectas condiciones. Coordinarás rutas, flotillas y te asegurarás de mantener la eficiencia en los tiempos de entrega (última milla).</p>
+                    <p><strong>Sueldo:</strong> $18,000 MXN mensuales libres + Bonos por cumplimiento de métricas.</p>
+                    <p><strong>Requisitos:</strong> Ing. Industrial, Logística o afín. Manejo de Excel avanzado y sistemas ERP.</p>
+                    <div class="apply-container">
+                        <a href="https://www.linkedin.com/jobs/mango-business-center-jobs-worldwide?f_C=91182438" target="_blank" class="btn-mango">Postularme</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="job-card">
+                <div class="job-header">
+                    <div class="job-info">
+                        <h4>Desarrollador Franquicias</h4>
+                        <p>Ubicación: Morelia | Tiempo Completo</p>
+                    </div>
+                    <button class="job-btn-more">Saber más</button>
+                </div>
+                <div class="job-details">
+                    <p><strong>Descripción del puesto:</strong> Encargado de la expansión de nuestro modelo de negocio. Perfilarás a posibles inversionistas, los guiarás en el proceso de adquisición y asegurarás la correcta implementación del modelo operativo en nuevas sucursales.</p>
+                    <p><strong>Sueldo:</strong> $20,000 MXN base + Excelente esquema de comisiones por apertura.</p>
+                    <p><strong>Requisitos:</strong> Experiencia comprobable en venta de intangibles, bienes raíces o modelos de franquicia.</p>
+                    <div class="apply-container">
+                        <a href="https://www.linkedin.com/jobs/mango-business-center-jobs-worldwide?f_C=91182438" target="_blank" class="btn-mango">Postularme</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="job-card">
+                <div class="job-header">
+                    <div class="job-info">
+                        <h4>Analista de Producción</h4>
+                        <p>Ubicación: Morelia | Tiempo Completo</p>
+                    </div>
+                    <button class="job-btn-more">Saber más</button>
+                </div>
+                <div class="job-details">
+                    <p><strong>Descripción del puesto:</strong> Supervisión y análisis continuo de las líneas de producción. Identificarás cuellos de botella, optimizarás los tiempos de maquila y asegurarás el cumplimiento de nuestros estándares de calidad.</p>
+                    <p><strong>Sueldo:</strong> $16,000 MXN mensuales.</p>
+                    <p><strong>Requisitos:</strong> Ing. en Alimentos, Bioquímica o afín. Conocimiento de normas de calidad y metodologías de mejora continua.</p>
+                    <div class="apply-container">
+                        <a href="https://www.linkedin.com/jobs/mango-business-center-jobs-worldwide?f_C=91182438" target="_blank" class="btn-mango">Postularme</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="talento-footer reveal delay-2">
+            <h3 style="font-size: 1.2rem;">"No buscamos empleados, buscamos socios de alma."</h3>
+            <p style="color: #666; margin-bottom: 10px; font-size: 0.9rem;">Conéctate para futuras vacantes.</p>
+            <a href="mailto:talento@mangobusiness.com" style="color: var(--dark); font-weight: 700; text-decoration: underline;">talento@mangobusiness.com</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid reveal">
+            <div class="footer-col">
+                <div class="footer-logo" style="margin-bottom: 20px;">
+                    <img src="Logos Vectorizados.png" alt="Mango BC" style="height: 50px; width: auto; filter: brightness(0) invert(1);" loading="lazy" decoding="async">
+                </div>
+                <p style="color: #888; font-size: 0.9rem; line-height: 1.6;">Morelia, Michoacán<br>México, CP 58000<br>+52 443 332 7430</p>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto Directo</h4>
+                <a href="mailto:socios@mangobusiness.com">Ventas y Socios</a>
+                <a href="mailto:talento@mangobusiness.com">Atracción de Talento</a>
+                <a href="mailto:compras@mangobusiness.com">Proveedores y Compras</a>
+            </div>
+            <div class="footer-col">
+                <h4>Redes Sociales</h4>
+                <a href="https://www.linkedin.com/company/mango-business-center" target="_blank">LinkedIn</a>
+                <a href="https://www.instagram.com/mangobusinesscenter" target="_blank">Instagram</a>
+                <a href="https://www.facebook.com/mangobusinesscenter" target="_blank">Facebook</a>
+            </div>
+        </div>
+        <div class="footer-bottom reveal delay-1">
+            © 2026 MANGO BUSINESS CENTER
+        </div>
+    </footer>
+
+    <script>
+// 1. Preloader (Versión rápida)
+        // Usamos DOMContentLoaded para que no espere a que baje todo el video pesado
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                
+                // Le damos 1 segundo extra a la transición antes de ocultarlo por completo
+                setTimeout(() => {
+                    document.getElementById('loader').style.visibility = 'hidden';
+                }, 1000);
+                
+            }, 1800); // Aparece 0.8 segundos y se va
+        });
+
+        // 2. Menú Móvil
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+            document.getElementById('navbar').classList.toggle('menu-open');
+            document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : 'auto';
+        });
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+                document.getElementById('navbar').classList.remove('menu-open');
+                document.body.style.overflow = 'auto';
+            });
+        });
+
+        // 3. Reveal Animation
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealOptions = { threshold: 0.05, rootMargin: "0px 0px 50px 0px" };
+        
+        const revealObserver = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target);
+            });
+        }, revealOptions);
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // 4. Lógica del Carrusel Móvil
+        if (window.innerWidth <= 992) {
+            const track = document.getElementById('carousel-track');
+            const dots = document.querySelectorAll('.carousel-dot');
+            const cards = track.querySelectorAll('.unidad-card');
+            const totalSlides = dots.length;
+            let currentIndex = 0;
+            let flipTimer, slideTimer, transitionTimer;
+            let carouselStarted = false;
+
+            const updateDots = (index) => {
+                dots.forEach(d => d.classList.remove('active'));
+                if(dots[index]) dots[index].classList.add('active');
+            };
+
+            const scrollToCard = (index) => {
+                if(!cards[index]) return;
+                const scrollPos = cards[index].offsetLeft - track.offsetLeft - (track.clientWidth - cards[index].clientWidth) / 2;
+                track.scrollTo({ left: scrollPos, behavior: 'smooth' });
+                updateDots(index);
+                currentIndex = index;
+            };
+
+            const clearTimers = () => {
+                clearTimeout(flipTimer);
+                clearTimeout(slideTimer);
+                clearTimeout(transitionTimer);
+                cards.forEach(c => c.classList.remove('is-flipped'));
+            };
+
+            const startAutoPlay = () => {
+                clearTimers();
+                
+                flipTimer = setTimeout(() => {
+                    if(cards[currentIndex]) cards[currentIndex].classList.add('is-flipped');
+
+                    slideTimer = setTimeout(() => {
+                        if(cards[currentIndex]) cards[currentIndex].classList.remove('is-flipped');
+
+                        transitionTimer = setTimeout(() => {
+                            currentIndex = (currentIndex + 1) % totalSlides;
+                            scrollToCard(currentIndex);
+                            startAutoPlay(); 
+                        }, 300);
+
+                    }, 2000);
+
+                }, 3000);
+            };
+
+            dots.forEach((dot, idx) => {
+                dot.addEventListener('click', () => {
+                    scrollToCard(idx);
+                    if (carouselStarted) startAutoPlay(); 
+                });
+            });
+
+            track.addEventListener('scroll', () => {
+                const scrollLeft = track.scrollLeft;
+                const cardWidth = track.clientWidth; 
+                const index = Math.round(scrollLeft / cardWidth);
+                if (index !== currentIndex) {
+                    updateDots(index);
+                    currentIndex = index;
+                    if (carouselStarted) startAutoPlay(); 
+                }
+            });
+
+            const unidadesSection = document.getElementById('unidades');
+            const carouselObserver = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && !carouselStarted) {
+                    carouselStarted = true;
+                    startAutoPlay();
+                }
+            }, { threshold: 0.2 });
+
+            if (unidadesSection) {
+                carouselObserver.observe(unidadesSection);
+            }
+        }
+
+        // 5. Smart Navbar (Ocultar al hacer scroll hacia abajo, mostrar hacia arriba)
+        let lastScrollTop = 0;
+        const navbarElement = document.getElementById('navbar');
+
+        window.addEventListener('scroll', () => {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (navbarElement.classList.contains('menu-open')) {
+                return;
+            }
+
+            if (scrollTop > lastScrollTop && scrollTop > 80) {
+                navbarElement.style.transform = 'translateY(-150%)';
+            } else {
+                navbarElement.style.transform = 'translateY(0)';
+            }
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
+        });
+
+        // 6. Acordeón de Empleos
+        const jobHeaders = document.querySelectorAll('.job-header');
+        jobHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const card = header.parentElement;
+                
+                // Opcional: Esto cierra cualquier otra pestaña abierta para que solo haya una a la vez
+                document.querySelectorAll('.job-card').forEach(c => {
+                    if(c !== card) {
+                        c.classList.remove('open');
+                        c.querySelector('.job-btn-more').textContent = 'Saber más';
+                    }
+                });
+
+                // Alterna abrir/cerrar la tarjeta clickeada
+                card.classList.toggle('open');
+                
+                // Cambia el texto del botón
+                const btn = header.querySelector('.job-btn-more');
+                if(card.classList.contains('open')){
+                    btn.textContent = 'Cerrar';
+                } else {
+                    btn.textContent = 'Saber más';
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

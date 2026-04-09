@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distribuidores | Mango BC</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* PALETA CORPORATIVA MANGO BC */
+            --mango: #fdea14; 
+            --dark: #1C1C1C;  
+            --white: #FFFFFF;
+            --light-bg: #F5F5F7; 
+            --box-bg: #F9F9F9;
+            --box-border: #EAEAEA;
+            
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.03);
+        }
+
+        /* RESET & BASE */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body { background-color: var(--light-bg); color: var(--dark); font-family: 'Open Sans', sans-serif; overflow-x: hidden; }
+        h1, h2, h3, h4, .font-title { font-family: 'Montserrat', sans-serif; }
+
+        #scroll-progress { position: fixed; top: 0; left: 0; height: 4px; background: var(--mango); width: 0%; z-index: 9999999; box-shadow: 0 0 10px rgba(253, 234, 20, 0.5); transition: width 0.1s; }
+
+        #loader { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--dark); display: flex; justify-content: center; align-items: center; z-index: 999999; transition: opacity 0.8s ease, visibility 0.8s ease; }
+        .loader-text { font-family: 'Montserrat'; font-weight: 900; font-size: 2vw; color: var(--white); letter-spacing: 5px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; color: var(--mango); text-shadow: 0 0 20px rgba(253, 234, 20, 0.5); } }
+
+        /* Textura SVG */
+        body::before { 
+            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); 
+            opacity: 0.02; pointer-events: none; z-index: 9999; 
+        }
+
+        /* NAVEGACIÓN ESTILO CRISTAL */
+        nav { 
+            position: fixed; width: 90%; top: 20px; left: 5%; padding: 15px 30px; 
+            background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border); border-radius: 100px;
+            display: flex; justify-content: space-between; align-items: center; z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: all 0.4s ease;
+        }
+        .logo { text-decoration: none; display: flex; align-items: center; z-index: 1002; transition: transform 0.4s; }
+        .logo:hover { transform: scale(1.05); }
+        .nav-logo { height: 35px; width: auto; object-fit: contain; }
+
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 600; font-size: 0.85rem; transition: color 0.3s; font-family: 'Open Sans', sans-serif;}
+        .nav-links a:hover { color: #888; }
+        .nav-cta { background: var(--dark); color: var(--white) !important; padding: 10px 24px; border-radius: 50px; transition: 0.4s; font-family: 'Montserrat', sans-serif !important; font-weight: 700 !important; font-size: 0.75rem !important;}
+        .nav-cta:hover { background: var(--mango); color: var(--dark) !important; }
+
+        .hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; z-index: 1002; }
+        .hamburger span { width: 30px; height: 3px; background-color: var(--dark); border-radius: 3px; transition: 0.4s; }
+        .hamburger.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+        /* MENÚ FLOTANTE PC */
+        .floating-menu { position: fixed; bottom: 30px; right: 30px; display: flex; flex-direction: column; align-items: flex-end; gap: 15px; z-index: 10000; padding: 20px; margin-right: -20px; margin-bottom: -20px; }
+        .floating-items { display: flex; flex-direction: column; gap: 15px; transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), visibility 0.4s; transform-origin: bottom center; }
+        .floating-menu.collapsed .floating-items { opacity: 0; visibility: hidden; transform: translateY(30px) scale(0.6); pointer-events: none; }
+        
+        .floating-btn { background: var(--dark); width: 65px; height: 65px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: transform 0.3s ease, background 0.3s ease; color: var(--white); text-decoration: none; cursor: pointer; }
+        .floating-btn:hover { transform: translateY(-5px) scale(1.05); background: #333; }
+        .floating-btn svg { width: 30px; height: 30px; fill: var(--white); }
+
+        .main-toggle-btn { width: 150px; height: 65px; padding: 0; border-radius: 35px; font-size: 0.9rem; position: relative; transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease; background: var(--mango); color: var(--dark); font-weight: 900; font-family: 'Montserrat';}
+        .floating-menu:not(.collapsed) .main-toggle-btn { width: 65px; background: var(--dark); color: var(--white);}
+        .floating-menu .toggle-icon, .floating-menu .toggle-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); white-space: nowrap; }
+        .floating-menu:not(.collapsed) .toggle-text { opacity: 0; transform: translate(-50%, -50%) scale(0.5); pointer-events: none; }
+        .floating-menu:not(.collapsed) .toggle-icon { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(90deg); }
+        .floating-menu.collapsed .toggle-icon { opacity: 0; transform: translate(-50%, -50%) scale(0.5) rotate(-90deg); pointer-events: none; }
+        .floating-menu.collapsed .toggle-text { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+        section { padding: 100px 5%; position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2; overflow: hidden; }
+        .section-title { font-family: 'Montserrat'; font-size: clamp(2rem, 5vw, 4rem); font-weight: 900; color: var(--dark); margin-bottom: 40px; text-transform: uppercase; text-align: center; line-height: 1.1; }
+        .section-title span { color: var(--mango); }
+
+        /* 1. HERO (Oscuro) */
+        .hero-distribuidores { min-height: 90vh; text-align: center; position: relative; background: var(--dark); padding-top: 100px; }
+        .hero-video-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+        
+        .hero-video-wrapper video { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            filter: grayscale(0.5); 
+            transform: scale(1.25) translateY(8%); 
+            object-position: center top; 
+        }
+        
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(28,28,28,0.85) 0%, rgba(28,28,28,0.7) 100%); z-index: 1; }
+        .hero-content { position: relative; z-index: 2; width: 100%; max-width: 2000px; margin: 0 auto; }
+        .hero-title { font-family: 'Montserrat'; font-weight: 900; font-size: clamp(3rem, 7vw, 6rem); color: var(--white); line-height: 1.1; margin-bottom: 20px; text-transform: uppercase; }
+        .hero-title span { color: var(--mango); }
+        .hero-subtitle { font-size: 1.2rem; color: #CCC; font-weight: 400; max-width: 700px; margin: 0 auto; line-height: 1.6; }
+
+        /* 2. ESTADÍSTICAS & BENEFICIOS */
+        .stats-beneficios-wrapper { 
+            background: var(--light-bg); 
+            color: var(--dark); 
+            width: 100%; 
+            padding: 0 5% 80px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+        }
+        
+        .stats-beneficios-wrapper .section-title { color: var(--dark); }
+        
+        .stats-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 30px; 
+            width: 100%; 
+            max-width: 1000px; 
+            background: var(--white);
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08); 
+            margin: -80px auto 60px auto; 
+            position: relative; 
+            z-index: 10; 
+        }
+        
+        .stat-item { text-align: center; }
+        .stat-number { font-family: 'Montserrat'; font-weight: 900; font-size: clamp(2.5rem, 5vw, 4rem); color: var(--mango); line-height: 1; }
+        .stat-label { font-size: 0.85rem; color: #555; text-transform: uppercase; font-weight: 700; margin-top: 5px; }
+
+        .grid-beneficios { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1200px; width: 100%; }
+        .floating-card { background: #222; border: 1px solid rgba(255,255,255,0.1); padding: 40px 30px; border-radius: 16px; text-align: center; box-shadow: var(--shadow-soft); transition: 0.3s;}
+        .floating-card:hover { border-color: var(--mango); transform: translateY(-5px); }
+        .floating-card h3 { font-family: 'Montserrat'; font-weight: 900; color: var(--white); font-size: 1.2rem; margin-bottom: 10px; text-transform: uppercase;}
+        .floating-card p { color: #AAA; line-height: 1.5; font-size: 0.95rem; margin: 0;}
+
+        /* 3. PROCESO (Claro) - AQUÍ ESTÁ LA CORRECCIÓN */
+        .proceso-section { background: var(--light-bg); color: var(--dark); }
+        .proceso-section .section-title { color: var(--dark); }
+        .timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 1000px; width: 100%; text-align: center; }
+        
+        .icon-circle { 
+            width: 130px; /* Ancho y alto iguales para ser un círculo perfecto */
+            height: 130px; 
+            background: transparent; /* Fondo transparente */
+            border: 4px solid var(--mango); /* Aquí está tu borde amarillo */
+            border-radius: 50%; /* Esto lo hace redondo */
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin: 0 auto 15px; 
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+        
+        .icon-circle img { 
+            width: 90%; /* Hace que la imagen llene casi todo el borde interior */
+            height: auto; 
+            object-fit: contain; 
+            border-radius: 50%; /* Asegura que la imagen negra no se salga del borde */
+        }
+        
+        .step:hover .icon-circle { transform: scale(1.1) rotate(5deg); box-shadow: 0 10px 25px rgba(253, 234, 20, 0.3); }
+        .step h4 { font-family: 'Montserrat'; font-weight: 700; font-size: 1rem; color: var(--dark); margin-bottom: 8px; text-transform: uppercase;}
+        .step p { color: #666; font-size: 0.85rem; line-height: 1.5;}
+
+        /* 4. KITS DE NIVELES */
+        .seccion-kits { background: #000000; padding-bottom: 100px; } 
+        .seccion-kits .section-title { color: var(--white); }
+        .kits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; max-width: 1000px; width: 100%; }
+        
+        .kit-card { 
+            text-align: center; 
+            background: transparent; 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 16px; 
+            padding: 60px 40px; 
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .kit-card:hover { 
+            transform: translateY(-5px); 
+            border-color: var(--mango);
+            box-shadow: 0 10px 30px rgba(253, 234, 20, 0.05);
+        }
+
+        .kit-subtitle { 
+            font-family: 'Montserrat'; 
+            font-weight: 900; 
+            font-size: 1.2rem; 
+            color: var(--mango); 
+            margin-bottom: 20px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+        }
+        
+        .kit-price { 
+            font-family: 'Montserrat'; 
+            font-size: 2.2rem; 
+            font-weight: 900; 
+            color: var(--mango); 
+            margin-bottom: 40px; 
+            text-transform: uppercase;
+        }
+        
+        .kit-list { list-style: none; display: flex; flex-direction: column; gap: 18px; padding: 0;}
+        .kit-list li { 
+            background: transparent; 
+            border: none; 
+            padding: 0; 
+            color: #CCC; 
+            font-size: 0.95rem; 
+            line-height: 1.5; 
+            text-align: center;
+        }
+
+        /* 5. FAQ (Claro) */
+        .faq-industrial { background: var(--white); padding-top: 40px; border-top: 1px solid rgba(0,0,0,0.02); padding-bottom: 60px;}
+        .faq-accordion { max-width: 800px; width: 100%; display: flex; flex-direction: column; gap: 12px; }
+        .accordion-item { background: var(--box-bg); border: 1px solid var(--box-border); border-radius: 12px; overflow: hidden; transition: 0.3s; }
+        
+        .accordion-header { padding: 20px 25px; display: flex; justify-content: space-between; align-items: center; text-decoration: none; cursor: pointer; }
+        .accordion-header h3 { font-size: 0.9rem; color: var(--dark); text-transform: uppercase; font-weight: 900; font-family: 'Montserrat'; margin: 0; padding-right: 20px; line-height: 1.3;}
+        
+        .accordion-icon { width: 16px; height: 16px; position: relative; flex-shrink: 0; }
+        .accordion-icon::after, .accordion-icon::before { content: ''; position: absolute; background: #888; transition: 0.3s; }
+        .accordion-icon::after { width: 100%; height: 1.5px; top: 50%; left: 0; transform: translateY(-50%); }
+        .accordion-icon::before { width: 1.5px; height: 100%; top: 0; left: 50%; transform: translateX(-50%); }
+        
+        .accordion-item.active { border-color: var(--mango); }
+        .accordion-item.active .accordion-icon::before { transform: translateX(-50%) rotate(90deg); opacity: 0; }
+        .accordion-item.active .accordion-icon::after { background: var(--dark); }
+        
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+        .accordion-content p { padding: 0 25px 25px; color: #555; font-size: 0.95rem; line-height: 1.6; }
+
+        /* 6. CTA FINAL (Oscuro) */
+        .cta-final { text-align: center; padding: 80px 5%; background: var(--dark); border-top: 1px solid rgba(255,255,255,0.05); }
+        .cta-final .section-title { color: var(--white); }
+        .magnetic-wrap { display: inline-block; padding: 20px; cursor: pointer; }
+        .btn-main { display: inline-block; padding: 20px 50px; background: var(--mango); color: var(--dark); font-family: 'Montserrat'; font-weight: 900; text-decoration: none; font-size: 1.1rem; border-radius: 50px; text-transform: uppercase; transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s; box-shadow: 0 10px 20px rgba(253, 234, 20, 0.3);}
+        .btn-main:hover { box-shadow: 0 15px 30px rgba(253, 234, 20, 0.5); transform: translateY(-3px);}
+
+        /* 7. FOOTER CORPORATIVO (Oscuro) */
+        footer { background: var(--dark); padding: 80px 5% 40px; color: var(--white); display: block; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 50px; max-width: 1400px; margin: 0 auto; }
+        .footer-col h4 { color: var(--mango); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 25px; font-family: 'Montserrat'; font-weight: 700;}
+        .footer-col a { color: #AAA; text-decoration: none; display: block; margin-bottom: 15px; font-size: 0.9rem; transition: 0.3s; cursor: pointer; }
+        .footer-col a:hover { color: var(--white); transform: translateX(5px); }
+        .footer-bottom { text-align: center; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 60px; padding-top: 30px; color: #666; font-size: 0.8rem; }
+
+        .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1); will-change: opacity, transform; }
+        .fade-in.is-visible { opacity: 1; transform: translateY(0); }
+
+        /* =========================================
+           DISEÑO RESPONSIVO ESTÁTICO (MÓVIL)
+           ========================================= */
+        @media (max-width: 992px) {
+            nav { width: 100%; top: 0; left: 0; border-radius: 0; padding: 15px 5%; border: none; }
+            .hamburger { display: flex; }
+            .nav-links { 
+                position: fixed; top: 0; left: 100%; width: 100%; height: 100vh; 
+                background: var(--white); flex-direction: column; justify-content: center; 
+                align-items: center; gap: 30px; transition: 0.4s; z-index: 1001;
+            }
+            .nav-links.active { left: 0; }
+            .nav-links a { font-size: 1.5rem; font-family: 'Montserrat', sans-serif; font-weight: 900; }
+            
+            .hero-distribuidores { min-height: 60vh; padding: 120px 5% 60px 5%; }
+            .hero-title { font-size: clamp(2.5rem, 8vw, 4rem); } 
+        }
+
+        @media (max-width: 768px) {
+            .fade-in { transform: none !important; opacity: 1 !important; transition: none !important; }
+            
+            section { padding: 60px 5%; } 
+            .section-title { font-size: 1.8rem; margin-bottom: 30px; }
+
+            .stats-beneficios-wrapper { padding: 0 5% 40px; }
+            .stats-grid { 
+                grid-template-columns: repeat(3, 1fr); 
+                gap: 10px; 
+                margin: -50px auto 40px auto;
+                padding: 20px 10px;
+                border-radius: 16px;
+            }
+            .stat-number { font-size: 1.4rem; }
+            .stat-label { font-size: 0.6rem; }
+
+            .grid-beneficios { grid-template-columns: 1fr; gap: 12px; }
+            .floating-card { padding: 20px 15px; border-radius: 12px; box-shadow: none; }
+            .floating-card h3 { font-size: 1.05rem; margin-bottom: 5px; }
+            .floating-card p { font-size: 0.85rem; }
+
+            .timeline { grid-template-columns: repeat(2, 1fr); gap: 25px 15px; }
+            
+            /* CORRECCIÓN MÓVIL TAMBIÉN APLICA AQUÍ */
+            .icon-circle { 
+                width: 90px; 
+                height: 90px; 
+                margin-bottom: 8px; 
+                border-width: 3px; 
+            }
+            
+            .step h4 { font-size: 0.85rem; margin-bottom: 5px;}
+            .step p { font-size: 0.75rem; line-height: 1.3;}
+
+            .kits-grid { grid-template-columns: 1fr; gap: 30px; }
+            .kit-card { padding: 40px 20px; }
+            .kit-subtitle { font-size: 1.1rem; margin-bottom: 15px; }
+            .kit-price { font-size: 1.8rem; margin-bottom: 30px; }
+            .kit-list { gap: 15px; }
+            .kit-list li { font-size: 0.85rem; }
+
+            .faq-industrial { padding-top: 30px; padding-bottom: 40px;}
+            .faq-accordion { gap: 8px; }
+            .accordion-item { border-radius: 10px; }
+            .accordion-header { padding: 15px 15px; }
+            .accordion-header h3 { font-size: 0.8rem; }
+            .accordion-content p { padding: 0 15px 15px; font-size: 0.85rem; }
+
+            .cta-final { padding: 60px 5%; }
+
+            .floating-menu { bottom: 15px; right: 15px; padding: 0; margin: 0; }
+            .main-toggle-btn { 
+                width: 60px; height: 60px; border-radius: 50%; 
+                background: #1C1C1C !important; color: var(--white) !important;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            }
+            .main-toggle-btn .toggle-text { 
+                font-size: 0.55rem; font-weight: 900; letter-spacing: 0; 
+                opacity: 1 !important; transform: translate(-50%, -50%) scale(1) !important; 
+            }
+            .main-toggle-btn .toggle-icon { display: none !important; }
+
+            .floating-btn { width: 50px; height: 50px; background: #1C1C1C; }
+            .floating-btn svg { width: 20px; height: 20px; }
+
+            .footer-grid { text-align: center; gap: 30px; }
+        }
+
+        /* MODAL CONTACTO */
+        .contact-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 999999; display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
+        .contact-modal-overlay.active { opacity: 1; visibility: visible; }
+        .contact-modal { background: var(--white); width: 90%; max-width: 500px; border-radius: 20px; border: 1px solid var(--box-border); position: relative; transform: translateY(50px); transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); box-shadow: 0 25px 50px rgba(0,0,0,0.2); overflow: hidden; padding: 40px; text-align: left;}
+        .contact-modal-overlay.active .contact-modal { transform: translateY(0); }
+        .close-modal { position: absolute; top: 15px; right: 20px; background: transparent; border: none; color: #888; font-size: 1.5rem; transition: 0.3s; cursor: pointer; }
+        .close-modal:hover { color: var(--mango); }
+        
+        .modal-content h3 { font-family: 'Montserrat'; font-weight: 900; color: var(--dark); font-size: 1.5rem; margin-bottom: 10px; line-height: 1.2; text-transform: uppercase;}
+        .modal-content h3 span { color: var(--mango); }
+        .modal-content p { color: #666; font-size: 0.9rem; margin-bottom: 25px; line-height: 1.5; }
+        
+        .input-group { margin-bottom: 15px; }
+        .input-group input, .input-group select { width: 100%; padding: 12px 15px; background: var(--light-bg); border: 1px solid #DDD; border-radius: 12px; color: var(--dark); font-family: 'Open Sans'; font-size: 0.9rem; outline: none; }
+        .input-group input:focus, .input-group select:focus { border-color: var(--mango); background: var(--white); }
+        
+        .btn-submit { width: 100%; padding: 15px; background: var(--mango); color: var(--dark); font-family: 'Montserrat'; font-weight: 900; font-size: 0.95rem; text-transform: uppercase; border: none; border-radius: 12px; cursor: pointer; }
+        .btn-submit.loading { background: #CCC; color: transparent; pointer-events: none; }
+        
+        .modal-success { display: none; text-align: center; opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
+        .modal-success.active { display: block; opacity: 1; transform: translateY(0); }
+        .success-icon { font-size: 3rem; color: var(--mango); margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <div id="scroll-progress"></div>
+    <div id="loader"><div class="loader-text">MANGO BC</div></div>
+
+    <nav id="navbar">
+        <a href="index.html" class="logo">
+            <img src="mbc.png" alt="Mango BC" class="nav-logo" style="height: 35px; width: auto; display: block; margin-right: 15px;">
+        </a>
+        
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="nav-links" id="nav-links">
+            <a href="#beneficios" class="nav-item">BENEFICIOS</a>
+            <a href="#proceso" class="nav-item">PROCESO</a>
+            <a href="#kits" class="nav-item">NIVELES</a>
+            <a href="#faq" class="nav-item">PREGUNTAS</a>
+            <a href="javascript:void(0)" onclick="openContactModal()" class="nav-cta nav-item">SER DISTRIBUIDOR</a>
+        </div>
+    </nav>
+
+    <div class="floating-menu" id="floatingMenu">
+        <div class="floating-items">
+            <a href="javascript:void(0)" onclick="openContactModal()" class="floating-btn" aria-label="Abrir Formulario de Contacto">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg>
+            </a>
+            <a href="https://api.whatsapp.com/send?phone=5214433327430&text=Hola%2C%20quiero%20DeliBarras%20%F0%9F%98%8D" class="floating-btn" target="_blank" aria-label="Contáctanos por WhatsApp">
+                <svg xmlns="https://api.whatsapp.com/send?phone=5214433327430&text=Hola%2C%20quiero%20DeliBarras%20%F0%9F%98%8D" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157.1zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+            </a>
+        </div>
+    
+        <div class="floating-btn main-toggle-btn" id="mainToggleBtn">
+            <span class="toggle-text">OPCIONES</span>
+            <span class="toggle-icon">✖</span>
+        </div>
+    </div>
+
+    <section class="hero-distribuidores" id="inicio">
+        <div class="hero-video-wrapper">
+            <video autoplay muted loop playsinline>
+                <source src="DISTRIBUIDOR LOOP.mp4" type="video/mp4">
+            </video>
+            <div class="hero-overlay"></div>
+        </div>
+        
+        <div class="hero-content">
+            <h1 class="hero-title fade-in">ESCALA TU<br><span>NEGOCIO</span></h1>
+            <p class="hero-subtitle fade-in">Conviértete en un distribuidor autorizado de nuestras marcas líderes y domina tu mercado local con el respaldo de Mango Logistics.</p>
+        </div>
+    </section>
+    
+    <div class="stats-beneficios-wrapper" id="beneficios">
+        <div class="dot-grid-bg"></div>
+        
+        <div class="stats-grid fade-in">
+            <div class="stat-item">
+                <div class="stat-number"><span class="counter" data-target="1500">0</span>+</div>
+                <div class="stat-label">Tons / Mes</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number"><span class="counter" data-target="25000">0</span>+</div>
+                <div class="stat-label">Puntos Venta</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number"><span class="counter" data-target="100">0</span>%</div>
+                <div class="stat-label">Cobertura</div>
+            </div>
+        </div>
+
+        <h2 class="section-title fade-in">BENEFICIOS DEL <span>PROGRAMA</span></h2>
+        
+        <div class="grid-beneficios fade-in">
+            <div class="floating-card">
+                <h3>Márgenes Atractivos</h3>
+                <p>Precios preferenciales de fábrica diseñados para maximizar tu rentabilidad en ventas.</p>
+            </div>
+            <div class="floating-card">
+                <h3>Demanda Comprobada</h3>
+                <p>Acceso a productos líderes de alta rotación, marcas posicionadas en el consumidor.</p>
+            </div>
+            <div class="floating-card">
+                <h3>Soporte Logístico</h3>
+                <p>Abastecimiento continuo respaldado por la infraestructura nacional de Mango Logistics.</p>
+            </div>
+        </div>
+    </div>
+
+    <section class="proceso-section" id="proceso">
+        <div class="dot-grid-bg"></div>
+        <h2 class="section-title fade-in">PROCESO DE<br><span>REGISTRO ÁGIL</span></h2>
+        
+        <div class="timeline fade-in">
+            <div class="step">
+                <div class="icon-circle"><img src="proceso-distribuidor-iconos-01.png" alt="Contacto"></div>
+                <h4>Contacto</h4>
+                <p>Llena y envía el formulario inicial.</p>
+            </div>
+            <div class="step">
+                <div class="icon-circle"><img src="proceso-distribuidor-iconos-02.png" alt="Evaluación"></div>
+                <h4>Evaluación</h4>
+                <p>Análisis de tu perfil y zona local.</p>
+            </div>
+            <div class="step">
+                <div class="icon-circle"><img src="proceso-distribuidor-iconos-03.png" alt="Selección"></div>
+                <h4>Selección</h4>
+                <p>Eliges el volumen y proyección.</p>
+            </div>
+            <div class="step">
+                <div class="icon-circle"><img src="proceso-distribuidor-iconos-04.png" alt="Arranque"></div>
+                <h4>Arranque</h4>
+                <p>Acuerdo, mercancía y capacitación.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="seccion-kits" id="kits">
+        <h2 class="section-title fade-in">KITS DE <span>DISTRIBUCIÓN</span></h2>
+        
+        <div class="kits-grid fade-in">
+            <div class="kit-card">
+                <div class="kit-subtitle">NIVEL REGIONAL</div>
+                <div class="kit-price">VOL. MEDIO</div>
+                <ul class="kit-list">
+                    <li>Inventario mixto de introducción</li>
+                    <li>Material POP básico</li>
+                    <li>Acceso a portal de pedidos</li>
+                    <li>Asignación de zona estándar</li>
+                </ul>
+            </div>
+            
+            <div class="kit-card">
+                <div class="kit-subtitle">NIVEL ESTATAL</div>
+                <div class="kit-price">ALTO VOL.</div>
+                <ul class="kit-list">
+                    <li>Inventario completo de todas las marcas</li>
+                    <li>Material POP Premium & Exhibidores</li>
+                    <li>Ejecutivo de cuenta asignado</li>
+                    <li>Exclusividad de zona amplia</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq-industrial" id="faq">
+        <h2 class="section-title fade-in">PREGUNTAS <span>FRECUENTES</span></h2>
+        
+        <div class="faq-accordion fade-in">
+            <div class="accordion-item">
+                <a href="javascript:void(0);" class="accordion-header">
+                    <h3>¿Cuál es el margen de utilidad garantizado?</h3>
+                    <div class="accordion-icon"></div>
+                </a>
+                <div class="accordion-content">
+                    <p>El modelo B2B está diseñado para garantizar márgenes preferenciales superiores a la media, permitiendo rentabilidad competitiva.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <a href="javascript:void(0);" class="accordion-header">
+                    <h3>¿Cómo funciona la exclusividad de territorio?</h3>
+                    <div class="accordion-icon"></div>
+                </a>
+                <div class="accordion-content">
+                    <p>Al firmar el acuerdo "Nivel Estatal", no autorizaremos nuevos distribuidores directos dentro de tus límites territoriales protegidos.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <a href="javascript:void(0);" class="accordion-header">
+                    <h3>¿Cuál es el tiempo de entrega de Mango Logistics?</h3>
+                    <div class="accordion-icon"></div>
+                </a>
+                <div class="accordion-content">
+                    <p>Los tiempos varían de 3 a 7 días hábiles. Para pedidos masivos, tu ejecutivo de cuenta gestionará envíos prioritarios.</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <a href="javascript:void(0);" class="accordion-header">
+                    <h3>¿Ofrecen líneas de crédito para mayoristas?</h3>
+                    <div class="accordion-icon"></div>
+                </a>
+                <div class="accordion-content">
+                    <p>Tras 6 meses de operaciones de contado con volumen constante, evaluaremos la opción de abrir líneas de crédito comerciales.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-final" id="contacto">
+        <div class="fade-in">
+            <h2 class="section-title" style="margin-bottom: 10px;">¿LISTO PARA DOMINAR <br><span>TU MERCADO?</span></h2>
+            <p style="margin-bottom: 30px; color: #CCC; font-size: 0.95rem; max-width: 600px; margin-left: auto; margin-right: auto;">Únete a la red industrial de Mango BC y escala tu facturación al siguiente nivel.</p>
+            <div class="magnetic-wrap">
+                <a href="javascript:void(0)" onclick="openContactModal()" class="btn-main cta-magnet">SOLICITAR CONTACTO</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid fade-in">
+            <div class="footer-col">
+                <div class="footer-logo" style="margin-bottom: 20px;">
+                    <img src="Logos Vectorizados.png" alt="Mango BC" style="height: 50px; width: auto; filter: brightness(0) invert(1);">
+                </div>
+                <p style="color: #888; font-size: 0.9rem; line-height: 1.6;">Morelia, Michoacán<br>México, CP 58000<br>+52 443 332 7430</p>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto Directo</h4>
+                <a href="mailto:socios@mangobusiness.com">Ventas y Socios</a>
+                <a href="mailto:talento@mangobusiness.com">Atracción de Talento</a>
+                <a href="mailto:compras@mangobusiness.com">Proveedores y Compras</a>
+            </div>
+            <div class="footer-col">
+                <h4>Redes Sociales</h4>
+                <a href="https://www.linkedin.com/company/mango-business-center" target="_blank">LinkedIn</a>
+                <a href="https://www.instagram.com/mangobusinesscenter" target="_blank">Instagram</a>
+                <a href="https://www.facebook.com/mangobusinesscenter" target="_blank">Facebook</a>
+            </div>
+        </div>
+        <div class="footer-bottom fade-in" style="transition-delay: 0.2s;">
+            © 2026 MANGO BUSINESS CENTER
+        </div>
+    </footer>
+
+    <div class="contact-modal-overlay" id="contactModal">
+        <div class="contact-modal">
+            <button class="close-modal" onclick="closeContactModal()">✕</button>
+            
+            <div class="modal-content" id="modalContent">
+                <h3>SOLICITUD DE<br><span>CONTACTO</span></h3>
+                <p>Déjanos tus datos. Nuestro equipo de escalamiento se comunicará contigo en menos de 24 horas.</p>
+                
+                <form id="fakeContactForm">
+                    <div class="input-group">
+                        <input type="text" placeholder="Nombre Completo" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" placeholder="Correo Electrónico" required>
+                    </div>
+                    <div class="input-group">
+                        <select required style="color: #666;">
+                            <option value="" disabled selected>Área de Interés</option>
+                            <option value="distribuidor">Ser Distribuidor (B2B)</option>
+                            <option value="emprendedor">Emprendimiento (Kits)</option>
+                            <option value="franquicia">Franquicias Hot Rolls</option>
+                            <option value="logistica">Mango Logistics</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-submit" id="submitBtn">ENVIAR INFORMACIÓN</button>
+                </form>
+            </div>
+
+            <div class="modal-success" id="modalSuccess">
+                <div class="success-icon">✓</div>
+                <h3 style="font-family: 'Montserrat'; font-weight: 900; color: var(--dark); font-size: 1.5rem; margin-bottom: 10px; text-transform: uppercase;">¡SOLICITUD <br><span>RECIBIDA!</span></h3>
+                <p style="color: #666; font-size: 0.95rem; line-height: 1.5;">Hemos registrado tus datos. Un asesor corporativo te contactará a la brevedad.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Preloader rápido
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loader').style.visibility = 'hidden';
+                }, 500); 
+            }, 500); 
+        });
+
+        // Menú Hamburguesa
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+            document.getElementById('navbar').classList.toggle('menu-open');
+            document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : 'auto';
+        });
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+                document.getElementById('navbar').classList.remove('menu-open');
+                document.body.style.overflow = 'auto';
+            });
+        });
+
+        // Smart Navbar
+        let lastScrollTop = 0;
+        const navbarElement = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (navbarElement.classList.contains('menu-open')) return;
+            if (scrollTop > lastScrollTop && scrollTop > 80) {
+                navbarElement.style.transform = 'translateY(-150%)';
+            } else {
+                navbarElement.style.transform = 'translateY(0)';
+            }
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
+        });
+
+        // Progress Bar
+        let tickingScroll = false;
+        window.addEventListener('scroll', () => {
+            if (!tickingScroll) {
+                window.requestAnimationFrame(() => {
+                    const scrollTotal = document.documentElement.scrollTop;
+                    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                    const scrolled = (scrollTotal / height) * 100;
+                    document.getElementById('scroll-progress').style.width = scrolled + '%';
+                    tickingScroll = false;
+                });
+                tickingScroll = true;
+            }
+        }, { passive: true });
+
+        // Fade in Observer 
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { 
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible'); 
+                    if(entry.target.classList.contains('stats-grid')) { animateCounters(); }
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // Contadores Rápidos
+        let countersAnimated = false; 
+        function animateCounters() {
+            if (countersAnimated) return;
+            countersAnimated = true;
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const speed = target / 30; 
+                const updateCount = () => {
+                    const count = +counter.innerText;
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + speed);
+                        setTimeout(updateCount, 15);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                updateCount();
+            });
+        }
+
+        // Acordeón FAQ Simple
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const item = this.parentElement;
+                const content = this.nextElementSibling;
+                
+                if (item.classList.contains('active')) {
+                    item.classList.remove('active');
+                    content.style.maxHeight = '0';
+                } else {
+                    document.querySelectorAll('.accordion-item.active').forEach(openItem => {
+                        openItem.classList.remove('active');
+                        openItem.querySelector('.accordion-content').style.maxHeight = '0';
+                    });
+                    item.classList.add('active');
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                }
+            });
+        });
+
+        // Modal
+        const modalOverlay = document.getElementById('contactModal');
+        const fakeForm = document.getElementById('fakeContactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const modalContent = document.getElementById('modalContent');
+        const modalSuccess = document.getElementById('modalSuccess');
+
+        function openContactModal() {
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeContactModal() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto'; 
+            setTimeout(() => {
+                fakeForm.reset();
+                modalContent.style.display = 'block';
+                modalSuccess.classList.remove('active');
+                submitBtn.classList.remove('loading');
+            }, 400);
+        }
+
+        fakeForm.addEventListener('submit', function(e) {
+            e.preventDefault(); 
+            submitBtn.classList.add('loading');
+            setTimeout(() => {
+                modalContent.style.display = 'none'; 
+                modalSuccess.classList.add('active'); 
+            }, 1500);
+        });
+
+        // Menú Flotante 
+        const floatingMenu = document.getElementById('floatingMenu');
+        const mainToggleBtn = document.getElementById('mainToggleBtn');
+        let isHovered = false;
+        let hoverTimeout; 
+
+        floatingMenu.addEventListener('mouseenter', () => {
+            clearTimeout(hoverTimeout); 
+            isHovered = true;
+            floatingMenu.classList.remove('collapsed');
+        });
+
+        floatingMenu.addEventListener('mouseleave', () => {
+            hoverTimeout = setTimeout(() => {
+                isHovered = false;
+                if (window.scrollY > window.innerHeight * 0.3) {
+                    floatingMenu.classList.add('collapsed');
+                }
+            }, 150);
+        });
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY < window.innerHeight * 0.3) {
+                floatingMenu.classList.remove('collapsed');
+            } else if (!isHovered) {
+                floatingMenu.classList.add('collapsed');
+            }
+        });
+
+        mainToggleBtn.addEventListener('click', (e) => {
+            if (floatingMenu.classList.contains('collapsed')) {
+                e.preventDefault(); 
+                floatingMenu.classList.remove('collapsed');
+                isHovered = true; 
+            } else {
+                floatingMenu.classList.add('collapsed');
+                isHovered = false;
+            }
+        });
+    </script>
+</body>
+</html>
